@@ -5,7 +5,7 @@ import { MenuIcon, XIcon } from 'lucide-react'
 export const NavBar = () => {
   const [isOpen, setIsOpen] = useState(false)
   return (
-    <nav className="w-full bg-white shadow-sm ">
+    <nav className=" fixed  w-full bg-white shadow-sm ">
       <div className="container mx-auto px-4 md:px-2">
         <div className="flex justify-between items-center h-16">
           {/* Logo */}
