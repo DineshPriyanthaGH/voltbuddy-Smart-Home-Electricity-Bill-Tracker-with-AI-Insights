@@ -2,6 +2,7 @@ import React from 'react'
 import { NavBar } from './components/NavBar';
 import { HeroSection } from './components/HeroSection';
 import { HowItWorksSection } from './components/HowItWorksSection';
+import { FeaturesSection } from './components/FeaturesSection';
 
 
 
@@ -11,6 +12,7 @@ export default function Home() {
     <NavBar />
     <HeroSection/>
     <HowItWorksSection/>
+    <FeaturesSection/>
 
       
     </div>
