@@ -3,6 +3,7 @@ import { NavBar } from './components/NavBar';
 import { HeroSection } from './components/HeroSection';
 import { HowItWorksSection } from './components/HowItWorksSection';
 import { FeaturesSection } from './components/FeaturesSection';
+import { CTASection } from './components/CTASection';
 
 
 
@@ -13,6 +14,7 @@ export default function Home() {
     <HeroSection/>
     <HowItWorksSection/>
     <FeaturesSection/>
+    <CTASection/>
 
       
     </div>
