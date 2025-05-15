@@ -50,7 +50,6 @@ export default function BillHistory() {
         </button>
       </div>
 
-      {/* Chart */}
       <div className="h-64 w-full relative mb-6">
         <ResponsiveContainer width="100%" height="100%">
           <LineChart

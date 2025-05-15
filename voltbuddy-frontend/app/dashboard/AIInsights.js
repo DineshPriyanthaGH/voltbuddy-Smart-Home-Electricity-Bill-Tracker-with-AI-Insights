@@ -1,7 +1,6 @@
 import React from "react";
 
 export default function AIInsights() {
-  // Sample insights data
   const insights = [
     {
       id: 1,
@@ -37,7 +36,6 @@ export default function AIInsights() {
     },
   ];
 
-  // Function to render the appropriate icon based on the type
   const renderIcon = (iconType, color) => {
     const colorClasses = {
       yellow: "text-yellow-500 bg-yellow-100",

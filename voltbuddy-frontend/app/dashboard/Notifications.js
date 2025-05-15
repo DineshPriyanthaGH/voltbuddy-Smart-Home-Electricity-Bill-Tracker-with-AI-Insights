@@ -60,7 +60,6 @@ export default function Notifications() {
 
   return (
     <div className="bg-white rounded-xl shadow-md p-6 relative">
-      {/* Top Right Bell Icon with Notification Badge */}
       <div className="absolute top-6 right-4">
         <div className="relative">
           <Bell className="h-5 w-5 text-gray-500" />
@@ -72,7 +71,6 @@ export default function Notifications() {
         </div>
       </div>
 
-      {/* Heading with Icon */}
       <h2 className="text-lg font-semibold text-gray-800">Notifications</h2>
 
       {/* Notification List */}
