@@ -175,7 +175,9 @@ export default function AIInsights() {
 
       <div className="mt-4 text-center">
         <button className="inline-flex items-center text-blue-600 text-sm hover:text-blue-800">
-          Learn More
+          <a href="/ai-insights" className="text-sm text-blue-600 hover:text-blue-800 mt-2">
+            Learn More
+          </a>
           <svg
             xmlns="http://www.w3.org/2000/svg"
             className="h-4 w-4 ml-1"
