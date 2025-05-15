@@ -76,7 +76,7 @@ export default function ApplianceUsage() {
           >
             <path
               strokeLinecap="round"
-              strokeLinejoin="round"
+              strokeLinejoin="round "
               strokeWidth={2}
               d="M3 5h18v12H3V5zM8 21h8m-4-4v4"
             />

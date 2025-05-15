@@ -7,7 +7,7 @@ export default function useElectricityData() {
 
   useEffect(() => {
     const fetchData = async () => {
-      // Replace this with actual API call
+      // Replace with actual API call
       const response = await fetch("/api/electricity-data");
       const result = await response.json();
       setData(result);
