@@ -1,4 +1,3 @@
-// app/dashboard/page.js
 import React from 'react';
 import BillHistory from './BillHistory';
 import ApplianceUsage from './ApplianceUsage';
