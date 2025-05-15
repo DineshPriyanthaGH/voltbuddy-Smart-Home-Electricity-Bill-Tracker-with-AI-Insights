@@ -48,13 +48,15 @@ export const NavBar = () => {
               Contact
             </a>
             <div className="flex items-center space-x-4">
+              <Link href="/Authentication" passHref>
               <button
-                href="#signup"
+                
                 className="bg-blue-600 font-bold text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors"
               >
                 Sign Up
               </button>
-              <Link href="/dashboard" passHref>
+              </Link>
+              <Link href="/Authentication" passHref>
                 <button className="text-blue-600 border-2 rounded-lg px-5 py-2 font-bold hover:text-blue-700 transition-colors">
                   Log In
                 </button>
@@ -81,33 +83,38 @@ export const NavBar = () => {
           <div className="md:hidden py-4">
             <div className="flex flex-col space-y-4">
               <a
-                href="#"
+                href="/home"
                 className="text-gray-700  font-bold hover:text-blue-600 transition-colors"
               >
                 Home
               </a>
               <a
-                href="#"
+                href="/features"
                 className="text-gray-700  font-bold hover:text-blue-600 transition-colors"
               >
                 Features
               </a>
               <a
-                href="#"
+                href="/about"
                 className="text-gray-700  font-bold hover:text-blue-600 transition-colors"
               >
                 About Us
               </a>
               <a
-                href="#"
+                href="/contact"
                 className="text-gray-700  font-bold hover:text-blue-600 transition-colors"
               >
                 Contact
               </a>
+              <Link href="/Authentication" passHref>
+                <button className="text-blue-600 border-2 rounded-lg px-5 py-2 font-bold hover:text-blue-700 transition-colors">
+                  Log In
+                </button>
+              </Link>
               <button className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors w-full">
                 Sign Up
               </button>
-              <Link href="/dashboard" passHref>
+              <Link href="/Authentication" passHref>
               <button className="text-blue-600 border-2 rounded-lg px-4 py-2   hover:text-blue-700 transition-colors w-full">
                 Log In
               </button>
