@@ -2,6 +2,8 @@
 
 import React, { useState } from 'react'
 import { MenuIcon, XIcon } from 'lucide-react'
+import Link from "next/link"; 
+
 export const NavBar = () => {
   const [isOpen, setIsOpen] = useState(false)
   return (
@@ -44,11 +46,15 @@ export const NavBar = () => {
             <button href='#signup' className="bg-blue-600 font-bold text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors">
               Sign Up
             </button>
-            <button className="text-blue-600 border-2 rounded-lg px-5 py-2  font-bold hover:text-blue-700 transition-colors">
-              Log In
-            </button>
+             <Link href="/dashboard" passHref>
+                <button className="text-blue-600 border-2 rounded-lg px-5 py-2 font-bold hover:text-blue-700 transition-colors">
+                  Log In
+                </button>
+              </Link>
             </div>
           </div>
+
+
           {/* Mobile menu button */}
           <div className="md:hidden">
             <button
