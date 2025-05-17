@@ -62,3 +62,9 @@ exports.getMe = async (req, res) => {
     res.status(500).json({ message: 'Server error' });
   }
 };
+
+const registerUser = (req, res) => { res.send('Register'); };
+const loginUser = (req, res) => { res.send('Login'); };
+const getMe = (req, res) => { res.send('Me'); };
+
+module.exports = { registerUser, loginUser, getMe };
