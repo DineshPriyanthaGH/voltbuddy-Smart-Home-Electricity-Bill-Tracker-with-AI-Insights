@@ -1,6 +1,7 @@
-// controllers/authController.js
 const jwt = require('jsonwebtoken');
 const User = require('../models/User');
+const OtpSession = require('../models/OtpSession');
+const sendSms = require('../services/smsService');
 
 // Generate JWT Token
 const generateToken = (userId) => {
@@ -9,41 +10,59 @@ const generateToken = (userId) => {
   });
 };
 
-// @desc    Register new user
-// @route   POST /api/auth/register
-exports.registerUser = async (req, res) => {
+// Request OTP - send OTP to user mobile
+exports.requestOtp = async (req, res) => {
   const { mobileNumber } = req.body;
 
+  if (!/^(?:\+94|0)?[0-9]{9}$/.test(mobileNumber)) {
+    return res.status(400).json({ message: 'Invalid mobile number' });
+  }
+
   try {
-    // Check if already exists
-    let user = await User.findOne({ mobileNumber });
-    if (user) {
-      return res.status(400).json({ message: 'User already registered' });
-    }
+    // Generate 6-digit OTP
+    const otpCode = Math.floor(100000 + Math.random() * 900000).toString();
+    const expiresAt = new Date(Date.now() + 5 * 60 * 1000); // 5 minutes expiry
 
-    // Create new user
-    user = await User.create({ mobileNumber });
+    // Remove previous OTPs for this number
+    await OtpSession.deleteMany({ mobileNumber });
 
-    const token = generateToken(user._id);
-    res.status(201).json({ user, token });
+    // Save OTP session
+    await new OtpSession({ mobileNumber, otpCode, expiresAt }).save();
+
+    // Send OTP SMS
+    await sendSms(mobileNumber, `Your VoltBuddy OTP is: ${otpCode}`);
+
+    res.status(200).json({ message: 'OTP sent successfully' });
   } catch (err) {
     console.error(err);
-    res.status(500).json({ message: 'Server error' });
+    res.status(500).json({ message: 'Failed to send OTP' });
   }
 };
 
-// @desc    Login user
-// @route   POST /api/auth/login
-exports.loginUser = async (req, res) => {
-  const { mobileNumber } = req.body;
+// Verify OTP - validate OTP and login/create user
+exports.verifyOtp = async (req, res) => {
+  const { mobileNumber, otpCode } = req.body;
 
   try {
-    const user = await User.findOne({ mobileNumber });
-
-    if (!user) {
-      return res.status(400).json({ message: 'User not found' });
+    const otpSession = await OtpSession.findOne({ mobileNumber, otpCode });
+    if (!otpSession) {
+      return res.status(400).json({ message: 'Invalid OTP' });
     }
 
+    if (otpSession.expiresAt < new Date()) {
+      return res.status(400).json({ message: 'OTP expired' });
+    }
+
+    // Delete OTP so it can't be reused
+    await OtpSession.deleteMany({ mobileNumber });
+
+    // Find or create user
+    let user = await User.findOne({ mobileNumber });
+    if (!user) {
+      user = await User.create({ mobileNumber });
+    }
+
+    // Generate JWT token
     const token = generateToken(user._id);
     res.status(200).json({ user, token });
   } catch (err) {
@@ -52,8 +71,7 @@ exports.loginUser = async (req, res) => {
   }
 };
 
-// @desc    Get logged-in user profile
-// @route   GET /api/auth/me
+// Get logged-in user profile
 exports.getMe = async (req, res) => {
   try {
     const user = await User.findById(req.user.id);
@@ -62,9 +80,3 @@ exports.getMe = async (req, res) => {
     res.status(500).json({ message: 'Server error' });
   }
 };
-
-const registerUser = (req, res) => { res.send('Register'); };
-const loginUser = (req, res) => { res.send('Login'); };
-const getMe = (req, res) => { res.send('Me'); };
-
-module.exports = { registerUser, loginUser, getMe };
