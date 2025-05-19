@@ -5,7 +5,7 @@ import Notifications from "./Notifications";
 import Navbar from "./Navbar";
 import AIInsights from "./AIInsights";
 import CurrentBill from "./CurrentBill";
-import { Footer } from "../components/Footer";
+import { Footer } from "./Footer";
 
 export default function Dashboard() {
   return (

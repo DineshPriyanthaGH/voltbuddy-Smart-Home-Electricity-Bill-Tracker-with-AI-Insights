@@ -1,109 +1,240 @@
-// app/components/Navbar.js
-import React from "react";
+"use client";
+
+import React, { useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
+import { usePathname } from "next/navigation";
 
 export default function Navbar() {
+  const pathname = usePathname();
+  const [profileDropdownOpen, setProfileDropdownOpen] = useState(false);
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+
   return (
     <nav className="bg-white border-b border-gray-200">
       <div className="container mx-auto px-4">
         <div className="flex justify-between items-center h-16">
-          <div className="flex-shrink-0 flex items-center space-x-2">
-            <img src="./images/logo.png"
+          {/* Logo */}
+          <div className="flex items-center space-x-2">
+            <Image
+              src="/images/logo.png"
               alt="VoltBuddy Logo"
-              className="h-17 w-17"
+              width={40}
+              height={40}
+              className="h-10 w-10"
             />
-            <span className="text-xl font-bold text-blue-600  ">VOLTBUDDY</span>
+            <span className="text-xl font-bold text-blue-600">VOLTBUDDY</span>
           </div>
 
-          {/* Navigation Links */}
+          {/* Desktop Navigation Links */}
           <div className="hidden md:flex items-center space-x-8">
             <Link
               href="/dashboard"
-              className="flex items-center px-2 py-1 rounded-md text-blue-600 bg-blue-50"
+              className={`flex items-center px-2 py-1 rounded-md ${
+                pathname === "/dashboard"
+                  ? "text-blue-600 bg-blue-50"
+                  : "text-gray-600 hover:text-blue-600"
+              }`}
             >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                className="h-5 w-5 mr-1"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"
-                />
-              </svg>
               Dashboard
             </Link>
+
             <Link
-              href="/bills"
-              className="flex items-center text-gray-600 hover:text-blue-600"
+              href="/bill-history"
+              className={`flex items-center px-2 py-1 rounded-md ${
+                pathname === "/bill-history"
+                  ? "text-blue-600 bg-blue-50"
+                  : "text-gray-600 hover:text-blue-600"
+              }`}
             >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                className="h-5 w-5 mr-1"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
-                />
-              </svg>
-              CEB Bills
+              Bill History
             </Link>
+
             <Link
               href="/settings"
-              className="flex items-center text-gray-600 hover:text-blue-600"
+              className={`flex items-center px-2 py-1 rounded-md ${
+                pathname === "/settings"
+                  ? "text-blue-600 bg-blue-50"
+                  : "text-gray-600 hover:text-blue-600"
+              }`}
             >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                className="h-5 w-5 mr-1"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"
-                />
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"
-                />
-              </svg>
               Settings
             </Link>
           </div>
 
-          {/* User Profile */}
-          <div className="flex items-center">
-            <span className="text-gray-600 mr-2 hidden md:block">
-              Welcome back, Mr Perera
-            </span>
-            <div className="h-10 w-10 rounded-full bg-gray-200 flex-shrink-0 overflow-hidden">
-              <Image
-                src="/images/profileimg.jpg"
-                alt="User profile"
-                width={40}
-                height={40}
-                className="object-cover rounded-full"
-                priority
-              />
-            </div>
+          {/* Mobile Menu Button */}
+          <div className="md:hidden flex items-center">
+            <button
+              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+              className="text-gray-600 focus:outline-none"
+            >
+              <svg
+                className="h-6 w-6"
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d={
+                    mobileMenuOpen
+                      ? "M6 18L18 6M6 6l12 12"
+                      : "M4 6h16M4 12h16M4 18h16"
+                  }
+                />
+              </svg>
+            </button>
+          </div>
+
+          {/* Desktop Profile */}
+          <div className="relative hidden md:flex items-center space-x-2">
+            <Link href="/profile" className="relative group">
+              <div className="h-10 w-10 rounded-full overflow-hidden bg-gray-900 ring-2 ring-transparent group-hover:ring-blue-600 transition">
+                <Image
+                  src="/images/profileimg.jpg"
+                  alt="User profile"
+                  width={40}
+                  height={40}
+                  className="object-cover rounded-full"
+                />
+              </div>
+            </Link>
+            <button
+              onClick={() => setProfileDropdownOpen(!profileDropdownOpen)}
+              aria-haspopup="true"
+              aria-expanded={profileDropdownOpen}
+              className="focus:outline-none"
+            >
+              <svg
+                className="h-4 w-4 text-gray-600"
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M19 9l-7 7-7-7"
+                />
+              </svg>
+            </button>
+
+            {profileDropdownOpen && (
+              <div className="absolute right-0 top-full mt-2 w-48 bg-white border rounded-md shadow-lg py-1 z-20">
+                <Link
+                  href="/notifications"
+                  className="block px-4 py-2 text-gray-700 hover:bg-gray-100 hover:text-blue-600"
+                >
+                  Notifications
+                </Link>
+                <button
+                  onClick={() => alert("Logout clicked")}
+                  className="w-full text-left px-4 py-2 text-gray-700 hover:bg-gray-100 hover:text-blue-600"
+                >
+                  Logout
+                </button>
+              </div>
+            )}
           </div>
         </div>
+
+        {/* Mobile Menu */}
+        {mobileMenuOpen && (
+          <div className="md:hidden mt-2 pb-4 space-y-2 border-t pt-4">
+            <Link
+              href="/dashboard"
+              className={`block px-4 py-2 rounded-md ${
+                pathname === "/dashboard"
+                  ? "text-blue-600 bg-blue-50"
+                  : "text-gray-700 hover:bg-gray-100 hover:text-blue-600"
+              }`}
+            >
+              Dashboard
+            </Link>
+            <Link
+              href="/bill-history"
+              className={`block px-4 py-2 rounded-md ${
+                pathname === "/bill-history"
+                  ? "text-blue-600 bg-blue-50"
+                  : "text-gray-700 hover:bg-gray-100 hover:text-blue-600"
+              }`}
+            >
+              Bill History
+            </Link>
+            <Link
+              href="/settings"
+              className={`block px-4 py-2 rounded-md ${
+                pathname === "/settings"
+                  ? "text-blue-600 bg-blue-50"
+                  : "text-gray-700 hover:bg-gray-100 hover:text-blue-600"
+              }`}
+            >
+              Settings
+            </Link>
+
+            {/* Profile Section (Mobile) */}
+            <div className="px-4 pt-2 border-t">
+              <div className="flex items-center space-x-2">
+                <Link href="/profile">
+                  <div className="h-10 w-10 rounded-full overflow-hidden  bg-gray-900 ring-2 ring-transparent hover:ring-blue-600">
+                    <Image
+                      src="/images/profileimg.jpg"
+                      alt="User profile"
+                      width={40}
+                      height={40}
+                      className="object-cover"
+                    />
+                  </div>
+                </Link>
+                <button
+                  onClick={() => setProfileDropdownOpen(!profileDropdownOpen)}
+                  className="focus:outline-none"
+                  aria-haspopup="true"
+                  aria-expanded={profileDropdownOpen}
+                >
+                  <svg
+                    className="h-4 w-4 text-gray-600"
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M19 9l-7 7-7-7"
+                    />
+                  </svg>
+                </button>
+              </div>
+
+              {profileDropdownOpen && (
+                <div className="mt-2 space-y-2">
+                  <Link
+                    href="/notifications"
+                    className="block px-2 py-1 text-gray-700 rounded-md hover:bg-gray-100 hover:text-blue-600"
+                  >
+                    Notifications
+                  </Link>
+                  <button
+                    onClick={() => alert("Logout clicked")}
+                    className="block w-full text-left px-2 py-1 text-gray-700 rounded-md hover:bg-gray-100 hover:text-blue-600"
+                  >
+                    Logout
+                  </button>
+                </div>
+              )}
+            </div>
+          </div>
+        )}
       </div>
     </nav>
   );
 }
+

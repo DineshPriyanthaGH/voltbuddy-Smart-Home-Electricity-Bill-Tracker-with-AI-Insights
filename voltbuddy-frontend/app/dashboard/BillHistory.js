@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import Link from "next/link";
 import {
   DollarSign,
   AlertCircle,
@@ -45,9 +46,11 @@ export default function BillHistory() {
     <div className="bg-white rounded-lg shadow-sm p-6">
       <div className="flex justify-between items-center mb-6">
         <h2 className="text-lg font-semibold text-gray-800">Bill History</h2>
-        <button className="text-sm text-green-600 bg-green-50 px-4 py-1 rounded-full hover:bg-blue-100 transition duration-200">
-          View All
-        </button>
+        <Link href="/bill-history">
+          <button className="text-sm text-green-600 bg-green-50 px-4 py-1 rounded-full hover:bg-blue-100 transition duration-200">
+            View All
+          </button>
+        </Link>
       </div>
 
       <div className="h-64 w-full relative mb-6">
