@@ -42,7 +42,9 @@ export default function BillSummaryCard() {
               aria-expanded={open}
             >
               <Calendar size={14} className="mr-1" />
-              <span>{options.find((opt) => opt.value === selected)?.label}</span>
+              <span>
+                {options.find((opt) => opt.value === selected)?.label}
+              </span>
               <ChevronDown size={14} className="ml-1" />
             </button>
 
@@ -52,7 +54,9 @@ export default function BillSummaryCard() {
                   <li
                     key={opt.value}
                     className={`cursor-pointer px-4 py-2 hover:bg-blue-100 flex items-center ${
-                      selected === opt.value ? "font-semibold text-blue-600" : ""
+                      selected === opt.value
+                        ? "font-semibold text-blue-600"
+                        : ""
                     }`}
                     onClick={() => {
                       setSelected(opt.value);

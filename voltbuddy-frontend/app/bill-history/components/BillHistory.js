@@ -19,7 +19,6 @@ export default function BillHistoryPage() {
       {/* Bill History Summary Card */}
       <BillSummaryCard />
 
-      
       {/* Bill Chart Card */}
       <BillChart />
 
