@@ -207,7 +207,7 @@ export default function ApplianceUsage() {
       </div>
 
       <button href="/appliance-management" className="w-full mt-10 mb-2 bg-indigo-600 text-white py-2 rounded-md text-sm font-medium hover:bg-indigo-700 transition duration-200">
-       <a href="/appliance-management" className="text-sm text-blue-600 hover:text-blue-800 mt-2">Manage Appliances</a>
+       <a href="/appliance-management" className="text-sm  mt-2">Manage Appliances</a>
       </button>
     </div>
   );
