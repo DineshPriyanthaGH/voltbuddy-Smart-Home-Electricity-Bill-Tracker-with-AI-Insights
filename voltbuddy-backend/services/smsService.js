@@ -26,3 +26,27 @@ async function sendOtp(to, locale = 'en') {
     throw new Error('Failed to send OTP');
   }
 }
+
+/**
+ * Verify the OTP code entered by the user
+ * @param {string} to - The recipient's mobile number
+ * @param {string} code - The OTP code entered by the user
+ * @returns {Promise<boolean>} - Returns true if OTP is valid
+ */
+async function verifyOtp(to, code) {
+  try {
+    const verificationCheck = await client.verify
+      .services(VERIFY_SERVICE_SID)
+      .verificationChecks.create({
+        to,
+        code,
+      });
+
+    return verificationCheck.status === 'approved';
+  } catch (error) {
+    console.error('Error verifying OTP:', error);
+    throw new Error('Failed to verify OTP');
+  }
+}
+
+module.exports = { sendOtp, verifyOtp };
