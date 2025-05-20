@@ -16,6 +16,7 @@ app.use('/api/auth', require('./routes/authRoutes'));  // Register the auth rout
 
 // DB Connection
 const mongoUri = process.env.MONGO_URI;
+console.log('Mongo URI:', mongoUri); // Debug: should print your URI
 
 mongoose.connect(mongoUri)
   .then(() => console.log('MongoDB connected'))
