@@ -10,3 +10,19 @@ const VERIFY_SERVICE_SID = process.env.TWILIO_VERIFY_SERVICE_SID;
  * @returns {Promise<Object>} - Twilio API response
  */
 
+async function sendOtp(to, locale = 'en') {
+  try {
+    const verification = await client.verify
+      .services(VERIFY_SERVICE_SID)
+      .verifications.create({
+        to,
+        channel: 'sms',  // OTP will be sent via SMS
+        locale,
+      });
+
+    return verification;
+  } catch (error) {
+    console.error('Error sending OTP:', error);
+    throw new Error('Failed to send OTP');
+  }
+}
