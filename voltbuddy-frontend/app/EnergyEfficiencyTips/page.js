@@ -1,10 +1,12 @@
 import React from "react";
 
+import { EnergyTipsPage } from './components/EnergyTipsPage'
+
 export default function EnergyEfficiencyTipsPage() {
   return (
     <div>
-      <h1>Energy Efficiency Tips</h1>
-      {/* Your content here */}
+      <EnergyTipsPage />
+      
     </div>
   );
 }
