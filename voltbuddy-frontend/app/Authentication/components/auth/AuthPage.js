@@ -7,14 +7,14 @@ import { PhoneIcon, UserIcon, KeyIcon } from 'lucide-react'
 import axios from 'axios'
 
 export function AuthPage() {
-  const [authMode, setAuthMode] = useState('login') // We'll keep tabs but only OTP login/signup flow
+  const [authMode, setAuthMode] = useState('login') 
   const [mobileNumber, setMobileNumber] = useState('')
   const [otpSent, setOtpSent] = useState(false)
   const [otpCode, setOtpCode] = useState('')
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState('')
 
-  // Step 1: Send OTP request
+  
   const handleSendOtp = async (e) => {
     e.preventDefault()
     setError('')
@@ -35,7 +35,7 @@ export function AuthPage() {
     }
   }
 
-  // Step 2: Verify OTP
+  
   const handleVerifyOtp = async (e) => {
     e.preventDefault()
     setError('')
@@ -50,7 +50,7 @@ export function AuthPage() {
       const res = await axios.post('/api/auth/verify-otp', { mobileNumber, otpCode })
       localStorage.setItem('token', res.data.token)
       alert('Login successful! Redirecting to dashboard...')
-      // TODO: Replace with your routing logic, e.g. next/router push to dashboard
+      
     } catch (err) {
       setError(err.response?.data?.message || 'OTP verification failed')
     } finally {
