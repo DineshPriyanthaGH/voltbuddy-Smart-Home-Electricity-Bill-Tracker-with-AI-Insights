@@ -63,7 +63,7 @@ export default function NotificationsPage() {
       <NavBar />
 
       {/* Main Content */}
-      <main className="flex-grow container mt-5 mx-auto p-4">
+      <main className="flex-grow container mt-20 mx-auto p-4">
         <div className="bg-white rounded-lg shadow-md p-6 max-w-4xl mx-auto">
           <h1 className="text-2xl text-black font-bold pt-5 mb-6">Notifications & Reminders</h1>
           
