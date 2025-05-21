@@ -51,9 +51,9 @@ export default function Navbar() {
             </Link>
 
             <Link
-              href="/settings"
+              href="/profile-setting"
               className={`flex items-center px-2 py-1 rounded-md ${
-                pathname === "/settings"
+                pathname === "/profile-setting"
                   ? "text-blue-600 bg-blue-50"
                   : "text-gray-600 hover:text-blue-600"
               }`}
@@ -91,7 +91,7 @@ export default function Navbar() {
 
           {/* Desktop Profile */}
           <div className="relative hidden md:flex items-center space-x-2">
-            <Link href="/profile" className="relative group">
+            <Link href="/profile-setting" className="relative group">
               <div className="h-10 w-10 rounded-full overflow-hidden bg-gray-900 ring-2 ring-transparent group-hover:ring-blue-600 transition">
                 <Image
                   src="/images/profileimg.jpg"
@@ -169,7 +169,7 @@ export default function Navbar() {
             <Link
               href="/settings"
               className={`block px-4 py-2 rounded-md ${
-                pathname === "/settings"
+                pathname === "/profile-setting"
                   ? "text-blue-600 bg-blue-50"
                   : "text-gray-700 hover:bg-gray-100 hover:text-blue-600"
               }`}
@@ -180,7 +180,7 @@ export default function Navbar() {
             {/* Profile Section (Mobile) */}
             <div className="px-4 pt-2 border-t">
               <div className="flex items-center space-x-2">
-                <Link href="/profile">
+                <Link href="/profile-setting" >
                   <div className="h-10 w-10 rounded-full overflow-hidden  bg-gray-900 ring-2 ring-transparent hover:ring-blue-600">
                     <Image
                       src="/images/profileimg.jpg"
