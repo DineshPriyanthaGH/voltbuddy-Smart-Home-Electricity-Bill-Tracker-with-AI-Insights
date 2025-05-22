@@ -3,7 +3,7 @@
 import { useState, useEffect, useRef } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
-import { NavBar } from '../components/NavBar';
+import Navbar from '../dashboard/Navbar';
 import { Footer } from '../components/Footer';
 
 export default function NotificationsPage() {
@@ -60,7 +60,8 @@ export default function NotificationsPage() {
   return (
     <div className="min-h-screen flex flex-col">
       {/* Navbar Component */}
-      <NavBar />
+      <Navbar />
+
 
       {/* Main Content */}
       <main className="flex-grow container mt-20 mx-auto p-4">
