@@ -1,12 +1,20 @@
 // models/User.js
 const mongoose = require('mongoose');
 
-const UserSchema = new mongoose.Schema({
-  mobileNumber: {
+const userSchema = new mongoose.Schema({
+  username: {
     type: String,
     required: true,
-    unique: true,
-    match: [/^(?:\+94|0)?[0-9]{9}$/, 'Invalid Sri Lankan mobile number format']
+    unique: true
+  },
+  email: {
+    type: String,
+    required: true,
+    unique: true
+  },
+  password: {
+    type: String,
+    required: true
   },
   appliances: [
     {
