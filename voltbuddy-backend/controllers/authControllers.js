@@ -1,35 +1,62 @@
-// controllers/authController.js
-const { auth } = require('../firebase');  // Import Firebase Admin SDK
+const User = require('../models/User');
 
-// Step 1: Request OTP (Sent via Firebase on the frontend)
-exports.requestOtp = async (req, res) => {
-  const { mobileNumber } = req.body;
-
+exports.register = async (req, res) => {
   try {
-    // Send OTP using Firebase Authentication (triggered on frontend, not backend)
-    // Here, we just assume the OTP is sent via Firebase's SDK
-    res.status(200).json({ message: 'OTP sent successfully. Please check your phone.' });
+    const { username, email, password } = req.body;
+    
+    // Check existing user
+    const existingUser = await User.findOne({ $or: [{ email }, { username }] });
+    if (existingUser) {
+      return res.status(400).json({ message: 'User already exists' });
+    }
+
+    // Create user with plain text password
+    const newUser = await User.create({ username, email, password });
+    
+    res.status(201).json({
+      status: 'success',
+      data: newUser
+    });
   } catch (err) {
-    console.error('Error sending OTP:', err);
-    res.status(500).json({ message: 'Failed to send OTP' });
+    res.status(400).json({
+      status: 'fail',
+      message: err.message
+    });
   }
 };
 
-// Step 2: Verify OTP (Called when user enters OTP on the frontend)
-exports.verifyOtp = async (req, res) => {
-  const { mobileNumber, otpCode, verificationId } = req.body;  // verificationId is the ID returned by Firebase on frontend
-
+exports.login = async (req, res) => {
   try {
-    // Use Firebase Admin SDK to verify OTP
-    const verificationResult = await auth.verifyIdToken(verificationId); // This should be handled in frontend
+    // For GET requests, we get parameters from query
+    const { email, password } = req.body;
 
-    if (verificationResult) {
-      res.status(200).json({ message: 'OTP verified successfully', token: 'JWT-TOKEN-HERE' });
-    } else {
-      res.status(400).json({ message: 'Invalid OTP' });
+    // Check if parameters exist
+    if (!email || !password) {
+      return res.status(400).json({ message: 'Please provide email and password' });
     }
+
+    // Find user with case-insensitive email match
+    const user = await User.findOne({ 
+      email: { $regex: new RegExp(`^${email}$`, 'i') } 
+    });
+
+    if (!user) {
+      return res.status(401).json({ message: 'No user found with this email' });
+    }
+
+    // Compare passwords directly (since no hashing)
+    if (user.password !== password) {
+      return res.status(401).json({ message: 'Incorrect password' });
+    }
+
+    res.status(200).json({
+      status: 'success',
+      data: user
+    });
   } catch (err) {
-    console.error('Error verifying OTP:', err);
-    res.status(500).json({ message: 'Failed to verify OTP' });
+    res.status(400).json({
+      status: 'fail',
+      message: err.message
+    });
   }
 };
