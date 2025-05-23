@@ -1,12 +1,11 @@
-// routes/authRoutes.js
 const express = require('express');
 const router = express.Router();
-const { requestOtp, verifyOtp } = require('../controllers/authControllers');  // Import the functions
+const { register, login } = require('../controllers/authController');
 
-// Route for sending OTP to the mobile number
-router.post('/request-otp', requestOtp);  // Endpoint to request OTP
+// POST for registration
+router.post('/register', register);
 
-//node  Route for verifying the OTP entered by the user
-router.post('/verify-otp', verifyOtp);  // Endpoint to verify OTP
+// GET for login (as requested)
+router.post('/login', login);
 
 module.exports = router;
