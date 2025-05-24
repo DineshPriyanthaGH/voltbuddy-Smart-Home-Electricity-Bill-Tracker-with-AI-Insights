@@ -1,52 +1,38 @@
-// models/User.js
 const mongoose = require('mongoose');
 
+const billSchema = new mongoose.Schema({
+  amount: { type: Number, required: true },
+  dueDate: { type: Date, required: true },
+  usageUnits: { type: Number, required: true },
+  billDate: { type: Date, default: Date.now },
+  status: { type: String, enum: ['Pending', 'Paid'], default: 'Pending' },
+});
+
 const userSchema = new mongoose.Schema({
-  username: {
-    type: String,
-    required: true,
-    unique: true
-  },
-  email: {
-    type: String,
-    required: true,
-    unique: true
-  },
-  password: {
-    type: String,
-    required: true
-  },
+  username: { type: String, required: true, unique: true },
+  email: { type: String, required: true, unique: true },
+  password: { type: String, required: true },
   appliances: [
     {
-      name: { type: String },
-      usage_kwh: { type: Number },
-      power_rating: { type: Number },
+      name: String,
+      usage_kwh: Number,
+      power_rating: Number,
     }
   ],
-  billHistory: [
-    {
-      amount: { type: Number },
-      dueDate: { type: Date },
-      usageUnits: { type: Number },
-      billDate: { type: Date, default: Date.now },
-    }
-  ],
+  billHistory: [billSchema],
   insights: [
     {
-      tip: { type: String },
-      generatedAt: { type: Date, default: Date.now }
+      tip: String,
+      generatedAt: { type: Date, default: Date.now },
     }
   ],
   reminders: [
     {
-      message: { type: String },
-      notifyAt: { type: Date }
+      message: String,
+      notifyAt: Date,
     }
   ],
-  createdAt: {
-    type: Date,
-    default: Date.now
-  }
+  createdAt: { type: Date, default: Date.now }
 });
 
-module.exports = mongoose.model('User', UserSchema);
+module.exports = mongoose.model('User', userSchema);
