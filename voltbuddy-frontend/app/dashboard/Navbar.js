@@ -132,12 +132,14 @@ export default function Navbar() {
                 >
                   Notifications
                 </Link>
+                <Link href="/Authentication" passHref>
                 <button
                   onClick={() => alert("Logout clicked")}
                   className="w-full text-left px-4 py-2 text-gray-700 hover:bg-gray-100 hover:text-blue-600"
                 >
                   Logout
                 </button>
+                </Link>
               </div>
             )}
           </div>
