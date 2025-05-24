@@ -2,7 +2,7 @@ require('dotenv').config();
 const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
-const authRouter = require('./routers/authRouter');
+const authRouter = require('./routes/authRoutes');
 
 const app = express();
 
@@ -29,6 +29,10 @@ app.use('/api/auth', authRouter);
 app.get('/', (req, res) => {
   res.send('Server is running');
 });
+
+const dashboardRouter = require('./routes/dashboardRoutes');
+
+app.use('/api/dashboard', dashboardRouter);
 
 const PORT = process.env.PORT || 5001;
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
