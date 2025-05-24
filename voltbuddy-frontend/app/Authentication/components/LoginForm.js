@@ -72,15 +72,15 @@ export function LoginForm() {
       {/* Logo and company name */}
       <div className="flex items-center mb-12">
         
-        <span className="text-2xl ml-2 text-gray-700">Echem.lk</span>
+        <span className="text-2xl ml-2    font-extrabold  text-blue-600">VOLTBUDDY</span>
       </div>
       {/* Form Container */}
       <form onSubmit={handleSubmit} className="transition-all duration-300 ease-in-out">
         {isLogin ? (
           // Login Form
           <div>
-            <h1 className="text-3xl font-medium text-gray-700 mb-2">Welcome to Echem.lk!</h1>
-            <p className="text-gray-500 mb-8">Please sign-in to your account and start the adventure</p>
+            <h1 className="text-2xl font-bold text-gray-700 mb-2">Welcome to VOLTBUDDY!</h1>
+            <p className="text-gray-500 mb-8">Please sign-in to Track Your Bills, Save with AI</p>
             <div className="mb-4">
               <label htmlFor="email" className="block text-gray-600 mb-2">
                 Email
@@ -91,7 +91,7 @@ export function LoginForm() {
                 placeholder="email@example.com"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                className="w-full px-4 py-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-yellow-500"
+                className="w-full text-gray-600 px-4 py-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-600"
               />
             </div>
             <div className="mb-4">
@@ -104,13 +104,13 @@ export function LoginForm() {
                 placeholder="••••••••"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                className="w-full px-4 py-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-yellow-500"
+                className="w-full px-4 text-gray-600 py-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-600"
               />
             </div>
             {error && <p className="text-red-500 mb-4">{error}</p>}
             <button
               type="submit"
-              className="w-full bg-yellow-400 hover:bg-yellow-500 text-center py-3 rounded-md text-gray-800 font-medium mb-4"
+              className="w-full bg-blue-600  cursor-pointer hover:bg-blue-700 text-center py-3 font-bold    rounded-md text-gray-100  mb-4"
             >
               Login
             </button>
@@ -124,7 +124,7 @@ export function LoginForm() {
                 setPassword('')
                 setConfirmPassword('')
               }}
-              className="w-full bg-gray-600 hover:bg-gray-700 text-center py-3 rounded-md text-white font-medium"
+              className="w-full bg-gray-600 hover:bg-gray-700 text-center py-3 rounded-md text-white font-bold cursor-pointer "
             >
               Register
             </button>
@@ -132,8 +132,8 @@ export function LoginForm() {
         ) : (
           // Register Form
           <div>
-            <h1 className="text-3xl font-medium text-gray-700 mb-2">Create Account</h1>
-            <p className="text-gray-500 mb-8">Join us and start your learning journey</p>
+            <h1 className="text-3xl font-bold text-gray-700 mb-2">Create Account</h1>
+            <p className="text-gray-500 mb-8">Track Your Bills, Save with AI</p>
             <div className="space-y-4">
               <div>
                 <label htmlFor="username" className="block text-gray-600 mb-2">
@@ -142,10 +142,10 @@ export function LoginForm() {
                 <input
                   type="text"
                   id="username"
-                  placeholder="John Doe"
+                  placeholder="Name"
                   value={username}
                   onChange={(e) => setUsername(e.target.value)}
-                  className="w-full px-4 py-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-yellow-500"
+                  className="w-full px-4 text-gray-600 py-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-600"
                 />
               </div>
               <div>
@@ -158,7 +158,7 @@ export function LoginForm() {
                   placeholder="email@example.com"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  className="w-full px-4 py-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-yellow-500"
+                  className="w-full px-4 py-3 border border-gray-300 text-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-600"
                 />
               </div>
               <div>
@@ -171,7 +171,7 @@ export function LoginForm() {
                   placeholder="••••••••"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
-                  className="w-full px-4 py-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-yellow-500"
+                  className="w-full text-gray-600 px-4 py-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-600"
                 />
               </div>
               <div>
@@ -184,14 +184,14 @@ export function LoginForm() {
                   placeholder="••••••••"
                   value={confirmPassword}
                   onChange={(e) => setConfirmPassword(e.target.value)}
-                  className="w-full px-4 py-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-yellow-500"
+                  className="w-full px-4 py-3 border border-gray-300 text-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-600"
                 />
               </div>
             </div>
             {error && <p className="text-red-500 mt-4">{error}</p>}
             <button
               type="submit"
-              className="w-full bg-yellow-400 hover:bg-yellow-500 text-center py-3 rounded-md text-gray-800 font-medium mt-6 mb-4"
+              className="w-full bg-blue-600 hover:bg-blue-700 text-center py-3 rounded-md text-white  font-bold cursor-pointer mt-6 mb-4"
             >
               Create Account
             </button>
@@ -205,7 +205,7 @@ export function LoginForm() {
                 setPassword('')
                 setConfirmPassword('')
               }}
-              className="w-full bg-gray-600 hover:bg-gray-700 text-center py-3 rounded-md text-white font-medium"
+              className="w-full bg-gray-600 hover:bg-gray-700 text-center py-3 rounded-md text-white font-bold cursor-pointer"
             >
               Back to Login
             </button>
