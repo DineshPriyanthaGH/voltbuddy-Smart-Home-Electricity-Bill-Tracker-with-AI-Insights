@@ -1,6 +1,6 @@
 const jwt = require('jsonwebtoken');
 const User = require('../models/User');
-const JWT_SECRET = process.env.JWT_SECRET || 'afde271b80207ed2a00116a1e832ae60015e11627224c0d07757f16a49f4e3861fd9ae87ecf4d3fd72784bd3f34791fc9b57610a222253683eb7f4f4c6fd60e1';
+const JWT_SECRET = process.env.JWT_SECRET
 
 async function authMiddleware(req, res, next) {
   try {
