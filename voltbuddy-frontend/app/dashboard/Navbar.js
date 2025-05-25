@@ -1,5 +1,4 @@
-"use client";
-
+'use client';
 import React, { useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
@@ -9,6 +8,16 @@ export default function Navbar() {
   const pathname = usePathname();
   const [profileDropdownOpen, setProfileDropdownOpen] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+
+  // New states for notifications toggle and limit
+  const [notificationsEnabled, setNotificationsEnabled] = useState(false);
+  const [billLimit, setBillLimit] = useState("");
+
+  // Toggle notification ON/OFF handler
+  const toggleNotifications = () => {
+    setNotificationsEnabled((prev) => !prev);
+    if (notificationsEnabled) setBillLimit(""); // clear limit when off
+  };
 
   return (
     <nav className="bg-white border-b border-gray-200">
@@ -60,10 +69,61 @@ export default function Navbar() {
             >
               Settings
             </Link>
+
+            {/* Notification toggle + limit input */}
+            <div className="relative flex items-center space-x-2">
+              <button
+                onClick={toggleNotifications}
+                className={`px-3 py-1 rounded-md border ${
+                  notificationsEnabled
+                    ? "bg-blue-600 text-white border-blue-600"
+                    : "bg-gray-100 text-gray-700 border-gray-300"
+                } focus:outline-none`}
+                title="Toggle Bill Increase Email Notifications"
+              >
+                {notificationsEnabled ? "Notifications ON" : "Notifications OFF"}
+              </button>
+
+              {notificationsEnabled && (
+                <input
+                  type="number"
+                  min="0"
+                  placeholder="Set limit LKR"
+                  value={billLimit}
+                  onChange={(e) => setBillLimit(e.target.value)}
+                  className="w-24 px-2 py-1 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-blue-500 text-gray-700"
+                  title="Set bill increase limit for notifications"
+                />
+              )}
+            </div>
           </div>
 
           {/* Mobile Menu Button */}
-          <div className="md:hidden flex items-center">
+          <div className="md:hidden flex items-center space-x-2">
+            {/* Notification toggle (mobile) */}
+            <button
+              onClick={toggleNotifications}
+              className={`px-2 py-1 rounded-md border ${
+                notificationsEnabled
+                  ? "bg-blue-600 text-white border-blue-600"
+                  : "bg-gray-100 text-gray-700 border-gray-300"
+              } focus:outline-none text-xs`}
+              title="Toggle Bill Increase Email Notifications"
+            >
+              {notificationsEnabled ? "Notif ON" : "Notif OFF"}
+            </button>
+            {notificationsEnabled && (
+              <input
+                type="number"
+                min="0"
+                placeholder="Limit"
+                value={billLimit}
+                onChange={(e) => setBillLimit(e.target.value)}
+                className="w-16 px-2 py-1 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-blue-500 text-xs"
+                title="Set bill increase limit"
+              />
+            )}
+
             <button
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
               className="text-gray-600 focus:outline-none"
@@ -133,12 +193,12 @@ export default function Navbar() {
                   Notifications
                 </Link>
                 <Link href="/Authentication" passHref>
-                <button
-                  onClick={() => alert("Logout clicked")}
-                  className="w-full text-left px-4 py-2 text-gray-700 hover:bg-gray-100 hover:text-blue-600"
-                >
-                  Logout
-                </button>
+                  <button
+                    onClick={() => alert("Logout clicked")}
+                    className="w-full text-left px-4 py-2 text-gray-700 hover:bg-gray-100 hover:text-blue-600"
+                  >
+                    Logout
+                  </button>
                 </Link>
               </div>
             )}
@@ -182,7 +242,7 @@ export default function Navbar() {
             {/* Profile Section (Mobile) */}
             <div className="px-4 pt-2 border-t">
               <div className="flex items-center space-x-2">
-                <Link href="/profile-setting" >
+                <Link href="/profile-setting">
                   <div className="h-10 w-10 rounded-full overflow-hidden  bg-gray-900 ring-2 ring-transparent hover:ring-blue-600">
                     <Image
                       src="/images/profileimg.jpg"
@@ -239,4 +299,3 @@ export default function Navbar() {
     </nav>
   );
 }
-
