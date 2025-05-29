@@ -3,6 +3,8 @@ const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
 const authRouter = require('./routes/authRoutes');
+const userRoutes = require('./routes/userRoutes');
+const chatRoutes = require('./routes/chat');
 
 const app = express();
 
@@ -24,15 +26,15 @@ mongoose.connect(process.env.MONGODB_URI)
 
 // Routes
 app.use('/api/auth', authRouter);
+app.use('/api/user', userRoutes);
+app.use('/api/chat', chatRoutes);
 
 // Test route
 app.get('/', (req, res) => {
   res.send('Server is running');
 });
 
-const dashboardRouter = require('./routes/dashboardRoutes');
 
-app.use('/api/dashboard', dashboardRouter);
 
 const PORT = process.env.PORT || 5001;
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
