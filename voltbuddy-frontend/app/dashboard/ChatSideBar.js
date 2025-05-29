@@ -23,7 +23,7 @@ export default function ChatSidebar({ onClose }) {
 
     try {
       // Call backend endpoint that calls Gemini API
-      const res = await axios.post('/api/chat/gemini', { message: input.trim() });
+      const res = await axios.post('http://localhost:5001/api/chat/gemini', { message: input.trim() });
       const botReply = res.data.reply || 'Sorry, I could not get an answer.';
 
       setMessages(prev => [...prev, { sender: 'bot', text: botReply }]);
