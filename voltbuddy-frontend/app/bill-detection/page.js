@@ -93,45 +93,7 @@ export default function BillDetection() {
             </ul>
           </InfoCard>
           
-          <InfoCard title="Actionable Tips">
-            <ul className="space-y-4">
-              <li className="flex items-start">
-                <div className="flex-shrink-0 bg-green-100 p-2 rounded-full mr-3">
-                  <svg className="w-5 h-5 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                  </svg>
-                </div>
-                <div>
-                  <h4 className="font-medium text-gray-700">Optimal Usage Times</h4>
-                  <p className="text-sm text-gray-500">Turn off the AC during the day or use it during off-peak hours.</p>
-                </div>
-              </li>
-              
-              <li className="flex items-start">
-                <div className="flex-shrink-0 bg-green-100 p-2 rounded-full mr-3">
-                  <svg className="w-5 h-5 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
-                  </svg>
-                </div>
-                <div>
-                  <h4 className="font-medium text-gray-700">Energy Efficient Appliances</h4>
-                  <p className="text-sm text-gray-500">Switch to energy-efficient appliances to lower your bills.</p>
-                </div>
-              </li>
-              
-              <li className="flex items-start">
-                <div className="flex-shrink-0 bg-green-100 p-2 rounded-full mr-3">
-                  <svg className="w-5 h-5 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M18.364 18.364A9 9 0 005.636 5.636m12.728 12.728A9 9 0 015.636 5.636m12.728 12.728L5.636 5.636"></path>
-                  </svg>
-                </div>
-                <div>
-                  <h4 className="font-medium text-gray-700">Reduce Standby Power</h4>
-                  <p className="text-sm text-gray-500">Unplug devices that are not in use to avoid phantom energy usage.</p>
-                </div>
-              </li>
-            </ul>
-          </InfoCard>
+          
         </div>
         
         <InfoCard title="Your Electricity Usage" className="mb-8">
