@@ -6,35 +6,38 @@ export default function ChatSidebar({ onClose }) {
     { sender: 'bot', text: 'Hello! Ask me about your electricity bills, taxes, and more.' }
   ]);
   const [input, setInput] = useState('');
+  const [loading, setLoading] = useState(false);
   const messagesEndRef = useRef(null);
 
-  // Scroll to bottom when messages update
+  // Scroll chat to bottom on new messages
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   }, [messages]);
 
-  // Function to send user message and get Gemini API response
+  // Send user message and get reply from backend
   const sendMessage = async () => {
-    if (!input.trim()) return;
+    const trimmedInput = input.trim();
+    if (!trimmedInput || loading) return;
 
-    const userMessage = { sender: 'user', text: input.trim() };
-    setMessages(prev => [...prev, userMessage]);
+    setLoading(true);
+    // Add user message immediately
+    setMessages(prev => [...prev, { sender: 'user', text: trimmedInput }]);
     setInput('');
 
     try {
-      // Call backend endpoint that calls Gemini API
-      const res = await axios.post('http://localhost:5001/api/chat/gemini', { message: input.trim() });
+      const res = await axios.post('http://localhost:5001/api/chat/gemini', { message: trimmedInput });
       const botReply = res.data.reply || 'Sorry, I could not get an answer.';
-
       setMessages(prev => [...prev, { sender: 'bot', text: botReply }]);
     } catch (error) {
       setMessages(prev => [...prev, { sender: 'bot', text: 'Error contacting chatbot service.' }]);
+    } finally {
+      setLoading(false);
     }
   };
 
-  // Send message on Enter key
-  const handleKeyDown = e => {
-    if (e.key === 'Enter') {
+  // Handle Enter key press to send
+  const handleKeyDown = (e) => {
+    if (e.key === 'Enter' && !e.shiftKey) {
       e.preventDefault();
       sendMessage();
     }
@@ -43,11 +46,11 @@ export default function ChatSidebar({ onClose }) {
   return (
     <div className="fixed top-0 right-0 w-80 h-full bg-white shadow-lg z-50 flex flex-col">
       <header className="flex justify-between items-center p-4 border-b">
-        <h2 className="text-lg font-semibold">Electricity Chatbot</h2>
+        <h2 className="text-lg font-semibold text-gray-900">VoltBuddy Chatbot</h2>
         <button
           onClick={onClose}
           aria-label="Close chat"
-          className="text-gray-600 hover:text-gray-900"
+          className="text-gray-600 hover:text-gray-900 text-2xl leading-none"
         >
           &times;
         </button>
@@ -57,7 +60,11 @@ export default function ChatSidebar({ onClose }) {
         {messages.map((msg, idx) => (
           <div
             key={idx}
-            className={`max-w-xs rounded-lg p-2 ${msg.sender === 'user' ? 'bg-blue-500 text-white self-end' : 'bg-gray-300 text-gray-900 self-start'}`}
+            className={`max-w-xs rounded-lg p-2 whitespace-pre-wrap ${
+              msg.sender === 'user'
+                ? 'bg-blue-600 text-white self-end'
+                : 'bg-gray-300 text-gray-900 self-start'
+            }`}
             style={{ alignSelf: msg.sender === 'user' ? 'flex-end' : 'flex-start' }}
           >
             {msg.text}
@@ -72,14 +79,18 @@ export default function ChatSidebar({ onClose }) {
           value={input}
           onChange={e => setInput(e.target.value)}
           onKeyDown={handleKeyDown}
-          placeholder="Type your question..."
-          className="w-full p-2 border rounded resize-none focus:outline-none focus:ring-2 focus:ring-blue-400"
+          placeholder={loading ? 'Waiting for response...' : 'Type your question...'}
+          disabled={loading}
+          className="w-full p-2 border rounded resize-none focus:outline-none focus:ring-2 focus:ring-blue-400 text-gray-700"
         />
         <button
           onClick={sendMessage}
-          className="mt-2 w-full bg-blue-600 text-white py-2 rounded hover:bg-blue-700"
+          disabled={loading || !input.trim()}
+          className={`mt-2 w-full py-2 rounded text-white ${
+            loading || !input.trim() ? 'bg-gray-400 cursor-not-allowed' : 'bg-blue-600 hover:bg-blue-700'
+          }`}
         >
-          Send
+          {loading ? 'Sending...' : 'Send'}
         </button>
       </footer>
     </div>
