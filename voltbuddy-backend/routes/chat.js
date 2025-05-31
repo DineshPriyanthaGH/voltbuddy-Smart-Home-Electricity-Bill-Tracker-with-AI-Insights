@@ -12,18 +12,29 @@ if (!apiKey) {
 
 const ai = new GoogleGenAI({ apiKey });
 
-// Single-turn generateContent example
+// VoltBuddy-specific system instruction for domain specialization
+const SYSTEM_INSTRUCTION = `
+You are VoltBuddy, a friendly AI assistant specialized in electricity bills and electricity taxes in Sri Lanka.
+Answer questions related to electricity bills, taxes, payments, due dates, rates, and policies.
+If the user asks your name, respond with "Name: VoltBuddy".
+If the question is unrelated, politely say you can only answer electricity-related queries.
+`;
+
+// Single-turn generateContent endpoint
 router.post('/gemini', async (req, res) => {
   const { message } = req.body;
   if (!message) return res.status(400).json({ error: 'Message is required' });
 
   try {
-    // Call generateContent as per official docs
+    // Call generateContent with system instruction to specialize chatbot behavior
     const response = await ai.models.generateContent({
-      model: 'gemini-2.0-flash', // or another valid model from ListModels
+      model: 'gemini-2.0-flash',
       contents: message,
-      // Optional config object for system instructions, temperature, etc.
-      // config: { systemInstruction: "You are a helpful assistant." }
+      config: {
+        systemInstruction: SYSTEM_INSTRUCTION,
+        temperature: 0.5,
+        maxOutputTokens: 250,
+      },
     });
 
     res.json({ reply: response.text });
@@ -33,10 +44,11 @@ router.post('/gemini', async (req, res) => {
   }
 });
 
-// Multi-turn chat example
+// Multi-turn chat endpoint
 router.post('/gemini-chat', async (req, res) => {
-    console.log('GEMINI_API_KEY on request:', apiKey ? '[REDACTED]' : 'undefined or empty');
-  const { history } = req.body; // history is array of chat messages [{ role: "user", parts: [{text:"..."}]}, ...]
+  console.log('GEMINI_API_KEY on request:', apiKey ? '[REDACTED]' : 'undefined or empty');
+  const { history } = req.body; // expect array of chat messages [{ role: "user", parts: [{text:"..."}]}, ...]
+
   if (!history || !Array.isArray(history)) {
     return res.status(400).json({ error: 'History array is required' });
   }
