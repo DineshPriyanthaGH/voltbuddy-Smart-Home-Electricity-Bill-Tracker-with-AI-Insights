@@ -11,6 +11,8 @@ import { Footer } from "./Footer";
 import { useState } from 'react';
 
 import ChatSidebar from "./ChatSideBar";
+import ChatbotIcon from "./ChatbotIcon";
+
 
 export default function Dashboard() {
    const [chatOpen, setChatOpen] = useState(false);
@@ -55,7 +57,10 @@ export default function Dashboard() {
           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 10h.01M12 10h.01M16 10h.01M21 16v-5a2 2 0 00-2-2H5a2 2 0 00-2 2v5a2 2 0 002 2h3l4 4 4-4h3a2 2 0 002-2z" />
         </svg>
       </button>
-      {chatOpen && <ChatSidebar onClose={toggleChat} />}
+      <>
+      <ChatbotIcon onClick={() => setChatOpen(true)} />
+      {chatOpen && <ChatSidebar onClose={() => setChatOpen(false)} />}
+    </>
 
 
 
