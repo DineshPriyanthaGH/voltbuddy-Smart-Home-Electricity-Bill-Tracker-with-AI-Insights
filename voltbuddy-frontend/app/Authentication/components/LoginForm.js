@@ -35,8 +35,17 @@ export function LoginForm() {
           email,
           password,
         });
+
+        // Save JWT token to localStorage
+        if (res.data.token) {
+          localStorage.setItem('token', res.data.token);
+        }
+
+        // Save user data (optional)
         localStorage.setItem('user', JSON.stringify(res.data.data));
+
         toast.success('Login successful!');
+        // Redirect to dashboard page after login
         window.location.href = '/dashboard';
       } else {
         await axios.post('http://localhost:5001/api/auth/register', {
@@ -60,27 +69,21 @@ export function LoginForm() {
   return (
     <div className="w-full max-w-md">
       <div className="relative">
-        <div className="absolute -top-16 right-0">
-         
-        </div>
+        <div className="absolute -top-16 right-0"></div>
       </div>
-       <div className="flex-shrink-0 flex items-center space-x-30">
-        <span className="text-2xl font-extrabold text-blue-600  ">VOLTBUDDY</span>
-            <img
-              src="./images/logo.png"
-              alt="VoltBuddy Logo"
-              className="h-17 w-17"
-            />{" "}
-            {/* Logo Image */}
-            
-          </div>
+      <div className="flex-shrink-0 flex items-center space-x-30">
+        <span className="text-2xl font-extrabold text-blue-600">VOLTBUDDY</span>
+        <img src="./images/logo.png" alt="VoltBuddy Logo" className="h-17 w-17" />
+      </div>
       <form onSubmit={handleSubmit}>
         {isLogin ? (
           <div>
             <h1 className="text-2xl font-bold text-gray-700 mb-2">Welcome to VOLTBUDDY!</h1>
             <p className="text-gray-500 mb-8">Please sign-in to Track Your Bills, Save with AI</p>
             <div className="mb-4">
-              <label htmlFor="email" className="block text-gray-600 mb-2">Email</label>
+              <label htmlFor="email" className="block text-gray-600 mb-2">
+                Email
+              </label>
               <input
                 type="email"
                 id="email"
@@ -91,7 +94,9 @@ export function LoginForm() {
               />
             </div>
             <div className="mb-4">
-              <label htmlFor="password" className="block text-gray-600 mb-2">Password</label>
+              <label htmlFor="password" className="block text-gray-600 mb-2">
+                Password
+              </label>
               <input
                 type="password"
                 id="password"
@@ -129,7 +134,9 @@ export function LoginForm() {
             <p className="text-gray-500 mb-8">Track Your Bills, Save with AI</p>
             <div className="space-y-4">
               <div>
-                <label htmlFor="username" className="block text-gray-600 mb-2">Full Name</label>
+                <label htmlFor="username" className="block text-gray-600 mb-2">
+                  Full Name
+                </label>
                 <input
                   type="text"
                   id="username"
@@ -140,7 +147,9 @@ export function LoginForm() {
                 />
               </div>
               <div>
-                <label htmlFor="email-register" className="block text-gray-600 mb-2">Email</label>
+                <label htmlFor="email-register" className="block text-gray-600 mb-2">
+                  Email
+                </label>
                 <input
                   type="email"
                   id="email-register"
@@ -151,7 +160,9 @@ export function LoginForm() {
                 />
               </div>
               <div>
-                <label htmlFor="password-register" className="block text-gray-600 mb-2">Password</label>
+                <label htmlFor="password-register" className="block text-gray-600 mb-2">
+                  Password
+                </label>
                 <input
                   type="password"
                   id="password-register"
@@ -162,7 +173,9 @@ export function LoginForm() {
                 />
               </div>
               <div>
-                <label htmlFor="confirm-password" className="block text-gray-600 mb-2">Confirm Password</label>
+                <label htmlFor="confirm-password" className="block text-gray-600 mb-2">
+                  Confirm Password
+                </label>
                 <input
                   type="password"
                   id="confirm-password"
