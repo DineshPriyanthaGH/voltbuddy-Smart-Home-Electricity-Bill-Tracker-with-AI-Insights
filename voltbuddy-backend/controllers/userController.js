@@ -2,10 +2,10 @@ const jwt = require('jsonwebtoken');
 const User = require('../models/User');
 const JWT_SECRET = process.env.JWT_SECRET;
 
-// Get user profile
+
 exports.getProfile = async (req, res) => {
   try {
-    const token = req.headers.authorization.split(" ")[1]; // Extract token
+    const token = req.headers.authorization.split(" ")[1];
     const decoded = jwt.verify(token, JWT_SECRET);
     const user = await User.findById(decoded.userId);
 
@@ -28,13 +28,12 @@ exports.getProfile = async (req, res) => {
   }
 };
 
-// Update user profile
 exports.updateProfile = async (req, res) => {
   try {
     const token = req.headers.authorization.split(" ")[1];
     const decoded = jwt.verify(token, JWT_SECRET);
 
-    // Whitelist fields allowed to update
+   
     const updates = {};
     if (req.body.username) updates.username = req.body.username;
     if (req.body.address) updates.address = req.body.address;
@@ -64,7 +63,7 @@ exports.updateProfile = async (req, res) => {
   }
 };
 
-// Optional: Placeholder for updateUser, remove if unused
+
 exports.updateUser = async (req, res) => {
   res.status(501).json({ status: 'fail', message: 'Not implemented' });
 };
