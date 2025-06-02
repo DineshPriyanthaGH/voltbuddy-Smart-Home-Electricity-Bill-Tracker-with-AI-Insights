@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 const { GoogleGenAI } = require('@google/genai');
 
-// Load API key from environment variables
+
 const apiKey = process.env.GEMINI_API_KEY;
 console.log('Loaded GEMINI_API_KEY:', apiKey ? '[REDACTED]' : 'undefined or empty');
 
@@ -12,7 +12,7 @@ if (!apiKey) {
 
 const ai = new GoogleGenAI({ apiKey });
 
-// VoltBuddy-specific system instruction for domain specialization
+
 const SYSTEM_INSTRUCTION = `
 You are VoltBuddy, a friendly AI assistant specialized in electricity bills and electricity taxes in Sri Lanka.
 Answer questions related to electricity bills, taxes, payments, due dates, rates, and policies.
@@ -20,13 +20,12 @@ If the user asks your name, respond with "Name: VoltBuddy".
 If the question is unrelated, politely say you can only answer electricity-related queries.
 `;
 
-// Single-turn generateContent endpoint
 router.post('/gemini', async (req, res) => {
   const { message } = req.body;
   if (!message) return res.status(400).json({ error: 'Message is required' });
 
   try {
-    // Call generateContent with system instruction to specialize chatbot behavior
+  
     const response = await ai.models.generateContent({
       model: 'gemini-2.0-flash',
       contents: message,
@@ -44,10 +43,10 @@ router.post('/gemini', async (req, res) => {
   }
 });
 
-// Multi-turn chat endpoint
+
 router.post('/gemini-chat', async (req, res) => {
   console.log('GEMINI_API_KEY on request:', apiKey ? '[REDACTED]' : 'undefined or empty');
-  const { history } = req.body; // expect array of chat messages [{ role: "user", parts: [{text:"..."}]}, ...]
+  const { history } = req.body; 
 
   if (!history || !Array.isArray(history)) {
     return res.status(400).json({ error: 'History array is required' });
@@ -60,7 +59,7 @@ router.post('/gemini-chat', async (req, res) => {
     });
 
     const response = await chat.sendMessage({
-      message: history[history.length - 1].parts[0].text, // latest user message
+      message: history[history.length - 1].parts[0].text,
     });
 
     res.json({ reply: response.text });
