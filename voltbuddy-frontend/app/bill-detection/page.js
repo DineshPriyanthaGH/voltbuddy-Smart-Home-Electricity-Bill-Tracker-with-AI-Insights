@@ -53,7 +53,45 @@ export default function BillDetection() {
         )} */}
         
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
-          
+          <InfoCard title="Potential Causes">
+            <ul className="space-y-4">
+              <li className="flex items-start">
+                <div className="flex-shrink-0 bg-blue-100 p-2 rounded-full mr-3">
+                  <svg className="w-5 h-5 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
+                  </svg>
+                </div>
+                <div>
+                  <h4 className="font-medium text-gray-700">Higher Appliance Usage</h4>
+                  <p className="text-sm text-gray-500">Your air conditioner might be using more power than needed.</p>
+                </div>
+              </li>
+              
+              <li className="flex items-start">
+                <div className="flex-shrink-0 bg-yellow-100 p-2 rounded-full mr-3">
+                  <svg className="w-5 h-5 text-yellow-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 15a4 4 0 004 4h9a5 5 0 10-.1-9.999 5.002 5.002 0 10-9.78 2.096A4.001 4.001 0 003 15z"></path>
+                  </svg>
+                </div>
+                <div>
+                  <h4 className="font-medium text-gray-700">Extreme Weather</h4>
+                  <p className="text-sm text-gray-500">High temperatures have caused an increase in AC usage.</p>
+                </div>
+              </li>
+              
+              <li className="flex items-start">
+                <div className="flex-shrink-0 bg-red-100 p-2 rounded-full mr-3">
+                  <svg className="w-5 h-5 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path>
+                  </svg>
+                </div>
+                <div>
+                  <h4 className="font-medium text-gray-700">Faulty Appliances</h4>
+                  <p className="text-sm text-gray-500">Check if your refrigerator is consuming more power than needed.</p>
+                </div>
+              </li>
+            </ul>
+          </InfoCard>
           
           
         </div>
