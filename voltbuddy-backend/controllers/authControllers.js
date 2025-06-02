@@ -11,17 +11,17 @@ exports.register = async (req, res) => {
   try {
     const { username, email, password } = req.body;
 
-    // Check if user exists
+    
     const existingUser = await User.findOne({ $or: [{ email }, { username }] });
     if (existingUser) {
       return res.status(400).json({ message: 'User already exists' });
     }
 
-    // Create user (password will be hashed by model middleware)
+    
     const newUser = new User({ username, email, password });
     await newUser.save();
 
-    // Create token
+   
     const token = createToken(newUser);
 
     res.status(201).json({
@@ -50,7 +50,7 @@ exports.login = async (req, res) => {
     const isMatch = await user.comparePassword(password);
     if (!isMatch) return res.status(401).json({ message: 'Invalid credentials' });
 
-    // Create token
+   
     const token = createToken(user);
 
     res.status(200).json({
