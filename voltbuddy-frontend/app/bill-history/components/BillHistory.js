@@ -1,12 +1,9 @@
 import React from "react";
 import BillSummaryCard from "./BillSummaryCard";
 
-import BillTable from "./BillTable";
-
-export default function BillHistoryPage() {
+export default function BillHistoryPage({ token }) {
   return (
     <>
-      {/* Title Section */}
       <div className="mb-6">
         <h1 className="text-2xl font-bold text-gray-800 ml-15 mb-3 mt-9">
           Bill History
@@ -16,14 +13,7 @@ export default function BillHistoryPage() {
         </p>
       </div>
 
-      {/* Bill History Summary Card */}
-      <BillSummaryCard />
-
-      {/* Bill Chart Card */}
-      
-
-      {/* Bill History Table */}
-      <BillTable />
+      <BillSummaryCard token={token} />
     </>
   );
 }
