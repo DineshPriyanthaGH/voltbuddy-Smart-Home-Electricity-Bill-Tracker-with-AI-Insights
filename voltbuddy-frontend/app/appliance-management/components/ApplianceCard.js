@@ -1,12 +1,22 @@
 'use client';
 import React, { useState } from 'react';
-import { EditIcon, TrashIcon, ZapIcon, InfoIcon, RefrigeratorIcon, AirVentIcon, TvIcon, LightbulbIcon, MicrowaveIcon, PackageIcon } from 'lucide-react';
+import {
+  EditIcon,
+  TrashIcon,
+  ZapIcon,
+  InfoIcon,
+  RefrigeratorIcon,
+  AirVentIcon,
+  TvIcon,
+  LightbulbIcon,
+  MicrowaveIcon,
+  PackageIcon,
+} from 'lucide-react';
 import { Tooltip } from './Tooltip';
 
 export const ApplianceCard = ({ appliance, onEdit, onDelete }) => {
   const [showTooltip, setShowTooltip] = useState(false);
 
-  // Function to return the appliance icon based on the appliance type
   const getApplianceIcon = () => {
     switch (appliance.type) {
       case 'refrigerator':
@@ -16,7 +26,7 @@ export const ApplianceCard = ({ appliance, onEdit, onDelete }) => {
       case 'tv':
         return <TvIcon size={24} className="text-blue-500" />;
       case 'washing-machine':
-        return <div size={24} className="text-blue-500" />;
+        return <div size={24} className="text-blue-500" />; // No icon imported; consider adding one
       case 'microwave':
         return <MicrowaveIcon size={24} className="text-blue-500" />;
       case 'light':
@@ -26,7 +36,6 @@ export const ApplianceCard = ({ appliance, onEdit, onDelete }) => {
     }
   };
 
-  // Function to return energy-saving tips based on the appliance type
   const getEnergyTip = () => {
     switch (appliance.type) {
       case 'refrigerator':
@@ -54,7 +63,6 @@ export const ApplianceCard = ({ appliance, onEdit, onDelete }) => {
           <h3 className="text-lg font-medium ml-2">{appliance.name}</h3>
         </div>
         <div className="flex space-x-1">
-          {/* Edit Button */}
           <button
             onClick={() => onEdit(appliance)}
             className="p-1.5 rounded-full hover:bg-gray-100"
@@ -62,8 +70,6 @@ export const ApplianceCard = ({ appliance, onEdit, onDelete }) => {
           >
             <EditIcon size={18} className="text-blue-600" />
           </button>
-
-          {/* Delete Button */}
           <button
             onClick={() => onDelete(appliance.id)}
             className="p-1.5 rounded-full hover:bg-gray-100"
@@ -86,10 +92,15 @@ export const ApplianceCard = ({ appliance, onEdit, onDelete }) => {
           <ZapIcon size={16} className="mr-2 text-yellow-500" />
           <span className="text-sm">{appliance.powerRating} Watts</span>
         </div>
+
+        {/* Used Hours Per Day */}
+        <div className="flex items-center text-gray-600">
+          <ZapIcon size={16} className="mr-2 text-blue-500" />
+          <span className="text-sm">{appliance.usedHoursPerDay} hours/day</span>
+        </div>
       </div>
 
       <div className="mt-3 relative">
-        {/* Energy Saving Tip Button */}
         <button
           className="flex items-center text-xs text-blue-600 hover:text-blue-800"
           onMouseEnter={() => setShowTooltip(true)}
@@ -104,3 +115,5 @@ export const ApplianceCard = ({ appliance, onEdit, onDelete }) => {
     </div>
   );
 };
+
+export default ApplianceCard;
