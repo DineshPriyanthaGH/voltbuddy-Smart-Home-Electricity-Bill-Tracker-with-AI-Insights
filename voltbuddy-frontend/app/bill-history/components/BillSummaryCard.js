@@ -2,7 +2,7 @@ import React, { useState, useRef, useEffect } from "react";
 import { Calendar, ChevronDown, MoreHorizontal } from "lucide-react";
 import { BillChart } from "./BillChart";
 
-export default function BillSummaryCard() {
+export default function BillSummaryCard({ token }) {
   const [open, setOpen] = useState(false);
   const [selected, setSelected] = useState(3); // default Last 3 Months
   const ref = useRef();
@@ -25,7 +25,7 @@ export default function BillSummaryCard() {
   }, []);
 
   return (
-    <div className="bg-white rounded-lg shadow-sm p-6 mb-10 sm:ml-20 sm:mr-20 ml-4 mr-4 relative">
+    <div className="bg-white rounded-lg shadow-sm p-6 mb-10 sm:mx-20 mx-4 relative">
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-4 mt-4 gap-2">
         <h2 className="text-lg font-bold text-gray-800">View Bill History</h2>
 
@@ -78,8 +78,8 @@ export default function BillSummaryCard() {
         View and analyze your past energy bills
       </p>
 
-      {/* Pass dateRange prop to BillChart */}
-      <BillChart dateRange={selected} />
+      {/* Pass dateRange and token props to BillChart */}
+      <BillChart dateRange={selected} token={token} />
     </div>
   );
 }
