@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useMemo } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import {
   BarChart,
   Bar,
@@ -12,28 +12,75 @@ import {
   ResponsiveContainer,
 } from "recharts";
 
-export const BillChart = ({ dateRange }) => {
+const monthShortNames = {
+  January: "Jan",
+  February: "Feb",
+  March: "Mar",
+  April: "Apr",
+  May: "May",
+  June: "Jun",
+  July: "Jul",
+  August: "Aug",
+  September: "Sep",
+  October: "Oct",
+  November: "Nov",
+  December: "Dec",
+};
+
+export const BillChart = ({ dateRange, token }) => {
   const [activeTab, setActiveTab] = useState("amount");
+  const [chartData, setChartData] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
 
-  const chartData = [
-    { month: "Jun", amount: 40, consumption: 5 },
-    { month: "Jul", amount: 25, consumption: 3 },
-    { month: "Aug", amount: 40, consumption: 5 },
-    { month: "Sep", amount: 30, consumption: 4 },
-    { month: "Oct", amount: 45, consumption: 5 },
-    { month: "Nov", amount: 40, consumption: 5 },
-    { month: "Dec", amount: 45, consumption: 5 },
-  ];
+  useEffect(() => {
+    if (!token) {
+      setError("Authentication token missing");
+      return;
+    }
 
-  // Compute filtered data based on dateRange (last N months)
-  // Assuming chartData is in chronological order from oldest to newest
+    async function fetchBills() {
+      setLoading(true);
+      setError(null);
+      try {
+        const response = await fetch("http://localhost:5001/api/bills/bill-history", {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+
+        if (!response.ok) {
+          throw new Error("Failed to fetch bills");
+        }
+
+        const bills = await response.json();
+
+        const data = bills.map((bill) => ({
+          month: monthShortNames[bill.month] || bill.month,
+          amount: bill.billAmount,
+          consumption: bill.consumption,
+        }));
+
+        setChartData(data);
+      } catch (err) {
+        setError(err.message);
+      } finally {
+        setLoading(false);
+      }
+    }
+
+    fetchBills();
+  }, [token]);
+
   const filteredData = useMemo(() => {
     if (!dateRange) return chartData;
     return chartData.slice(-dateRange);
   }, [dateRange, chartData]);
 
+  if (loading) return <div className="p-6">Loading chart...</div>;
+  if (error) return <div className="p-6 text-red-600">Error: {error}</div>;
+  if (!chartData.length) return <div className="p-6 text-gray-600">No bill data available</div>;
+
   return (
-    <div className="bg-white rounded-lg shadow-sm p-6 sm:ml-20 sm:mr-20 ml-4 mr-4">
+    <div className="bg-white rounded-lg shadow-sm p-6 sm:mx-20 mx-4">
       {/* Toggle Tabs */}
       <div className="flex justify-center mb-6">
         <div className="inline-flex rounded-md shadow-sm" role="group">
