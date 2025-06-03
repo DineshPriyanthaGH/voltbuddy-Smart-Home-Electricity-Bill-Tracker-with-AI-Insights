@@ -1,19 +1,7 @@
 "use client";
 
-import { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Link from "next/link";
-import {
-  DollarSign,
-  AlertCircle,
-  ChevronRight,
-  Home,
-  Settings,
-  PieChart,
-  Info,
-  Bell,
-  Plus,
-  X,
-} from "lucide-react";
 import {
   LineChart,
   Line,
@@ -23,24 +11,87 @@ import {
   Tooltip,
   ResponsiveContainer,
 } from "recharts";
-import React from "react";
 
-export default function BillHistory() {
-  const chartData = [
-    { month: "Jan", amount: 1200 },
-    { month: "Feb", amount: 950 },
-    { month: "Mar", amount: 1400 },
-    { month: "Apr", amount: 2100 },
-    { month: "May", amount: 2400 },
-    { month: "Jun", amount: 1800 },
-  ];
+export default function BillHistory({ token }) {
+  const [chartData, setChartData] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
 
+  // Map full month names from backend to 3-letter abbreviations for chart
+  const monthShortNames = {
+    January: "Jan",
+    February: "Feb",
+    March: "Mar",
+    April: "Apr",
+    May: "May",
+    June: "Jun",
+    July: "Jul",
+    August: "Aug",
+    September: "Sep",
+    October: "Oct",
+    November: "Nov",
+    December: "Dec",
+  };
+
+  useEffect(() => {
+    if (!token) {
+      setError("Authentication token missing");
+      return;
+    }
+
+    const fetchBills = async () => {
+      setLoading(true);
+      setError(null);
+      try {
+        const res = await fetch("http://localhost:5001/api/bills/bill-history", {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+
+        if (!res.ok) {
+          throw new Error(`Failed to fetch bills: ${res.statusText}`);
+        }
+
+        const data = await res.json();
+
+        // Sort by year & month ascending
+        const monthOrder = [
+          "January", "February", "March", "April", "May", "June",
+          "July", "August", "September", "October", "November", "December",
+        ];
+        data.sort((a, b) => {
+          if (a.year !== b.year) return a.year - b.year;
+          return monthOrder.indexOf(a.month) - monthOrder.indexOf(b.month);
+        });
+
+        // Map to chart format
+        const formattedData = data.map((bill) => ({
+          month: monthShortNames[bill.month] || bill.month,
+          amount: bill.billAmount,
+        }));
+
+        setChartData(formattedData);
+      } catch (err) {
+        setError(err.message);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchBills();
+  }, [token]);
+
+  // Compute stats if data available
   const amounts = chartData.map((item) => item.amount);
-  const average = (
-    amounts.reduce((sum, val) => sum + val, 0) / amounts.length
-  ).toFixed(2);
-  const highest = Math.max(...amounts);
-  const lowest = Math.min(...amounts);
+  const average = amounts.length
+    ? (amounts.reduce((sum, val) => sum + val, 0) / amounts.length).toFixed(2)
+    : 0;
+  const highest = amounts.length ? Math.max(...amounts) : 0;
+  const lowest = amounts.length ? Math.min(...amounts) : 0;
+
+  if (loading) return <div className="p-6">Loading chart...</div>;
+  if (error) return <div className="p-6 text-red-600">Error: {error}</div>;
 
   return (
     <div className="bg-white rounded-lg shadow-sm p-6">
@@ -61,7 +112,7 @@ export default function BillHistory() {
           >
             <CartesianGrid strokeDasharray="3 3" />
             <XAxis dataKey="month" />
-            <YAxis domain={[0, 3000]} />
+            <YAxis domain={[0, Math.max(highest * 1.2, 3000)]} />
             <Tooltip />
             <Line
               type="monotone"
