@@ -151,7 +151,7 @@ export default function BillTable({ token }) {
           <select
             value={filterYear}
             onChange={(e) => setFilterYear(Number(e.target.value))}
-            className="border border-gray-300 rounded px-2 py-1"
+            className="border text-gray-600 border-gray-300 rounded px-2 py-1"
           >
             {years.map((year) => (
               <option key={year} value={year}>
@@ -164,7 +164,7 @@ export default function BillTable({ token }) {
           <select
             value={filterMonth}
             onChange={(e) => setFilterMonth(e.target.value)}
-            className="border border-gray-300 rounded px-2 py-1"
+            className="border text-gray-600 border-gray-300 rounded px-2 py-1"
           >
             {months.map((month) => (
               <option key={month} value={month}>
@@ -177,7 +177,7 @@ export default function BillTable({ token }) {
           <select
             value={filterLastNMonths}
             onChange={(e) => setFilterLastNMonths(e.target.value)}
-            className="border border-gray-300 rounded px-2 py-1"
+            className="border text-gray-600 border-gray-300 rounded px-2 py-1"
           >
             {lastNMonthsOptions.map((opt) => (
               <option key={opt} value={opt}>
