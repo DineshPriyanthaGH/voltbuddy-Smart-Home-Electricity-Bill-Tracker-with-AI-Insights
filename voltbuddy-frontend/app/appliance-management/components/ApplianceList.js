@@ -2,14 +2,11 @@
 import React from 'react';
 import { ApplianceCard } from './ApplianceCard';
 
-// ApplianceList component accepts `appliances`, `onEdit`, and `onDelete` as props
 export const ApplianceList = ({ appliances, onEdit, onDelete }) => {
-  if (appliances.length === 0) {
+  if (!appliances.length) {
     return (
       <div className="bg-white rounded-lg shadow-md p-6 text-center">
-        <p className="text-gray-500">
-          No appliances added yet. Add your first appliance above!
-        </p>
+        <p className="text-gray-500">No appliances added yet. Add your first appliance above!</p>
       </div>
     );
   }
