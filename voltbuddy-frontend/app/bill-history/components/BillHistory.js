@@ -1,6 +1,6 @@
 import React from "react";
 import BillSummaryCard from "./BillSummaryCard";
-import { BillChart } from "./BillChart";
+
 import BillTable from "./BillTable";
 
 export default function BillHistoryPage() {
@@ -20,7 +20,7 @@ export default function BillHistoryPage() {
       <BillSummaryCard />
 
       {/* Bill Chart Card */}
-      <BillChart />
+      
 
       {/* Bill History Table */}
       <BillTable />

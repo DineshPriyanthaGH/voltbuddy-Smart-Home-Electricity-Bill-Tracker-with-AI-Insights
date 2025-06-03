@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useMemo } from "react";
 import {
   BarChart,
   Bar,
@@ -25,6 +25,13 @@ export const BillChart = ({ dateRange }) => {
     { month: "Dec", amount: 45, consumption: 5 },
   ];
 
+  // Compute filtered data based on dateRange (last N months)
+  // Assuming chartData is in chronological order from oldest to newest
+  const filteredData = useMemo(() => {
+    if (!dateRange) return chartData;
+    return chartData.slice(-dateRange);
+  }, [dateRange, chartData]);
+
   return (
     <div className="bg-white rounded-lg shadow-sm p-6 sm:ml-20 sm:mr-20 ml-4 mr-4">
       {/* Toggle Tabs */}
@@ -32,11 +39,11 @@ export const BillChart = ({ dateRange }) => {
         <div className="inline-flex rounded-md shadow-sm" role="group">
           <button
             type="button"
-            className={`px-4 py-2 text-sm font-medium  ${
-              activeTab === "amount "
+            className={`px-4 py-2 text-sm font-medium ${
+              activeTab === "amount"
                 ? "text-blue-600 bg-white"
-                : "text-gray-700 bg-white hover:text-blue-600 "
-            } border border-gray-200 rounded-l-lg   `}
+                : "text-gray-700 bg-white hover:text-blue-600"
+            } border border-gray-200 rounded-l-lg`}
             onClick={() => setActiveTab("amount")}
           >
             Amount
@@ -58,7 +65,7 @@ export const BillChart = ({ dateRange }) => {
       {/* Chart */}
       <div className="h-72 sm:h-96">
         <ResponsiveContainer width="100%" height="100%">
-          <BarChart data={chartData} barCategoryGap={20}>
+          <BarChart data={filteredData} barCategoryGap={20}>
             <CartesianGrid strokeDasharray="3 3" />
             <XAxis dataKey="month" />
             <YAxis />

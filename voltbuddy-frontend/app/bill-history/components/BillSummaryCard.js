@@ -1,15 +1,16 @@
 import React, { useState, useRef, useEffect } from "react";
 import { Calendar, ChevronDown, MoreHorizontal } from "lucide-react";
+import { BillChart } from "./BillChart";
 
 export default function BillSummaryCard() {
   const [open, setOpen] = useState(false);
-  const [selected, setSelected] = useState(1);
+  const [selected, setSelected] = useState(3); // default Last 3 Months
   const ref = useRef();
 
   const options = [
-    { label: "Last 3 Months", value: 1 },
-    { label: "Last 6 Months", value: 3 },
-    { label: "Last 9 Months", value: 6 },
+    { label: "Last 3 Months", value: 3 },
+    { label: "Last 6 Months", value: 6 },
+    { label: "Last 9 Months", value: 9 },
   ];
 
   // Close dropdown on outside click
@@ -19,7 +20,6 @@ export default function BillSummaryCard() {
         setOpen(false);
       }
     }
-
     document.addEventListener("mousedown", handleClickOutside);
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
@@ -42,9 +42,7 @@ export default function BillSummaryCard() {
               aria-expanded={open}
             >
               <Calendar size={14} className="mr-1" />
-              <span>
-                {options.find((opt) => opt.value === selected)?.label}
-              </span>
+              <span>{options.find((opt) => opt.value === selected)?.label}</span>
               <ChevronDown size={14} className="ml-1" />
             </button>
 
@@ -54,9 +52,7 @@ export default function BillSummaryCard() {
                   <li
                     key={opt.value}
                     className={`cursor-pointer px-4 py-2 hover:bg-blue-100 flex items-center ${
-                      selected === opt.value
-                        ? "font-semibold text-blue-600"
-                        : ""
+                      selected === opt.value ? "font-semibold text-blue-600" : ""
                     }`}
                     onClick={() => {
                       setSelected(opt.value);
@@ -81,6 +77,9 @@ export default function BillSummaryCard() {
       <p className="text-gray-600 text-sm mb-6">
         View and analyze your past energy bills
       </p>
+
+      {/* Pass dateRange prop to BillChart */}
+      <BillChart dateRange={selected} />
     </div>
   );
 }
