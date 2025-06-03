@@ -50,14 +50,14 @@ export const NavBar = () => {
             <div className="flex items-center space-x-4">
               <Link href="/Authentication" passHref>
               <button
-                
-                className="bg-blue-600 font-bold text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors"
+
+                className="bg-blue-600 cursor-pointer font-bold text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors"
               >
                 Sign Up
               </button>
               </Link>
               <Link href="/Authentication" passHref>
-                <button className="text-blue-600 border-2 rounded-lg px-5 py-2 font-bold hover:text-blue-700 transition-colors">
+                <button className="text-blue-600 border-2 cursor-pointer rounded-lg px-5 py-2 font-bold hover:text-blue-700 transition-colors">
                   Log In
                 </button>
               </Link>

@@ -58,7 +58,16 @@ export default function Navbar() {
             >
               Bill History
             </Link>
-
+            <Link
+              href="/appliance-management"
+              className={`flex items-center px-2 py-1 rounded-md ${
+                pathname === "/payment-history"
+                  ? "text-blue-600 bg-blue-50"
+                  : "text-gray-600 hover:text-blue-600"
+              }`}
+            >
+              Appliance
+            </Link>
             <Link
               href="/profile-setting"
               className={`flex items-center px-2 py-1 rounded-md ${
