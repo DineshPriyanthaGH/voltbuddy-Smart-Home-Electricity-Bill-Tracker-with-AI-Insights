@@ -1,5 +1,6 @@
 import React from "react";
 import BillSummaryCard from "./BillSummaryCard";
+import BillTable from "./BillTable";
 
 export default function BillHistoryPage({ token }) {
   return (
@@ -14,6 +15,7 @@ export default function BillHistoryPage({ token }) {
       </div>
 
       <BillSummaryCard token={token} />
+      <BillTable token={token} />
     </>
   );
 }
