@@ -1,47 +1,88 @@
 'use client';
 import React, { useState, useEffect } from 'react';
-import { PlusIcon, SaveIcon, XIcon } from 'lucide-react';
+import { PlusIcon, SaveIcon, XIcon, InfoIcon } from 'lucide-react';
+
+// Default watts per appliance type and their info descriptions
+const defaultWattsByType = {
+  refrigerator: 150,
+  'air-conditioner': 1200,
+  tv: 100,
+  'washing-machine': 500,
+  microwave: 1100,
+  light: 15,
+  other: 100,
+};
+
+const defaultWattsInfo = {
+  refrigerator: 'Typical refrigerator consumes about 150 Watts.',
+  'air-conditioner': 'Typical air conditioner consumes about 1200 Watts.',
+  tv: 'Typical TV consumes about 100 Watts.',
+  'washing-machine': 'Typical washing machine consumes about 500 Watts.',
+  microwave: 'Typical microwave consumes about 1100 Watts.',
+  light: 'Typical LED bulb consumes about 15 Watts.',
+  other: 'Typical appliance consumes about 100 Watts.',
+};
 
 export const ApplianceForm = ({ onSubmit, editingAppliance, onCancel }) => {
   const [name, setName] = useState('');
-  const [monthlyUsage, setMonthlyUsage] = useState('');
+  const [usedHoursPerDay, setUsedHoursPerDay] = useState('');
   const [powerRating, setPowerRating] = useState('');
   const [type, setType] = useState('other');
+  const [showPowerInfo, setShowPowerInfo] = useState(false);
 
-  // If editing an appliance, pre-fill the form with existing appliance data
+  // Prefill form when editing
   useEffect(() => {
     if (editingAppliance) {
       setName(editingAppliance.name);
-      setMonthlyUsage(editingAppliance.monthlyUsage.toString());
+      setUsedHoursPerDay(editingAppliance.usedHoursPerDay.toString());
       setPowerRating(editingAppliance.powerRating.toString());
       setType(editingAppliance.type);
+    } else {
+      // reset form if not editing
+      setName('');
+      setUsedHoursPerDay('');
+      setType('other');
+      setPowerRating(defaultWattsByType['other']);
     }
   }, [editingAppliance]);
 
-  // Handle form submission
+  // When type changes, update power rating default if user hasn't manually edited powerRating
+  useEffect(() => {
+    if (!editingAppliance) {
+      setPowerRating(defaultWattsByType[type] || defaultWattsByType['other']);
+    }
+  }, [type, editingAppliance]);
+
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    // Create appliance data
+    const usedHours = parseFloat(usedHoursPerDay);
+    const watts = parseFloat(powerRating);
+
+    if (isNaN(usedHours) || isNaN(watts) || usedHours < 0 || watts < 0) {
+      alert('Please enter valid positive numbers for used hours and power rating.');
+      return;
+    }
+
+    // Calculate estimated monthly usage (kWh)
+    const monthlyUsage = ((watts * usedHours * 30) / 1000).toFixed(2);
+
     const applianceData = {
       name,
-      monthlyUsage: parseFloat(monthlyUsage),
-      powerRating: parseFloat(powerRating),
+      usedHoursPerDay: usedHours,
+      powerRating: watts,
       type,
+      monthlyUsage: parseFloat(monthlyUsage),
     };
 
-    // If editing, update the appliance; otherwise, add a new one
     if (editingAppliance) {
       onSubmit({ ...applianceData, id: editingAppliance.id });
     } else {
       onSubmit(applianceData);
-    }
-
-    // Reset form if adding a new appliance
-    if (!editingAppliance) {
+      // Reset form for next add
       setName('');
-      setMonthlyUsage('');
-      setPowerRating('');
+      setUsedHoursPerDay('');
+      setPowerRating(defaultWattsByType['other']);
       setType('other');
     }
   };
@@ -63,7 +104,7 @@ export const ApplianceForm = ({ onSubmit, editingAppliance, onCancel }) => {
               type="text"
               value={name}
               onChange={(e) => setName(e.target.value)}
-              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full px-3 py-2 border text-gray-500 border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
               required
             />
           </div>
@@ -77,7 +118,7 @@ export const ApplianceForm = ({ onSubmit, editingAppliance, onCancel }) => {
               id="type"
               value={type}
               onChange={(e) => setType(e.target.value)}
-              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full px-3 py-2 border text-gray-500 border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
             >
               <option value="refrigerator">Refrigerator</option>
               <option value="air-conditioner">Air Conditioner</option>
@@ -89,41 +130,64 @@ export const ApplianceForm = ({ onSubmit, editingAppliance, onCancel }) => {
             </select>
           </div>
 
-          {/* Monthly Usage */}
+          {/* Used Hours Per Day */}
           <div className="mb-4">
-            <label htmlFor="monthlyUsage" className="block text-sm font-medium text-gray-700 mb-1">
-              Estimated Monthly Usage (kWh)
+            <label htmlFor="usedHoursPerDay" className="block text-sm font-medium text-gray-700 mb-1">
+              Used Hours Per Day
             </label>
             <input
-              id="monthlyUsage"
+              id="usedHoursPerDay"
               type="number"
-              value={monthlyUsage}
-              onChange={(e) => setMonthlyUsage(e.target.value)}
-              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+              value={usedHoursPerDay}
+              onChange={(e) => setUsedHoursPerDay(e.target.value)}
+              className="w-full px-3 py-2 border text-gray-500 border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
               required
               min="0"
               step="0.1"
             />
           </div>
 
-          {/* Power Rating */}
-          <div className="mb-4">
-            <label htmlFor="powerRating" className="block text-sm font-medium text-gray-700 mb-1">
+          {/* Power Rating with Info Icon and Tooltip */}
+          <div className="mb-4 relative">
+            <label
+              htmlFor="powerRating"
+              className="block text-sm font-medium text-gray-700 mb-1 flex items-center"
+            >
               Power Rating (Watts)
+              <InfoIcon
+                size={16}
+                className="ml-2 text-gray-500 text-blue-500 cursor-pointer"
+                tabIndex={0}
+                aria-describedby="powerRatingInfo"
+                onMouseEnter={() => setShowPowerInfo(true)}
+                onMouseLeave={() => setShowPowerInfo(false)}
+                onFocus={() => setShowPowerInfo(true)}
+                onBlur={() => setShowPowerInfo(false)}
+              />
             </label>
             <input
               id="powerRating"
               type="number"
               value={powerRating}
               onChange={(e) => setPowerRating(e.target.value)}
-              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full px-3 py-2 border text-gray-500 border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
               required
               min="0"
             />
+            {showPowerInfo && (
+              <div
+                id="powerRatingInfo"
+                role="tooltip"
+                className="absolute bg-gray-100 text-gray-700 p-2 rounded shadow-md text-sm mt-1 max-w-xs z-10"
+                style={{ top: '100%', left: 0 }}
+              >
+                {defaultWattsInfo[type]}
+              </div>
+            )}
           </div>
         </div>
 
-        {/* Submit/Cancel Buttons */}
+        {/* Buttons */}
         <div className="flex justify-end mt-4 space-x-2">
           {editingAppliance && (
             <button
