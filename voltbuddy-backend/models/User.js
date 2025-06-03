@@ -9,12 +9,21 @@ const billSchema = new mongoose.Schema({
   consumption: { type: Number, required: true },  // Power consumption in kWh
 });
 
+// Define the schema for appliances
+const applianceSchema = new mongoose.Schema({
+  name: { type: String, required: true },
+  type: { type: String, required: true },
+  usedHoursPerDay: { type: Number, required: true },
+  powerRating: { type: Number, required: true },
+  monthlyUsage: { type: Number, required: true },  // in kWh
+});
 // Define the user schema
 const userSchema = new mongoose.Schema({
   username: { type: String, required: true, unique: true },
   email: { type: String, required: true, unique: true, lowercase: true },
   password: { type: String, required: true },  // Plain text password (no hashing)
   bills: [billSchema],  // Array to store the user's bill history
+  appliances: [applianceSchema],  // Array to store the user's appliances
 });
 
 // Instance method to check password (plain text comparison)
