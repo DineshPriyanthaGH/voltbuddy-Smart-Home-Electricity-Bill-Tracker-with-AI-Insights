@@ -53,18 +53,50 @@ exports.updateAppliance = async (req, res) => {
 // Delete an appliance
 exports.deleteAppliance = async (req, res) => {
   try {
-    const userId = req.user._id;
-    const applianceId = req.params.id;
+    const userId = req.user._id; // Ensure this comes from the authentication middleware
+    const applianceId = req.params.id; // The appliance ID from the request parameter
 
+    // Log the user ID and appliance ID to confirm the request
+    console.log(`User ID: ${userId}`);
+    console.log(`Attempting to delete appliance with ID: ${applianceId}`);
+
+    // Find the user
     const user = await User.findById(userId);
-    if (!user) return res.status(404).json({ message: 'User not found' });
+    if (!user) {
+      console.error('User not found');
+      return res.status(404).json({ message: 'User not found' });
+    }
 
-    user.appliances.id(applianceId).remove();
+    // Find the appliance in the user's appliances array
+    const appliance = user.appliances.id(applianceId);
+    if (!appliance) {
+      console.error('Appliance not found');
+      return res.status(404).json({ message: 'Appliance not found' });
+    }
+
+    // Log the appliance before removal
+    console.log('Found appliance to delete:', appliance);
+
+    // Remove the appliance using the splice method on the appliances array
+    user.appliances.pull(applianceId);  // This will remove the appliance from the array
+
+    // Save the updated user object
     await user.save();
 
-    res.json({ message: 'Appliance deleted successfully', appliances: user.appliances });
+    // Log the success of the operation
+    console.log('Appliance deleted successfully');
+
+    // Send a successful response
+    res.json({
+      message: 'Appliance deleted successfully',
+      appliances: user.appliances, // Return the updated appliances list
+    });
+
   } catch (err) {
-    console.error(err);
+    // Log the error to the console
+    console.error('Error deleting appliance:', err);
+
+    // Return a server error response
     res.status(500).json({ message: 'Server error' });
   }
 };
