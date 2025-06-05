@@ -7,6 +7,8 @@ const authRouter = require('./routes/authRoutes');
 const userRoutes = require('./routes/userRoutes');
 const chatRoutes = require('./routes/chat');  
 const billHistoryRoutes = require('./routes/billHistoryRoutes'); 
+const applianceRoutes = require('./routes/applianceRoutes');
+
 
 const app = express();
 
@@ -29,6 +31,7 @@ app.use('/api/auth', authRouter);
 app.use('/api/user', userRoutes);
 app.use('/api/chat', chatRoutes); 
 app.use('/api/bills', billHistoryRoutes);
+app.use('/api/appliances', applianceRoutes);
 
 app.get('/', (req, res) => {
   res.send('Server is running');
