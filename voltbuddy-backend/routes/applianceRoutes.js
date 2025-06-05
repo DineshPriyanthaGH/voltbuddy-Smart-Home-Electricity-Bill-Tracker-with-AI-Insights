@@ -1,3 +1,4 @@
+// applianceRoutes.js
 const express = require('express');
 const router = express.Router();
 const applianceController = require('../controllers/applianceController');
@@ -6,9 +7,10 @@ const authMiddleware = require('../middleware/authMiddleware'); // your auth mid
 // Protect all routes
 router.use(authMiddleware);
 
-router.get('/', applianceController.getAppliances);
-router.post('/', applianceController.addAppliance);
-router.put('/:id', applianceController.updateAppliance);
-router.delete('/:id', applianceController.deleteAppliance);
+// Correct the endpoint paths to match the base route
+router.get('/', applianceController.getAppliances); // GET /api/appliances
+router.post('/', applianceController.addAppliance); // POST /api/appliances
+router.put('/:id', applianceController.updateAppliance); // PUT /api/appliances/:id
+router.delete('/:id', applianceController.deleteAppliance); // DELETE /api/appliances/:id
 
 module.exports = router;
