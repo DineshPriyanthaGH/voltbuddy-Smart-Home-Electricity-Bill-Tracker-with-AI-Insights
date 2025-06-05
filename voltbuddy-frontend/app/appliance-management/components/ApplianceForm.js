@@ -2,7 +2,6 @@
 import React, { useState, useEffect } from 'react';
 import { PlusIcon, SaveIcon, XIcon, InfoIcon } from 'lucide-react';
 
-// Default watts per appliance type and their info descriptions
 const defaultWattsByType = {
   refrigerator: 150,
   'air-conditioner': 1200,
@@ -13,24 +12,13 @@ const defaultWattsByType = {
   other: 100,
 };
 
-const defaultWattsInfo = {
-  refrigerator: 'Typical refrigerator consumes about 150 Watts.',
-  'air-conditioner': 'Typical air conditioner consumes about 1200 Watts.',
-  tv: 'Typical TV consumes about 100 Watts.',
-  'washing-machine': 'Typical washing machine consumes about 500 Watts.',
-  microwave: 'Typical microwave consumes about 1100 Watts.',
-  light: 'Typical LED bulb consumes about 15 Watts.',
-  other: 'Typical appliance consumes about 100 Watts.',
-};
-
 export const ApplianceForm = ({ onSubmit, editingAppliance, onCancel }) => {
   const [name, setName] = useState('');
   const [usedHoursPerDay, setUsedHoursPerDay] = useState('');
   const [powerRating, setPowerRating] = useState('');
-  const [type, setType] = useState('other');
+  const [type, setType] = useState('refrigerator');
   const [showPowerInfo, setShowPowerInfo] = useState(false);
 
-  // Prefill form when editing
   useEffect(() => {
     if (editingAppliance) {
       setName(editingAppliance.name);
@@ -38,18 +26,16 @@ export const ApplianceForm = ({ onSubmit, editingAppliance, onCancel }) => {
       setPowerRating(editingAppliance.powerRating.toString());
       setType(editingAppliance.type);
     } else {
-      // reset form if not editing
       setName('');
       setUsedHoursPerDay('');
-      setType('other');
-      setPowerRating(defaultWattsByType['other']);
+      setType('refrigerator');
+      setPowerRating('');
     }
   }, [editingAppliance]);
 
-  // When type changes, update power rating default if user hasn't manually edited powerRating
   useEffect(() => {
     if (!editingAppliance) {
-      setPowerRating(defaultWattsByType[type] || defaultWattsByType['other']);
+      setPowerRating(defaultWattsByType[type] || defaultWattsByType['refrigerator']);
     }
   }, [type, editingAppliance]);
 
@@ -59,70 +45,74 @@ export const ApplianceForm = ({ onSubmit, editingAppliance, onCancel }) => {
     const usedHours = parseFloat(usedHoursPerDay);
     const watts = parseFloat(powerRating);
 
-    if (isNaN(usedHours) || isNaN(watts) || usedHours < 0 || watts < 0) {
-      alert('Please enter valid positive numbers for used hours and power rating.');
+    // Ensure all fields are valid before sending to the backend
+    if (isNaN(usedHours) || isNaN(watts) || usedHours < 0 || watts < 0 || !name || !type) {
+      alert('Please fill in all fields correctly.');
       return;
     }
 
-    // Calculate estimated monthly usage (kWh)
-    const monthlyUsage = ((watts * usedHours * 30) / 1000).toFixed(2);
+    // Calculate monthly usage (in kWh)
+    const monthlyUsage = ((watts * usedHours * 30) / 1000).toFixed(2);  // Assuming 30 days in a month
 
     const applianceData = {
       name,
       usedHoursPerDay: usedHours,
       powerRating: watts,
       type,
-      monthlyUsage: parseFloat(monthlyUsage),
+      monthlyUsage: parseFloat(monthlyUsage),  // Add monthlyUsage for backend
     };
 
+    console.log('Appliance data to send:', applianceData);  // Log the data being sent
+
     if (editingAppliance) {
-      // PUT request to update the appliance
-      await updateAppliance(editingAppliance.id, applianceData);
+      await updateAppliance(editingAppliance._id, applianceData);  // Use _id for backend consistency
     } else {
-      // POST request to add a new appliance
-      await addAppliance(applianceData);
+      await addAppliance(applianceData);  // Add new appliance
     }
   };
 
-  // Function to add a new appliance
   const addAppliance = async (applianceData) => {
     try {
-      const response = await fetch('/api/appliances', {
+      console.log('Sending appliance data to backend:', applianceData);  // Log the data before sending
+
+      const response = await fetch('http://localhost:5001/api/appliances', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          Authorization: `Bearer ${localStorage.getItem('token')}`, // Assuming JWT token is stored in localStorage
+          Authorization: `Bearer ${localStorage.getItem('token')}`,  // Ensure the token is passed correctly
         },
         body: JSON.stringify(applianceData),
       });
 
-      const result = await response.json();
+      const result = await response.json();  // Parse the backend response
+      console.log('Backend response:', result);  // Log the backend response
+
       if (response.ok) {
-        onSubmit(result.appliance);
+        onSubmit(result.appliances);  // Assuming appliances are returned in the response
       } else {
-        alert(result.message);
+        console.error('Error adding appliance:', result);  // Log the error returned by the backend
+        alert(result.message || 'Error adding appliance');
       }
     } catch (error) {
-      console.error('Error adding appliance:', error);
+      console.error('Error adding appliance:', error);  // Log unexpected errors
       alert('Error adding appliance');
     }
   };
 
-  // Function to update an existing appliance
   const updateAppliance = async (id, applianceData) => {
     try {
       const response = await fetch(`/api/appliances/${id}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
-          Authorization: `Bearer ${localStorage.getItem('token')}`, // Assuming JWT token is stored in localStorage
+          Authorization: `Bearer ${localStorage.getItem('token')}`,  // Ensure the token is passed correctly
         },
         body: JSON.stringify(applianceData),
       });
 
       const result = await response.json();
       if (response.ok) {
-        onSubmit(result.appliance);
+        onSubmit(result.appliances);  // Pass the updated appliances list to the parent component
       } else {
         alert(result.message);
       }
@@ -192,23 +182,10 @@ export const ApplianceForm = ({ onSubmit, editingAppliance, onCancel }) => {
             />
           </div>
 
-          {/* Power Rating with Info Icon and Tooltip */}
-          <div className="mb-4 relative">
-            <label
-              htmlFor="powerRating"
-              className="block text-sm font-medium text-gray-700 mb-1 flex items-center"
-            >
+          {/* Power Rating */}
+          <div className="mb-4">
+            <label htmlFor="powerRating" className="block text-sm font-medium text-gray-700 mb-1">
               Power Rating (Watts)
-              <InfoIcon
-                size={16}
-                className="ml-2 text-gray-500 text-blue-500 cursor-pointer"
-                tabIndex={0}
-                aria-describedby="powerRatingInfo"
-                onMouseEnter={() => setShowPowerInfo(true)}
-                onMouseLeave={() => setShowPowerInfo(false)}
-                onFocus={() => setShowPowerInfo(true)}
-                onBlur={() => setShowPowerInfo(false)}
-              />
             </label>
             <input
               id="powerRating"
@@ -219,20 +196,10 @@ export const ApplianceForm = ({ onSubmit, editingAppliance, onCancel }) => {
               required
               min="0"
             />
-            {showPowerInfo && (
-              <div
-                id="powerRatingInfo"
-                role="tooltip"
-                className="absolute bg-gray-100 text-gray-700 p-2 rounded shadow-md text-sm mt-1 max-w-xs z-10"
-                style={{ top: '100%', left: 0 }}
-              >
-                {defaultWattsInfo[type]}
-              </div>
-            )}
           </div>
         </div>
 
-        {/* Buttons */}
+        {/* Submit Button */}
         <div className="flex justify-end mt-4 space-x-2">
           {editingAppliance && (
             <button
