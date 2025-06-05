@@ -53,7 +53,7 @@ export const ApplianceForm = ({ onSubmit, editingAppliance, onCancel }) => {
     }
   }, [type, editingAppliance]);
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
     const usedHours = parseFloat(usedHoursPerDay);
@@ -76,14 +76,59 @@ export const ApplianceForm = ({ onSubmit, editingAppliance, onCancel }) => {
     };
 
     if (editingAppliance) {
-      onSubmit({ ...applianceData, id: editingAppliance.id });
+      // PUT request to update the appliance
+      await updateAppliance(editingAppliance.id, applianceData);
     } else {
-      onSubmit(applianceData);
-      // Reset form for next add
-      setName('');
-      setUsedHoursPerDay('');
-      setPowerRating(defaultWattsByType['other']);
-      setType('other');
+      // POST request to add a new appliance
+      await addAppliance(applianceData);
+    }
+  };
+
+  // Function to add a new appliance
+  const addAppliance = async (applianceData) => {
+    try {
+      const response = await fetch('/api/appliances', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${localStorage.getItem('token')}`, // Assuming JWT token is stored in localStorage
+        },
+        body: JSON.stringify(applianceData),
+      });
+
+      const result = await response.json();
+      if (response.ok) {
+        onSubmit(result.appliance);
+      } else {
+        alert(result.message);
+      }
+    } catch (error) {
+      console.error('Error adding appliance:', error);
+      alert('Error adding appliance');
+    }
+  };
+
+  // Function to update an existing appliance
+  const updateAppliance = async (id, applianceData) => {
+    try {
+      const response = await fetch(`/api/appliances/${id}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${localStorage.getItem('token')}`, // Assuming JWT token is stored in localStorage
+        },
+        body: JSON.stringify(applianceData),
+      });
+
+      const result = await response.json();
+      if (response.ok) {
+        onSubmit(result.appliance);
+      } else {
+        alert(result.message);
+      }
+    } catch (error) {
+      console.error('Error updating appliance:', error);
+      alert('Error updating appliance');
     }
   };
 
