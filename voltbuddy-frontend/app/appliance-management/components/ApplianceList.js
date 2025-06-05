@@ -13,7 +13,7 @@ export const ApplianceList = ({ onEdit, onDelete }) => {
         const response = await fetch('http://localhost:5001/api/appliances', {
           method: 'GET',
           headers: {
-            Authorization: `Bearer ${localStorage.getItem('token')}`, // Assuming JWT token is stored in localStorage
+            Authorization: `Bearer ${localStorage.getItem('token')}`,  // Ensure the token is passed correctly
           },
         });
 
@@ -31,7 +31,7 @@ export const ApplianceList = ({ onEdit, onDelete }) => {
     };
 
     fetchAppliances();
-  }, []);
+  }, []);  // Empty dependency array ensures this runs only once when the component mounts
 
   if (errorMessage) {
     return (
@@ -54,9 +54,8 @@ export const ApplianceList = ({ onEdit, onDelete }) => {
       <h3 className="text-xl font-semibold mb-4 text-gray-700">Your Appliances</h3>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
         {appliances.map((appliance) => (
-          // Use appliance._id (or another unique identifier) as the key
           <ApplianceCard
-            key={appliance._id} // Ensure that appliance._id is unique and used as the key
+            key={appliance._id} // Ensure the appliance _id is used as the unique key
             appliance={appliance}
             onEdit={onEdit}
             onDelete={onDelete}
