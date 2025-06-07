@@ -11,31 +11,46 @@ exports.register = async (req, res) => {
   try {
     const { username, email, password } = req.body;
 
-    
+    // Log incoming data (for debugging)
+    console.log('📥 Register body:', req.body);
+
+    // Validate required fields
+    if (!username || !email || !password) {
+      return res.status(400).json({ message: 'All fields are required' });
+    }
+
+    // Check for existing user
     const existingUser = await User.findOne({ $or: [{ email }, { username }] });
     if (existingUser) {
       return res.status(400).json({ message: 'User already exists' });
     }
 
-    
+    // Create and save new user
     const newUser = new User({ username, email, password });
     await newUser.save();
 
-   
-    const token = createToken(newUser);
+    // Create JWT token
+    const token = jwt.sign({ userId: newUser._id }, JWT_SECRET, { expiresIn: '7d' });
 
+    // Success response
     res.status(201).json({
       status: 'success',
-      data: { userId: newUser._id, username: newUser.username, email: newUser.email },
+      data: {
+        userId: newUser._id,
+        username: newUser.username,
+        email: newUser.email,
+      },
       token,
     });
   } catch (err) {
+    console.error('❌ Register error:', err); // full error log for debugging
     res.status(400).json({
       status: 'fail',
-      message: err.message,
+      message: err.message || 'Registration failed',
     });
   }
 };
+
 
 exports.login = async (req, res) => {
   try {

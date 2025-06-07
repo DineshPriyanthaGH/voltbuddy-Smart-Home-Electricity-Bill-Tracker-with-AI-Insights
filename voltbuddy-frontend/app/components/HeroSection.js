@@ -1,9 +1,12 @@
-'use client'
+"use client";
 
-import React from 'react'
+import React from "react";
 export const HeroSection = () => {
   return (
-    <div className="w-full bg-gradient-to-br from-blue-50 to-blue-100 py-16 md:py-24">
+    <div
+      className="w-full bg-gradient-to-br from-blue-50 to-blue-100 py-16 md:py-24"
+      id="home"
+    >
       <div className="container mx-auto px-4 md:px-6">
         <div className="flex flex-col md:flex-row items-center justify-between gap-8">
           <div className="w-full md:w-1/2 space-y-6">
@@ -27,15 +30,23 @@ export const HeroSection = () => {
               </button>
             </div>
           </div>
-          <div className="w-full md:w-1/2 flex justify-center">
+          <div className="relative w-full md:w-[600px] lg:w-[700px] flex items-center justify-center">
+            {/* Main 3D Character Image */}
             <img
-              src="https://images.unsplash.com/photo-1592833159057-6facceb4d3be?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80"
+              src="/images/homeimage.png"
               alt="Smart home electricity management"
-              className="rounded-xl shadow-xl max-w-full h-auto"
+              className="w-[300px] md:w-[300px] lg:w-[300px] z-10 relative "
+            />
+
+            {/* Logo positioned behind or beside */}
+            <img
+              src="/images/logo.png"
+              alt="VoltBuddy Logo"
+              className="absolute -top-6 right-10 md:-top-14 md:right-16 md:left-40 w-240 h-240 md:w-100 md:h-100 opacity-90 z-0"
             />
           </div>
         </div>
       </div>
     </div>
-  )
-}
+  );
+};

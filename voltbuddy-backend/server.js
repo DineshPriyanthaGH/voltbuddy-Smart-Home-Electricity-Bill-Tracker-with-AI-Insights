@@ -9,7 +9,6 @@ const chatRoutes = require('./routes/chat');
 const billHistoryRoutes = require('./routes/billHistoryRoutes'); 
 const applianceRoutes = require('./routes/applianceRoutes');
 
-
 const app = express();
 
 // CORS configuration to allow frontend origin and Authorization header
@@ -23,7 +22,11 @@ app.use(cors({
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-mongoose.connect(process.env.MONGODB_URI)
+mongoose.connect(process.env.MONGODB_URI, {
+  useNewUrlParser: true,
+  useUnifiedTopology: true,
+  serverSelectionTimeoutMS: 10000
+})
   .then(() => console.log('DB connected!'))
   .catch(err => console.error('DB connection error:', err));
 
