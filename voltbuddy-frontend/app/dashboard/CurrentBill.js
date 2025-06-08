@@ -41,6 +41,8 @@ export default function CurrentBill() {
   }, [startDate, endDate]);
 
   const calculateBill = () => {
+    setStatus("Pending");  // Reset status to Pending when Calculate Bill is clicked
+    setStatusColor("bg-yellow-200");  // Reset color to yellow (Pending)
     setLoading(true); // Start loading animation
 
     setTimeout(() => {
@@ -95,7 +97,7 @@ export default function CurrentBill() {
   // Function to mark as Paid
   const handleMarkAsPaid = () => {
     setStatus("Done");
-    setStatusColor("bg-green-200"); // Change color to green
+    setStatusColor("bg-green-200"); // Change color to green (Done)
   };
 
   // Function to reset status when another month is added
