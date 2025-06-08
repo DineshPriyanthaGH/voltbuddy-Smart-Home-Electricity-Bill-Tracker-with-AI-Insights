@@ -1,4 +1,4 @@
-'use client'
+'use client';
 
 import React, { useState, useEffect } from "react";
 
@@ -19,6 +19,7 @@ export default function CurrentBill() {
   const [endDate, setEndDate] = useState("2025-02-28");
 
   const [loading, setLoading] = useState(false); // Loading state
+  const token = localStorage.getItem("token");
 
   // Function to calculate the due date (next month 25th)
   const calculateDueDate = () => {
@@ -34,18 +35,17 @@ export default function CurrentBill() {
     return endMonth;
   };
 
-  // Update the month dynamically when dates change
   useEffect(() => {
     setMonth(calculateBillingPeriod());
     setDueDate(calculateDueDate());
   }, [startDate, endDate]);
 
-  const calculateBill = () => {
+  const calculateBill = async () => {
     setStatus("Pending");  // Reset status to Pending when Calculate Bill is clicked
     setStatusColor("bg-yellow-200");  // Reset color to yellow (Pending)
     setLoading(true); // Start loading animation
 
-    setTimeout(() => {
+    setTimeout(async () => {
       const consumption = endReading - startReading;
 
       // Initialize charges
@@ -80,10 +80,45 @@ export default function CurrentBill() {
       setFixedCharge(calculatedFixedCharge);
       setSscl(calculatedSscl);
       setAmount(totalAmount);
+
+      // Save the bill to the backend (Database)
+      await saveBillToDatabase(totalAmount, consumption);
+
       setLoading(false); // Stop loading after 10 seconds
     }, 10000); // Simulate loading for 10 seconds
   };
 
+  // Save the calculated bill data to the backend
+  const saveBillToDatabase = async (totalAmount, consumption) => {
+    const billData = {
+      month: month,
+      year: 2025,
+      billAmount: totalAmount,
+      consumption: consumption,
+    };
+
+    try {
+      const response = await fetch('http://localhost:5001/api/bills/update', {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(billData),
+      });
+
+      const data = await response.json();
+      if (response.ok) {
+        console.log('Bill updated successfully:', data.newBill);
+      } else {
+        console.error('Error updating bill:', data.message);
+      }
+    } catch (error) {
+      console.error('Error saving bill:', error);
+    }
+  };
+
+  // Handle form submission for calculating bill
   const handleSubmit = (e) => {
     e.preventDefault();
     calculateBill();
@@ -94,16 +129,28 @@ export default function CurrentBill() {
     return total > 0 ? (value / total) * 100 : 0;
   };
 
-  // Function to mark as Paid
-  const handleMarkAsPaid = () => {
+  // Function to mark the bill as Paid
+  const handleMarkAsPaid = async () => {
     setStatus("Done");
     setStatusColor("bg-green-200"); // Change color to green (Done)
-  };
 
-  // Function to reset status when another month is added
-  const handleResetStatus = () => {
-    setStatus("Pending");
-    setStatusColor("bg-yellow-200"); // Reset to yellow
+    try {
+      const response = await fetch(`http://localhost:5001/api/bills/mark-paid/${billId}`, {
+        method: 'PUT',
+        headers: {
+          'Authorization': `Bearer ${token}`,
+        },
+      });
+
+      const data = await response.json();
+      if (response.ok) {
+        console.log('Bill marked as paid:', data.updatedBill);
+      } else {
+        console.error('Error marking bill as paid:', data.message);
+      }
+    } catch (error) {
+      console.error('Error marking bill as paid:', error);
+    }
   };
 
   return (
