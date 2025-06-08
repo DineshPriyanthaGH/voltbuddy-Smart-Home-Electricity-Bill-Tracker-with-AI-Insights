@@ -7,6 +7,7 @@ const billSchema = new mongoose.Schema({
   billAmount: { type: Number, required: true },
   dueDate: { type: Date, required: true },  // The due date of the bill
   consumption: { type: Number, required: true },  // Power consumption in kWh
+  status: { type: String, default: "Pending" },  // Bill status
 });
 
 // Define the schema for appliances
