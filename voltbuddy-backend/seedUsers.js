@@ -78,6 +78,74 @@ const seedUsers = async () => {
   } else {
     console.log('User test5 found and updated');
   }
+  const user7 = await User.findOneAndUpdate(
+    { email: 'test7@example.com' },
+    {
+      $set: {
+        bills: [
+          { month: 'February', year: 2025, billAmount: 1100, dueDate: new Date('2025-03-25'), consumption: 340 },
+          { month: 'March', year: 2025, billAmount: 600, dueDate: new Date('2025-04-25'), consumption: 360 },
+          { month: 'April', year: 2025, billAmount: 1320, dueDate: new Date('2025-05-25'), consumption: 380 },
+          { month: 'May', year: 2025, billAmount: 100, dueDate: new Date('2025-06-25'), consumption: 400 },
+          { month: 'June', year: 2025, billAmount: 2000, dueDate: new Date('2025-07-25'), consumption: 420 },
+        ],
+      },
+    },
+    { new: true }
+  );
+
+  if (!user7) {
+    console.log('User test7 not found, creating new user');
+    await User.create({
+      username: 'test7',
+      email: 'test7@example.com',
+      password: '2002', // Plain text or hashed depending on your model
+      bills: [
+        { month: 'February', year: 2025, billAmount: 1100, dueDate: new Date('2025-03-25'), consumption: 340 },
+        { month: 'March', year: 2025, billAmount: 600, dueDate: new Date('2025-04-25'), consumption: 360 },
+        { month: 'April', year: 2025, billAmount: 1320, dueDate: new Date('2025-05-25'), consumption: 380 },
+        { month: 'May', year: 2025, billAmount: 100, dueDate: new Date('2025-06-25'), consumption: 400 },
+        { month: 'June', year: 2025, billAmount: 2000, dueDate: new Date('2025-07-25'), consumption: 420 },
+      ],
+    });
+    console.log('New user test7 created and bill histories added');
+  } else {
+    console.log('User test7 found and updated');
+  }
+  const user8 = await User.findOneAndUpdate(
+    { email: 'test8@example.com' },
+    {
+      $set: {
+        bills: [
+          { month: 'February', year: 2025, billAmount: 1100, dueDate: new Date('2025-03-25'), consumption: 340 },
+          { month: 'March', year: 2025, billAmount: 600, dueDate: new Date('2025-04-25'), consumption: 360 },
+          { month: 'April', year: 2025, billAmount: 1320, dueDate: new Date('2025-05-25'), consumption: 380 },
+          { month: 'May', year: 2025, billAmount: 100, dueDate: new Date('2025-06-25'), consumption: 400 },
+          { month: 'June', year: 2025, billAmount: 2000, dueDate: new Date('2025-07-25'), consumption: 420 },
+        ],
+      },
+    },
+    { new: true }
+  );
+
+  if (!user8) {
+    console.log('User test8 not found, creating new user');
+    await User.create({
+      username: 'test8',
+      email: 'test8@example.com',
+      password: '2002', // Plain text or hashed depending on your model
+      bills: [
+        { month: 'February', year: 2025, billAmount: 1100, dueDate: new Date('2025-03-25'), consumption: 340 },
+        { month: 'March', year: 2025, billAmount: 600, dueDate: new Date('2025-04-25'), consumption: 360 },
+        { month: 'April', year: 2025, billAmount: 1320, dueDate: new Date('2025-05-25'), consumption: 380 },
+        { month: 'May', year: 2025, billAmount: 100, dueDate: new Date('2025-06-25'), consumption: 400 },
+        { month: 'June', year: 2025, billAmount: 2000, dueDate: new Date('2025-07-25'), consumption: 420 },
+      ],
+    });
+    console.log('New user test8 created and bill histories added');
+  } else {
+    console.log('User test8 found and updated');
+  }
 };
 
 seedUsers().catch((error) => console.error(error));
