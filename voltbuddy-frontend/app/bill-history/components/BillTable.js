@@ -70,6 +70,7 @@ export default function BillTable({ token }) {
     return `01 ${month} - ${monthDays[month]} ${month} ${year}`;
   };
 
+  // Fetching bill history from the backend when component is mounted
   useEffect(() => {
     if (!token) {
       setError("Authentication token missing");
@@ -137,6 +138,31 @@ export default function BillTable({ token }) {
     setFilteredBills(filtered);
   }, [filterMonth, filterYear, filterLastNMonths, billHistory]);
 
+  // Function to handle Mark as Paid button
+  const handleMarkAsPaid = async (billId) => {
+    try {
+      const res = await fetch(`http://localhost:5001/api/bills/mark-paid/${billId}`, {
+        method: "PUT",
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      const data = await res.json();
+      if (res.ok) {
+        // Update bill status locally
+        setBillHistory((prevBills) =>
+          prevBills.map((bill) =>
+            bill._id === billId ? { ...bill, status: "Paid" } : bill
+          )
+        );
+      } else {
+        console.error("Error marking bill as paid:", data.message);
+      }
+    } catch (err) {
+      console.error("Error marking bill as paid:", err);
+    }
+  };
+
   if (loading) return <div className="p-6">Loading bill history...</div>;
   if (error) return <div className="p-6 text-red-600">Error: {error}</div>;
   if (!billHistory.length) return <div className="p-6 text-gray-600">No bill data available.</div>;
@@ -196,35 +222,43 @@ export default function BillTable({ token }) {
               <th className="px-4 py-3 text-left text-lm font-medium text-gray-600">Amount</th>
               <th className="px-4 py-3 text-left text-lm font-medium text-gray-600">Consumption</th>
               <th className="px-4 py-3 text-left text-lm font-medium text-gray-600">Status</th>
+              <th className="px-4 py-3 text-left text-lm font-medium text-gray-600">Actions</th>
             </tr>
           </thead>
           <tbody>
-            {filteredBills.map((bill, index) => {
-              const isJune = bill.month === "June" && bill.year === 2025;
-              const status = isJune ? "Pending" : "Paid";
-
-              return (
-                <tr key={index} className="border-b border-gray-100">
-                  <td className="px-4 py-4 text-sm text-gray-800">{formatBillingPeriod(bill.month, bill.year)}</td>
-                  <td className="px-4 py-4 text-sm text-gray-800">Rs. {bill.billAmount.toLocaleString()}</td>
-                  <td className="px-4 py-4 text-sm text-gray-800">{bill.consumption} kWh</td>
-                  <td className="px-4 py-4 text-sm">
-                    <div
-                      className={`flex items-center ${
-                        status === "Paid" ? "text-green-500" : "text-yellow-600"
-                      }`}
+            {filteredBills.map((bill) => (
+              <tr key={bill._id} className="border-b border-gray-100">
+                <td className="px-4 py-4 text-sm text-gray-800">
+                  {formatBillingPeriod(bill.month, bill.year)}
+                </td>
+                <td className="px-4 py-4 text-sm text-gray-800">Rs. {bill.billAmount}</td>
+                <td className="px-4 py-4 text-sm text-gray-800">{bill.consumption} kWh</td>
+                <td className="px-4 py-4 text-sm">
+                  <div
+                    className={`flex items-center ${
+                      bill.status === "Paid" ? "text-green-500" : "text-yellow-600"
+                    }`}
+                  >
+                    {bill.status === "Paid" ? (
+                      <CheckCircle size={16} className="mr-1" />
+                    ) : (
+                      <XCircle size={16} className="mr-1" />
+                    )}
+                    <span>{bill.status}</span>
+                  </div>
+                </td>
+                <td className="px-4 py-4 text-sm">
+                  {bill.status !== "Paid" && (
+                    <button
+                      onClick={() => handleMarkAsPaid(bill._id)}
+                      className="bg-green-500 text-white px-4 py-2 rounded-md text-sm font-medium hover:bg-green-600 transition duration-200"
                     >
-                      {status === "Paid" ? (
-                        <CheckCircle size={16} className="mr-1" />
-                      ) : (
-                        <XCircle size={16} className="mr-1" />
-                      )}
-                      <span>{status}</span>
-                    </div>
-                  </td>
-                </tr>
-              );
-            })}
+                      Mark as Paid
+                    </button>
+                  )}
+                </td>
+              </tr>
+            ))}
           </tbody>
         </table>
       </div>
