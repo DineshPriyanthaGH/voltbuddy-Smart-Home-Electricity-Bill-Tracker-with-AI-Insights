@@ -8,7 +8,9 @@ const App = () => {
   const [activeTab, setActiveTab] = useState('settings');
   const [showPassword, setShowPassword] = useState(false);
   const [showNotification, setShowNotification] = useState(false);
-const [profileData, setProfileData] = useState({
+  const [twoFactorAuthEnabled, setTwoFactorAuthEnabled] = useState(false);
+  const [loginNotificationsEnabled, setLoginNotificationsEnabled] = useState(true);
+  const [profileData, setProfileData] = useState({
     name: 'K.S Fernando',
     branch: 'Anuradhapura Branch',
     address: 'No:6,Main Street, Anuradhapura',
@@ -179,6 +181,7 @@ reader.onloadend = () => {
                   </div>
                 </div>
               </div>
+
               {/* Security Settings Section */}
               <div className="mb-10 bg-gray-50 p-6 rounded-xl border border-gray-100">
                 <h3 className="text-xl font-semibold text-gray-900 mb-6 flex items-center">
@@ -192,9 +195,15 @@ reader.onloadend = () => {
                       <p className="text-xs text-gray-500">Add an extra layer of security to your account</p>
                     </div>
 <div className="relative inline-block w-12 mr-2 align-middle select-none">
-  <input type="checkbox" id="toggle" className="sr-only" onChange={() => {}} defaultChecked={false} />
+  <input
+    type="checkbox"
+    id="toggle"
+    className="sr-only"
+    onChange={() => setTwoFactorAuthEnabled(!twoFactorAuthEnabled)}
+    defaultChecked={twoFactorAuthEnabled}
+  />
   <label htmlFor="toggle" className="block overflow-hidden h-6 rounded-full bg-gray-300 cursor-pointer dark:bg-gray-600">
-    <span className="dot absolute left-1 top-1 bg-white w-4 h-4 rounded-full transition-transform duration-300 ease-in-out"></span>
+    <span className="dot absolute left-1 top-1 bg-white w-4 h-4 rounded-full transition-transform duration-300 ease-in-out" style={{ transform: twoFactorAuthEnabled ? 'translateX(100%)' : 'translateX(0)' }}></span>
   </label>
 </div>
                   </div>
@@ -204,9 +213,15 @@ reader.onloadend = () => {
                       <p className="text-xs text-gray-500">Receive alerts when someone logs into your account</p>
                     </div>
 <div className="relative inline-block w-12 mr-2 align-middle select-none">
-  <input type="checkbox" id="toggle2" className="sr-only" onChange={() => {}} defaultChecked={true} />
-  <label htmlFor="toggle2" className="block overflow-hidden h-6 rounded-full bg-blue-600 cursor-pointer dark:bg-gray-600">
-    <span className="dot absolute left-2 top-1 bg-white w-4 h-4 rounded-full transition-transform duration-300 ease-in-out"></span>
+  <input
+    type="checkbox"
+    id="toggle2"
+    className="sr-only"
+    onChange={() => setLoginNotificationsEnabled(!loginNotificationsEnabled)}
+    defaultChecked={loginNotificationsEnabled}
+  />
+  <label htmlFor="toggle2" className="block overflow-hidden h-6 rounded-full cursor-pointer dark:bg-gray-600" style={{ backgroundColor: loginNotificationsEnabled ? '#3b82f6' : '#d1d5db' }}>
+    <span className="dot absolute left-2 top-1 bg-white w-4 h-4 rounded-full transition-transform duration-300 ease-in-out" style={{ transform: loginNotificationsEnabled ? 'translateX(100%)' : 'translateX(0)' }}></span>
   </label>
 </div>
                   </div>
@@ -256,6 +271,7 @@ reader.onloadend = () => {
                   </div>
                 </div>
               </div>
+              
               {/* Action Buttons */}
               <div className="flex justify-end space-x-4 mt-10">
                 <button
@@ -282,9 +298,6 @@ reader.onloadend = () => {
           background-color: #3b82f6;
         }
         #toggle:checked + label .dot {
-          transform: translateX(100%);
-        }
-        #toggle2:checked + label .dot {
           transform: translateX(100%);
         }
       `}</style>
