@@ -2,6 +2,7 @@ const jwt = require('jsonwebtoken');
 const User = require('../models/User');
 const JWT_SECRET = process.env.JWT_SECRET;
 
+// JWT Authentication Middleware
 async function authMiddleware(req, res, next) {
   try {
     // Check for the presence of token in the Authorization header
@@ -30,8 +31,26 @@ async function authMiddleware(req, res, next) {
     next(); 
   } catch (error) {
     console.error("Authentication error:", error);
+    if (error.name === 'JsonWebTokenError') {
+      return res.status(401).json({ message: 'Invalid token' });
+    } else if (error.name === 'TokenExpiredError') {
+      return res.status(401).json({ message: 'Token expired' });
+    }
     res.status(401).json({ message: 'Unauthorized: Token is expired or invalid' });
   }
 }
 
-module.exports = authMiddleware;
+// Error Handling Middleware
+function errorHandler(err, req, res, next) {
+  console.error(err);
+  res.status(500).json({
+    error: 'Internal Server Error',
+    message: err.message || 'An error occurred',
+  });
+}
+
+// Export both middlewares
+module.exports = {
+  authMiddleware,
+  errorHandler
+};
