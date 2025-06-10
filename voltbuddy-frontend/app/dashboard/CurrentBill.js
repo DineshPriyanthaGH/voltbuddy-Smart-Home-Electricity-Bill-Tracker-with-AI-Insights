@@ -7,7 +7,7 @@ export default function CurrentBill() {
   const [startReading, setStartReading] = useState(0);
   const [endReading, setEndReading] = useState(0);
   const [amount, setAmount] = useState(0);
-  const [month, setMonth] = useState("March 2025");
+  const [month, setMonth] = useState("March");
   const [dueDate, setDueDate] = useState("");
   const [status, setStatus] = useState("Pending");
   const [statusColor, setStatusColor] = useState("bg-yellow-200"); // Default to yellow (Pending)
@@ -15,15 +15,19 @@ export default function CurrentBill() {
   const [fixedCharge, setFixedCharge] = useState(0);
   const [energyCharge, setEnergyCharge] = useState(0);
   const [sscl, setSscl] = useState(0);
-  const [startDate, setStartDate] = useState("2025-01-30");
-  const [endDate, setEndDate] = useState("2025-02-28");
 
+  const [pendingBills, setPendingBills] = useState([]); // New state to store pending bills
   const [loading, setLoading] = useState(false); // Loading state
   const token = localStorage.getItem("token");
 
+  const months = [
+    "January", "February", "March", "April", "May", "June",
+    "July", "August", "September", "October", "November", "December"
+  ];
+
   // Function to calculate the due date (next month 25th)
   const calculateDueDate = () => {
-    const endMonth = new Date(endDate);
+    const endMonth = new Date();
     const dueDate = new Date(endMonth.setMonth(endMonth.getMonth() + 1));
     dueDate.setDate(25);
     return dueDate.toLocaleDateString();
@@ -31,14 +35,42 @@ export default function CurrentBill() {
 
   // Set Billing Period dynamically
   const calculateBillingPeriod = () => {
-    const endMonth = new Date(endDate).toLocaleString('default', { month: 'long', year: 'numeric' });
+    const endMonth = new Date().toLocaleString('default', { month: 'long', year: 'numeric' });
     return endMonth;
   };
 
   useEffect(() => {
-    setMonth(calculateBillingPeriod());
+    // Set the due date after the component mounts (Client-side only)
     setDueDate(calculateDueDate());
-  }, [startDate, endDate]);
+  }, [month]);
+
+  useEffect(() => {
+    // Fetch pending bills from the backend
+    const fetchPendingBills = async () => {
+      setLoading(true);
+      try {
+        const response = await fetch('http://localhost:5001/api/bills/bill-history', {
+          headers: {
+            'Authorization': `Bearer ${token}`,
+          }
+        });
+        const data = await response.json();
+        if (response.ok) {
+          // Filter pending bills from fetched data
+          const pendingBills = data.filter((bill) => bill.status === 'Pending');
+          setPendingBills(pendingBills);
+        } else {
+          console.error('Error fetching bills:', data.message);
+        }
+      } catch (error) {
+        console.error('Error fetching pending bills:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchPendingBills();
+  }, [token]);
 
   const calculateBill = async () => {
     setStatus("Pending");  // Reset status to Pending when Calculate Bill is clicked
@@ -96,6 +128,7 @@ export default function CurrentBill() {
       billAmount: totalAmount,
       consumption: consumption,
     };
+     console.log('Sending bill data to backend:', billData);
 
     try {
       const response = await fetch('http://localhost:5001/api/bills/update', {
@@ -124,13 +157,8 @@ export default function CurrentBill() {
     calculateBill();
   };
 
-  // Calculate the progress bar widths based on the amounts
-  const getProgressBarWidth = (value, total) => {
-    return total > 0 ? (value / total) * 100 : 0;
-  };
-
   // Function to mark the bill as Paid
-  const handleMarkAsPaid = async () => {
+  const handleMarkAsPaid = async (billId) => {
     setStatus("Done");
     setStatusColor("bg-green-200"); // Change color to green (Done)
 
@@ -145,12 +173,19 @@ export default function CurrentBill() {
       const data = await response.json();
       if (response.ok) {
         console.log('Bill marked as paid:', data.updatedBill);
+        // Remove the paid bill from the pending bills list
+        setPendingBills((prevBills) => prevBills.filter(bill => bill._id !== billId));
       } else {
         console.error('Error marking bill as paid:', data.message);
       }
     } catch (error) {
       console.error('Error marking bill as paid:', error);
     }
+  };
+
+  // Calculate the progress bar widths based on the amounts
+  const getProgressBarWidth = (value, total) => {
+    return total > 0 ? (value / total) * 100 : 0;
   };
 
   return (
@@ -162,35 +197,54 @@ export default function CurrentBill() {
         </div>
       </div>
 
+      {/* Pending Bills Section */}
+      <div className="mb-6">
+        <h3 className="text-lg font-semibold text-gray-800">Pending Bills</h3>
+        {loading ? (
+          <p>Loading pending bills...</p>
+        ) : (
+          <div>
+            {pendingBills.length === 0 ? (
+              <p>No pending bills.</p>
+            ) : (
+              pendingBills.map((bill) => (
+                <div key={bill._id} className="border p-4 mb-4 bg-gray-100 rounded-md">
+                  <p className="font-semibold">{bill.month} {bill.year}</p>
+                  <p>Amount Due: LKR {bill.billAmount}</p>
+                  <p>Due Date: {new Date(bill.dueDate).toLocaleDateString()}</p>
+                  <p>Status: <span className="text-yellow-600">Pending</span></p>
+                  <button
+                    onClick={() => handleMarkAsPaid(bill._id)}
+                    className="bg-green-500 text-white px-4 py-2 rounded-md text-sm font-medium hover:bg-green-600 mt-2"
+                  >
+                    Mark as Paid
+                  </button>
+                </div>
+              ))
+            )}
+          </div>
+        )}
+      </div>
+
+      {/* Form for calculating the bill */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        {/* Left side: Form and Display */}
         <div className="space-y-4">
           <form onSubmit={handleSubmit} className="space-y-4">
             <div>
               <label className="block text-gray-700 font-medium mb-1">
-                Start Date (Please select 30 days)
+                Select Month
               </label>
-              <input
-                type="date"
-                value={startDate}
-                onChange={(e) => setStartDate(e.target.value)}
+              <select
+                value={month}
+                onChange={(e) => setMonth(e.target.value)}
                 className="w-full border border-gray-300 rounded-md p-2 text-gray-500"
                 required
-              />
-              <span className="text-xs text-gray-500">Tip: Please select a 30-day period.</span>
-            </div>
-
-            <div>
-              <label className="block text-gray-700 font-medium mb-1">
-                End Date (30-day period)
-              </label>
-              <input
-                type="date"
-                value={endDate}
-                onChange={(e) => setEndDate(e.target.value)}
-                className="w-full border border-gray-300 rounded-md p-2 text-gray-500"
-                required
-              />
+              >
+                {months.map((month, index) => (
+                  <option key={index} value={month}>{month}</option>
+                ))}
+              </select>
+              <span className="text-xs text-gray-500">Tip: Please add reading from 01 of the selected month to 30 of the month.</span>
             </div>
 
             <div>
