@@ -293,10 +293,10 @@ export default function CurrentBill() {
 
             <button
               type="submit"
-              className="bg-indigo-600 text-white px-6 py-2 rounded-md text-sm font-medium hover:bg-indigo-700 transition duration-200"
+              className="bg-blue-600 cursor-pointer text-white px-6 py-2 rounded-md text-sm font-medium hover:bg-blue-700 transition duration-200"
             >
               {loading ? (
-                <div className="animate-spin inline-block w-5 h-5 border-4 border-t-indigo-600 border-gray-200 rounded-full"></div>
+                <div className="animate-spin inline-block w-5 h-5 border-4 border-t-blue-600 border-gray-200 rounded-full"></div>
               ) : (
                 "Calculate Bill"
               )}
