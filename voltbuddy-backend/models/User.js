@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 
-//schema for bill history
+// Schema for Bill History
 const billSchema = new mongoose.Schema({
   month: { type: String, required: true },  
   year: { type: Number, required: true },   
@@ -10,7 +10,7 @@ const billSchema = new mongoose.Schema({
   status: { type: String, default: "Pending" },  
 });
 
-//  schema for appliances
+// Schema for Appliances
 const applianceSchema = new mongoose.Schema({
   name: { type: String, required: true },
   type: { type: String, required: true },
@@ -18,15 +18,25 @@ const applianceSchema = new mongoose.Schema({
   powerRating: { type: Number, required: true },
   monthlyUsage: { type: Number, required: true },  
 });
-//  user schema
+
+// Schema for Future Energy Tips (for the user)
+const energyTipSchema = new mongoose.Schema({
+  title: { type: String, required: true },
+  description: { type: String, required: true },
+  icon: { type: String, default: "" }, // Can store an icon or URL for the tip
+});
+
+// User Schema (main schema)
 const userSchema = new mongoose.Schema({
   username: { type: String, required: true, unique: true },
   email: { type: String, required: true, unique: true, lowercase: true },
-  password: { type: String, required: true }, 
-  bills: [billSchema],  
-  appliances: [applianceSchema],  
+  password: { type: String, required: true },
+  bills: [billSchema],  // Store user's bill history
+  appliances: [applianceSchema],  // Store user's appliances and usage data
+  futureEnergyTips: [energyTipSchema],  // Store future energy-saving tips
 });
 
+// Method to compare password (for login)
 userSchema.methods.comparePassword = function(candidatePassword) {
   return this.password === candidatePassword;
 };
