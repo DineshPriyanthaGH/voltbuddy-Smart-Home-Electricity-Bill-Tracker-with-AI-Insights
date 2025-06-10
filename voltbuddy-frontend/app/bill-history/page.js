@@ -8,7 +8,7 @@ export default function Page() {
   const [token, setToken] = useState(null);
 
   useEffect(() => {
-    // Grab the JWT token saved during login
+   
     const savedToken = localStorage.getItem("token");
     setToken(savedToken);
   }, []);
