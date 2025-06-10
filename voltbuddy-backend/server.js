@@ -8,6 +8,10 @@ const userRoutes = require('./routes/userRoutes');
 const chatRoutes = require('./routes/chat');  
 const billHistoryRoutes = require('./routes/billHistoryRoutes'); 
 const applianceRoutes = require('./routes/applianceRoutes');
+const energyTipsRoutes = require('./routes/energyTipsRoutes');
+const { errorHandler } = require('./middleware/authMiddleware'); 
+// Custom error handler middleware
+
 
 const app = express();
 
@@ -30,15 +34,18 @@ mongoose.connect(process.env.MONGODB_URI, {
   .then(() => console.log('DB connected!'))
   .catch(err => console.error('DB connection error:', err));
 
+// Middleware to parse JSON
+ 
+
+  app.use('/api/users', userRoutes); // Routes for user management (save user data)
+app.use('/api/energy-tips', energyTipsRoutes);
 app.use('/api/auth', authRouter);
 app.use('/api/user', userRoutes);
 app.use('/api/chat', chatRoutes); 
 app.use('/api/bills', billHistoryRoutes);
 app.use('/api/appliances', applianceRoutes);
 
-app.get('/', (req, res) => {
-  res.send('Server is running');
-});
+app.use(errorHandler);
 
 const PORT = process.env.PORT || 5001;
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
