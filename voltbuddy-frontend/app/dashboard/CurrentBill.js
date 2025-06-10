@@ -25,7 +25,6 @@ export default function CurrentBill() {
     "July", "August", "September", "October", "November", "December"
   ];
 
-  // Function to calculate the due date (next month 25th)
   const calculateDueDate = () => {
     const endMonth = new Date();
     const dueDate = new Date(endMonth.setMonth(endMonth.getMonth() + 1));
@@ -33,19 +32,19 @@ export default function CurrentBill() {
     return dueDate.toLocaleDateString();
   };
 
-  // Set Billing Period dynamically
+ 
   const calculateBillingPeriod = () => {
     const endMonth = new Date().toLocaleString('default', { month: 'long', year: 'numeric' });
     return endMonth;
   };
 
   useEffect(() => {
-    // Set the due date after the component mounts (Client-side only)
+    
     setDueDate(calculateDueDate());
   }, [month]);
 
   useEffect(() => {
-    // Fetch pending bills from the backend
+   
     const fetchPendingBills = async () => {
       setLoading(true);
       try {
@@ -56,7 +55,7 @@ export default function CurrentBill() {
         });
         const data = await response.json();
         if (response.ok) {
-          // Filter pending bills from fetched data
+       
           const pendingBills = data.filter((bill) => bill.status === 'Pending');
           setPendingBills(pendingBills);
         } else {
@@ -73,18 +72,18 @@ export default function CurrentBill() {
   }, [token]);
 
   const calculateBill = async () => {
-    setStatus("Pending");  // Reset status to Pending when Calculate Bill is clicked
-    setStatusColor("bg-yellow-200");  // Reset color to yellow (Pending)
-    setLoading(true); // Start loading animation
+    setStatus("Pending");  
+    setStatusColor("bg-yellow-200"); 
+    setLoading(true); 
 
     setTimeout(async () => {
       const consumption = endReading - startReading;
 
-      // Initialize charges
+      
       let calculatedEnergyCharge = 0;
       let calculatedFixedCharge = 0;
 
-      // Tariff Calculation based on consumption
+      
       if (consumption <= 60) {
         calculatedEnergyCharge = consumption <= 30 ? consumption * 4 : (30 * 4) + ((consumption - 30) * 6);
         calculatedFixedCharge = 75;
@@ -102,25 +101,25 @@ export default function CurrentBill() {
         calculatedFixedCharge = 2000;
       }
 
-      // Calculate total bill amount
+     
       const subtotal = calculatedEnergyCharge + calculatedFixedCharge;
-      const calculatedSscl = subtotal * 0.025;  // SSCL tax of 2.5%
+      const calculatedSscl = subtotal * 0.025;  
       const totalAmount = subtotal + calculatedSscl;
 
-      // Update the state with the calculated amount and breakdowns
+      
       setEnergyCharge(calculatedEnergyCharge);
       setFixedCharge(calculatedFixedCharge);
       setSscl(calculatedSscl);
       setAmount(totalAmount);
 
-      // Save the bill to the backend (Database)
+    
       await saveBillToDatabase(totalAmount, consumption);
 
-      setLoading(false); // Stop loading after 10 seconds
-    }, 10000); // Simulate loading for 10 seconds
+      setLoading(false);
+    }, 10000); 
   };
 
-  // Save the calculated bill data to the backend
+ 
   const saveBillToDatabase = async (totalAmount, consumption) => {
     const billData = {
       month: month,
