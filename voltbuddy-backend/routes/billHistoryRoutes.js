@@ -1,10 +1,11 @@
-// billHistoryRoutes.js
+
+
 const express = require('express');
 const User = require('../models/User');
 const authMiddleware = require('../middleware/authMiddleware');
 const router = express.Router();
 
-// Get the bill history of a user
+
 router.get('/bill-history', authMiddleware, async (req, res) => {
   const userId = req.user.id;
 
@@ -12,9 +13,11 @@ router.get('/bill-history', authMiddleware, async (req, res) => {
     const user = await User.findById(userId);
     if (!user) return res.status(404).send('User not found.');
 
-    // Get bills for the current year
+    
+    
     const filteredBills = user.bills.filter(
-      (bill) => bill.year === 2025 // Example for filtering by year
+      (bill) => bill.year === 2025 
+      
     );
 
     res.json(filteredBills);
@@ -24,9 +27,11 @@ router.get('/bill-history', authMiddleware, async (req, res) => {
   }
 });
 
-// Update a bill (Calculate and store the new bill in the database)
 
-// Update a bill (Calculate and store the new bill in the database)
+
+
+
+
 router.post('/update', authMiddleware, async (req, res) => {
   const { month, year, billAmount, consumption } = req.body;
 
@@ -34,37 +39,47 @@ router.post('/update', authMiddleware, async (req, res) => {
     const user = await User.findById(req.user.id);
     if (!user) return res.status(404).send('User not found.');
 
-    // Create a valid Date object for the month and year
-    const monthIndex = new Date(Date.parse(month + " 1, 2020")).getMonth();  // Converts month name to month index (0 for Jan, 11 for Dec)
-    const dueDate = new Date(year, monthIndex, 25); // Set due date to the 25th of the given month
+  
+    
+    const monthIndex = new Date(Date.parse(month + " 1, 2020")).getMonth();  
+    
+    const dueDate = new Date(year, monthIndex, 25); 
+    
 
-    // Log the calculated dueDate for debugging
+    
+    
     console.log("Calculated dueDate:", dueDate);
 
-    // Check if the bill already exists for the given month and year
+    
+    
     const existingBill = user.bills.find(
       (bill) => bill.year === year && bill.month === month
     );
 
     if (existingBill) {
-      // Update the existing bill
+    
+      
       existingBill.billAmount = billAmount;
       existingBill.consumption = consumption;
       existingBill.dueDate = dueDate;
-      existingBill.status = 'Pending'; // Reset status to Pending
+      existingBill.status = 'Pending';
+      
       await user.save();
-      console.log('Bill updated:', existingBill);  // Log the updated bill
+      console.log('Bill updated:', existingBill);  
+      
       return res.json({ message: 'Bill updated successfully', updatedBill: existingBill });
     }
 
-    // If the bill does not exist, create a new one
+   
+    
     const newBill = {
       month,
       year,
       billAmount,
       consumption,
       dueDate,
-      status: 'Pending',  // Set status as 'Pending' initially
+      status: 'Pending', 
+      
     };
 
     user.bills.push(newBill); // Add the new bill to the user's bills
