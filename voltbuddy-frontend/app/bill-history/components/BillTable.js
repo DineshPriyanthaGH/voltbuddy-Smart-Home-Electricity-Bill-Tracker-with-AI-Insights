@@ -60,24 +60,24 @@ export default function BillTable({ token }) {
         <table className="w-full min-w-[500px]">
           <thead>
             <tr>
-              <th className="px-4 py-3 text-left text-lm font-medium text-gray-600">Billing Period</th>
-              <th className="px-4 py-3 text-left text-lm font-medium text-gray-600">Amount</th>
-              <th className="px-4 py-3 text-left text-lm font-medium text-gray-600">Consumption</th>
-              <th className="px-4 py-3 text-left text-lm font-medium text-gray-600">Status</th>
-              <th className="px-4 py-3 text-left text-lm font-medium text-gray-600">Actions</th>
+              <th className="px-4 py-3 text-left text-lm font-bold text-gray-600">Billing Period</th>
+              <th className="px-4 py-3 text-left text-lm font-bold text-gray-600">Amount</th>
+              <th className="px-4 py-3 text-left text-lm font-bold text-gray-600">Consumption</th>
+              <th className="px-10 py-3 text-left text-lm font-bold text-gray-600">Status</th>
+              <th className="px-4 py-3 text-left text-lm font-bold text-gray-600">Actions</th>
             </tr>
           </thead>
           <tbody>
             {billHistory.map((bill) => (
               <tr key={bill._id}>
-                <td>{bill.month} {bill.year}</td>
-                <td>{bill.billAmount}</td>
-                <td>{bill.consumption}</td>
-                <td>
+                <td className="text-gray-400">{bill.month} {bill.year}</td>
+                <td className="text-gray-400">{bill.billAmount}</td>
+                <td className="text-gray-400 ">{bill.consumption}</td>
+                <td className="text-green-500 flex items-center">
                   {bill.status === "Paid" ? (
                     <CheckCircle size={16} className="mr-1" />
                   ) : (
-                    <XCircle size={16} className="mr-1" />
+                    <XCircle size={16} className="mr-1 text-red-600" />
                   )}
                   {bill.status}
                 </td>
@@ -85,7 +85,7 @@ export default function BillTable({ token }) {
                   {bill.status !== "Paid" && (
                     <button
                       onClick={() => handleMarkAsPaid(bill._id)}
-                      className="bg-green-500 text-white px-4 py-2 rounded-md"
+                      className="bg-green-500 cursor-pointer font-bold text-white px-4 py-2 rounded-md"
                     >
                       Mark as Paid
                     </button>
