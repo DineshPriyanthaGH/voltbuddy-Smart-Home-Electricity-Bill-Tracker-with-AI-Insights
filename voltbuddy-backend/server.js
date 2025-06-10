@@ -11,12 +11,12 @@ const applianceRoutes = require('./routes/applianceRoutes');
 
 const app = express();
 
-// CORS configuration to allow frontend origin and Authorization header
+
 app.use(cors({
-  origin: 'http://localhost:3000',  // frontend origin
+  origin: 'http://localhost:3000',  
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-  allowedHeaders: ['Content-Type', 'Authorization'],  // allow Authorization header for JWT
-  credentials: true, // if you want to support cookies, sessions etc.
+  allowedHeaders: ['Content-Type', 'Authorization'],  
+  credentials: true, 
 }));
 
 app.use(express.json());
