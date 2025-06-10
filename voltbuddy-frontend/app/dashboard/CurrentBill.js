@@ -73,7 +73,7 @@ export default function CurrentBill() {
 
   const calculateBill = async () => {
     setStatus("Pending");  
-    setStatusColor("bg-yellow-200"); 
+    setStatusColor("bg-yellow-500"); 
     setLoading(true); 
 
     setTimeout(async () => {
@@ -187,63 +187,103 @@ export default function CurrentBill() {
     return total > 0 ? (value / total) * 100 : 0;
   };
 
+    const areAllBillsPaid = pendingBills.length === 0;
+
   return (
     <div className="bg-white rounded-lg shadow-sm p-12">
-      <div className="flex justify-between items-center mb-4">
-        <h2 className="text-xl font-semibold text-gray-800">Current Bill</h2>
-        <div className={`${statusColor} text-xs font-medium px-3 py-1 rounded-full`}>
-          {status === "Pending" ? "Due in " + Math.max(0, new Date(dueDate).getDate() - new Date().getDate()) + " days" : status}
+            <div className="flex justify-between items-center mb-4">
+        <h2 className="text-xl font-semibold text-gray-800">Your Pending Bills</h2>
+        <div className="flex justify-between space-x-2 items-center mb-4">
+          <div className={`${statusColor} text-xs text-black font-bold px-3 py-1 rounded-full`}>
+            {status === "Pending" ? "Due in " + Math.max(0, new Date(dueDate).getDate() - new Date().getDate()) + " days" : status}
+          </div>
         </div>
       </div>
 
       {/* Pending Bills Section */}
-<div className="mb-6">
-  <h3 className="text-lg font-semibold text-gray-800">Pending Bills</h3>
-  {loading ? (
-     <div className="flex flex-wrap gap-4">
-      
-      {Array(5).fill().map((_, index) => (
-        <div
-          key={index}
-          className="flex-none w-64 p-4 bg-gray-100 border rounded-md skeleton"
-        >
-          <div className="h-6 bg-gray-300 mb-2 skeleton"></div>
-          <div className="h-4 bg-gray-300 mb-2 skeleton"></div>
-          <div className="h-4 bg-gray-300 mb-2 skeleton"></div>
-          <div className="h-4 bg-gray-300 skeleton"></div>
-        </div>
-      ))}
-    </div>
-  )  : (
-    <div className="flex flex-wrap gap-4">
-      {pendingBills.length === 0 ? (
-        <p>No pending bills.</p>
-      ) : (
-        pendingBills.map((bill) => (
-          <div
-            key={bill._id}
-            className="flex-none w-64 p-4 bg-gray-100 border rounded-md"
-          >
-            <p className="font-semibold text-gray-600">{bill.month} {bill.year}</p>
-            <p className="text-gray-500">Amount Due: LKR {bill.billAmount}</p>
-            <p className="text-gray-500">Due Date: {new Date(bill.dueDate).toLocaleDateString()}</p>
-            <p className="text-gray-500">Status: <span className="text-red-600">Pending</span></p>
-            <button
-              onClick={() => handleMarkAsPaid(bill._id)}
-              className="bg-green-500 cursor-pointer text-white font-bold px-4 py-2 rounded-md text-sm  hover:bg-green-600 mt-2"
-            >
-              Mark as Paid
-            </button>
+      <div className="mb-6">
+        {loading ? (
+          <div className="flex flex-wrap gap-4">
+            {Array(5).fill().map((_, index) => (
+              <div
+                key={index}
+                className="flex-none w-64 p-4 bg-gray-100 border rounded-md skeleton"
+              >
+                <div className="h-6 bg-gray-300 mb-2 skeleton"></div>
+                <div className="h-4 bg-gray-300 mb-2 skeleton"></div>
+                <div className="h-4 bg-gray-300 mb-2 skeleton"></div>
+                <div className="h-4 bg-gray-300 skeleton"></div>
+              </div>
+            ))}
           </div>
-        ))
-      )}
-    </div>
-  )}
-</div>
+        ) : (
+          <div className="flex flex-wrap gap-4">
+            {pendingBills.length === 0 ? (
+              <div className="flex-none w- p-4 bg-gray-100 border rounded-md">
+                <div className="flex items-center">
+                  <div className="w-7 h-7 bg-green-500 rounded-full flex items-center justify-center text-white text-xs font-bold mr-2">
+                    ✓
+                  </div>
+                  <span className="text text-gray-500">
+                    No Pending Bills | All Bills Are Paid.
+                  </span>
+                </div>
+              </div>
+            ) : (
+              pendingBills.map((bill) => (
+                <div
+                  key={bill._id}
+                  className="flex-none w-64 p-4 bg-gray-100 border rounded-md"
+                >
+                  <p className="font-semibold text-gray-600">{bill.month} {bill.year}</p>
+                  <p className="text-gray-500">Amount Due: LKR {bill.billAmount}</p>
+                  <p className="text-gray-500">Due Date: {new Date(bill.dueDate).toLocaleDateString()}</p>
+                  <p className="text-gray-500">Status: <span className="text-red-600">Pending</span></p>
+                  <button
+                    onClick={() => handleMarkAsPaid(bill._id)}
+                    className="bg-green-500 cursor-pointer text-white font-bold px-4 py-2 rounded-md text-sm hover:bg-green-600 mt-2"
+                  >
+                    {loading ? (
+                      <div className="animate-spin inline-block w-5 h-5 border-4 border-t-blue-600 border-gray-200 rounded-full"></div> // Spin animation
+                    ) : (
+                      "Mark as Paid"
+                    )}
+                  </button>
+                </div>
+              ))
+            )}
+          </div>
+        )}
+      </div>
+
+      {/* Pay Now Button & All Bills Paid Message */}
+      <div className="mt-4">
+        {areAllBillsPaid ? (
+          <div className="bg-green-200 text-center text-gray-700 font-semibold py-2 rounded-md">
+            All Bills are Paid.
+          </div>
+        ) : (
+          <a
+            href="https://payment.ceb.lk/instantpay"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="bg-blue-500 text-white px-6 py-2 rounded-md text-sm font-medium hover:bg-blue-600 transition duration-200"
+          >
+            Pay Now
+          </a>
+        )}
+      </div>
+
+
+
 
 
       {/* Form for calculating the bill */}
+      <br></br>
+      <h2 className="text-xl font-semibold text-gray-800">Calculate Monthly Bill Amount</h2>
+      <br></br>
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        
         <div className="space-y-4">
           <form onSubmit={handleSubmit} className="space-y-4">
             <div>
@@ -385,27 +425,10 @@ export default function CurrentBill() {
             <span>Billing Period: {month}</span>
           </div>
 
-          <div className="mt-4">
-            {/* Pay Now Button */}
-            <a
-              href="https://www.ceb.lk/payment"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="bg-blue-500 text-white px-6 py-2 rounded-md text-sm font-medium hover:bg-blue-600 transition duration-200"
-            >
-              Pay Now
-            </a>
-          </div>
+        
 
           {/* Mark as Paid Button */}
-          <div className="mt-4">
-            <button
-              onClick={handleMarkAsPaid}
-              className="bg-green-500 text-white px-6 py-2 rounded-md text-sm font-medium hover:bg-green-600 transition duration-200"
-            >
-              Mark as Paid
-            </button>
-          </div>
+         
         </div>
       </div>
     </div>
