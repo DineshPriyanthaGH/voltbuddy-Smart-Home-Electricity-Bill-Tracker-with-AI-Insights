@@ -150,16 +150,16 @@ export default function CurrentBill() {
     }
   };
 
-  // Handle form submission for calculating bill
+  
   const handleSubmit = (e) => {
     e.preventDefault();
     calculateBill();
   };
 
-  // Function to mark the bill as Paid
+  
   const handleMarkAsPaid = async (billId) => {
     setStatus("Done");
-    setStatusColor("bg-green-200"); // Change color to green (Done)
+    setStatusColor("bg-green-200"); 
 
     try {
       const response = await fetch(`http://localhost:5001/api/bills/mark-paid/${billId}`, {
@@ -172,7 +172,7 @@ export default function CurrentBill() {
       const data = await response.json();
       if (response.ok) {
         console.log('Bill marked as paid:', data.updatedBill);
-        // Remove the paid bill from the pending bills list
+       
         setPendingBills((prevBills) => prevBills.filter(bill => bill._id !== billId));
       } else {
         console.error('Error marking bill as paid:', data.message);
@@ -182,7 +182,7 @@ export default function CurrentBill() {
     }
   };
 
-  // Calculate the progress bar widths based on the amounts
+
   const getProgressBarWidth = (value, total) => {
     return total > 0 ? (value / total) * 100 : 0;
   };
