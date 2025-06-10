@@ -3,21 +3,21 @@
 import React, { useState, useEffect } from "react";
 
 export default function CurrentBill() {
-  // State for controlled inputs
+
   const [startReading, setStartReading] = useState(0);
   const [endReading, setEndReading] = useState(0);
   const [amount, setAmount] = useState(0);
   const [month, setMonth] = useState("March");
   const [dueDate, setDueDate] = useState("");
   const [status, setStatus] = useState("Pending");
-  const [statusColor, setStatusColor] = useState("bg-yellow-200"); // Default to yellow (Pending)
+  const [statusColor, setStatusColor] = useState("bg-yellow-200"); 
 
   const [fixedCharge, setFixedCharge] = useState(0);
   const [energyCharge, setEnergyCharge] = useState(0);
   const [sscl, setSscl] = useState(0);
 
-  const [pendingBills, setPendingBills] = useState([]); // New state to store pending bills
-  const [loading, setLoading] = useState(false); // Loading state
+  const [pendingBills, setPendingBills] = useState([]); 
+  const [loading, setLoading] = useState(false); 
   const token = localStorage.getItem("token");
 
   const months = [
