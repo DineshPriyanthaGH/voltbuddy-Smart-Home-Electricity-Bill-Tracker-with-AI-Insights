@@ -82,20 +82,20 @@ router.post('/update', authMiddleware, async (req, res) => {
       
     };
 
-    user.bills.push(newBill); // Add the new bill to the user's bills
-    await user.save(); // Save the updated user
+    user.bills.push(newBill);
+    await user.save(); 
 
-    console.log('New bill added:', newBill);  // Log the newly added bill
+    console.log('New bill added:', newBill);
     res.json({ message: 'Bill added successfully', newBill });
   } catch (error) {
-    console.error('Error updating the bill:', error);  // Log the full error for debugging
+    console.error('Error updating the bill:', error);  
     res.status(500).json({ message: 'Error updating the bill.' });
   }
 });
 
 
 
-// Mark a bill as paid
+
 router.put('/mark-paid/:billId', authMiddleware, async (req, res) => {
   const { billId } = req.params;
 
@@ -103,11 +103,11 @@ router.put('/mark-paid/:billId', authMiddleware, async (req, res) => {
     const user = await User.findById(req.user.id);
     if (!user) return res.status(404).send('User not found.');
 
-    const bill = user.bills.id(billId); // Find the bill by its ID
+    const bill = user.bills.id(billId); 
     if (!bill) return res.status(404).send('Bill not found.');
 
-    bill.status = 'Paid'; // Mark the bill as paid
-    await user.save(); // Save the updated user
+    bill.status = 'Paid'; 
+    await user.save(); 
 
     res.json({ message: 'Bill marked as paid', updatedBill: bill });
   } catch (error) {
