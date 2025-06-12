@@ -1,29 +1,51 @@
 // services/geminiService.js
-const fetch = require('node-fetch');
+require('dotenv').config();  // Load environment variables from .env
+const { GoogleGenAI } = require('@google/genai'); // Import GoogleGenAI SDK
 
-// Function to interact with Gemini API and get energy-saving tips
+const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY }); // Initialize the API with the key
+
+// Function to interact with the Gemini API and get energy-saving tips
 async function getEnergyTipsFromGemini(billHistory, applianceUsage) {
   try {
-    const response = await fetch('https://api.gemini.com/energy-tips', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer AIzaSyDBFlr2UtARy-M1z7hQvpvWcDClq0RfLaY`,  // Replace with your actual Gemini API key
+    const content = `
+      Based on the following bill history and appliance usage, generate energy-saving tips:
+
+      Bill History: ${JSON.stringify(billHistory)}
+
+      Appliance Usage: ${JSON.stringify(applianceUsage)}
+
+      Provide tips that could help reduce energy consumption.
+    `;
+
+    const response = await ai.models.generateContent({
+      model: "gemini-2.0-flash",  // Specify the model
+      contents: content,  // Pass the input (bill history and appliance usage)
+      config: {
+        maxOutputTokens: 500,
+        temperature: 0.7,
       },
-      body: JSON.stringify({
-        billHistory,
-        applianceUsage,
-      }),
     });
 
-    if (!response.ok) {
-      throw new Error('Failed to fetch energy tips');
-    }
+    // Split the response into lines (each line represents a tip)
+    const tips = response.text.split('\n').map((tip, index) => {
+      const description = tip.trim();  // Clean up any extra whitespace
+      
+      // If a description is missing or empty, provide a default
+      if (!description) {
+        return null;  // Return null for tips without a valid description
+      }
 
-    const data = await response.json();
-    return data.tips;  // Assuming Gemini API returns tips in a "tips" field
+      // Return the tip with a proper title and description
+      return {
+        title: `Tip ${index + 1}`,
+        description: description || "No description available", // Default description if empty
+      };
+    }).filter(Boolean);  // Remove null or invalid tips
+
+    return tips; // Return the valid tips
   } catch (error) {
-    throw new Error(error.message || 'Error fetching future tips from Gemini');
+    console.error('Error generating energy tips:', error);
+    throw new Error('Failed to generate energy-saving tips');
   }
 }
 
