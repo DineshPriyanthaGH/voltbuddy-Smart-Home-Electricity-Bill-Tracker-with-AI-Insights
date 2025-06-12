@@ -65,15 +65,18 @@ exports.updateProfile = async (req, res) => {
 };
 
 // Save user data (bill history, appliance usage) and generate future energy-saving tips
+// controllers/userController.js
+// Save user data (bill history, appliance usage) and generate future energy-saving tips
 exports.saveUserData = async (req, res) => {
   const { userId, billHistory, applianceUsage } = req.body;
 
   try {
-    // Find user or create new user
+    // Find user or create a new user
     let user = await User.findById(userId);
     if (!user) {
       user = new User({ _id: userId, billHistory, applianceUsage });
     } else {
+      // Update the existing user with the new bill history and appliance usage
       user.billHistory = billHistory;
       user.applianceUsage = applianceUsage;
     }
@@ -81,19 +84,21 @@ exports.saveUserData = async (req, res) => {
     // Save the user data in the database
     await user.save();
 
-    // Call Gemini API to generate energy-saving tips
+    // Call Gemini API to regenerate energy-saving tips based on updated data
     const futureTips = await getEnergyTipsFromGemini(billHistory, applianceUsage);
-    
-    // Store the future tips in the user's profile
-    user.futureEnergyTips = futureTips;  
-    await user.save();  // Save the user with the new future energy-saving tips
 
+    // Store the regenerated future tips in the user's profile
+    user.futureEnergyTips = futureTips;
+    await user.save();  // Save the updated user with new energy-saving tips
+
+    // Respond with success and the newly generated tips
     res.status(200).json({ status: 'success', tips: futureTips });
   } catch (err) {
     console.error('Error saving user data:', err);
     res.status(500).json({ status: 'fail', message: 'Failed to save data' });
   }
 };
+
 
 // Get saved user data (bill history, appliance usage, and energy-saving tips)
  exports.getUserData = async (req, res) => {
