@@ -34,10 +34,10 @@ mongoose.connect(process.env.MONGODB_URI, {
   .then(() => console.log('DB connected!'))
   .catch(err => console.error('DB connection error:', err));
 
-// Middleware to parse JSON
+
  
 
-  app.use('/api/users', userRoutes); // Routes for user management (save user data)
+  app.use('/api/users', userRoutes); 
 app.use('/api/energy-tips', energyTipsRoutes);
 app.use('/api/auth', authRouter);
 app.use('/api/user', userRoutes);
