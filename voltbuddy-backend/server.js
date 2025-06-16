@@ -10,7 +10,7 @@ const billHistoryRoutes = require('./routes/billHistoryRoutes');
 const applianceRoutes = require('./routes/applianceRoutes');
 const energyTipsRoutes = require('./routes/energyTipsRoutes');
 const { errorHandler } = require('./middleware/authMiddleware'); 
-// Custom error handler middleware
+
 
 
 const app = express();
