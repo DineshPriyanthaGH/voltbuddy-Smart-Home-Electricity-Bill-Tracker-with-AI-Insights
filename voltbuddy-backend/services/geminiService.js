@@ -18,31 +18,30 @@ async function getEnergyTipsFromGemini(billHistory, applianceUsage) {
     `;
 
     const response = await ai.models.generateContent({
-      model: "gemini-2.0-flash",  // Specify the model
-      contents: content,  // Pass the input (bill history and appliance usage)
+      model: "gemini-2.0-flash",  
+      contents: content,  
       config: {
         maxOutputTokens: 500,
         temperature: 0.7,
       },
     });
 
-    // Split the response into lines (each line represents a tip)
+    
     const tips = response.text.split('\n').map((tip, index) => {
-      const description = tip.trim();  // Clean up any extra whitespace
+      const description = tip.trim();  
       
-      // If a description is missing or empty, provide a default
+     
       if (!description) {
-        return null;  // Return null for tips without a valid description
+        return null; 
       }
 
-      // Return the tip with a proper title and description
+      
       return {
         title: `Tip ${index + 1}`,
-        description: description || "No description available", // Default description if empty
+        description: description || "No description available", 
       };
-    }).filter(Boolean);  // Remove null or invalid tips
-
-    return tips; // Return the valid tips
+    }).filter(Boolean); 
+    return tips; 
   } catch (error) {
     console.error('Error generating energy tips:', error);
     throw new Error('Failed to generate energy-saving tips');
