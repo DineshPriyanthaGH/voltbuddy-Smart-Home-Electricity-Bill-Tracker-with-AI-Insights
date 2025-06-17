@@ -1,10 +1,10 @@
-// services/geminiService.js
-require('dotenv').config();  // Load environment variables from .env
-const { GoogleGenAI } = require('@google/genai'); // Import GoogleGenAI SDK
 
-const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY }); // Initialize the API with the key
+require('dotenv').config();  
+const { GoogleGenAI } = require('@google/genai'); 
 
-// Function to interact with the Gemini API and get energy-saving tips
+const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY }); 
+
+
 async function getEnergyTipsFromGemini(billHistory, applianceUsage) {
   try {
     const content = `
