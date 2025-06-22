@@ -23,7 +23,7 @@ exports.addAppliance = async (req, res) => {
   }
 };
 
-// Update an existing appliance
+
 exports.updateAppliance = async (req, res) => {
   try {
     const userId = req.user._id;
