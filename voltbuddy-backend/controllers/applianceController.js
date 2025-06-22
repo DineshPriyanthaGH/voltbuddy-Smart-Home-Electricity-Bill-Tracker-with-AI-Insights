@@ -3,7 +3,7 @@ const User = require('../models/User');
 // Add a new appliance
 exports.addAppliance = async (req, res) => {
   try {
-    const userId = req.user._id; // assume req.user is set by auth middleware
+    const userId = req.user._id; 
     const { name, type, usedHoursPerDay, powerRating, monthlyUsage } = req.body;
 
     if (!name || !type || usedHoursPerDay == null || powerRating == null || monthlyUsage == null) {
