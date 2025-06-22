@@ -1,6 +1,6 @@
 const User = require('../models/User');
 
-// Add a new appliance
+
 exports.addAppliance = async (req, res) => {
   try {
     const userId = req.user._id; // assume req.user is set by auth middleware
