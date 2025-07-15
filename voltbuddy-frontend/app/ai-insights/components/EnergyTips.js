@@ -2,6 +2,7 @@
 import React, { useEffect, useState } from 'react'
 import { LightbulbIcon, ThermometerIcon, TvIcon, PlugZapIcon } from 'lucide-react'
 import TipCard from './shared/TipCard'
+import CardSkeleton from './shared/CardSkeleton'
 
 const iconMap = {
   led: <LightbulbIcon className="h-8 w-8 text-green-500" />,
@@ -30,8 +31,7 @@ export function EnergyTips() {
       setLoading(true)
       setError('')
       try {
-        // TODO: Replace with real user data or fetch from context/store if needed
-        const token = localStorage.getItem('token') // or get from context
+        const token = localStorage.getItem('token')
         const billHistory = JSON.parse(localStorage.getItem('billHistory') || '[]')
         const applianceUsage = JSON.parse(localStorage.getItem('applianceUsage') || '[]')
 
@@ -67,7 +67,11 @@ export function EnergyTips() {
         Energy-Saving Tips
       </h2>
       {loading && (
-        <div className="text-gray-500 mb-4">Loading tips...</div>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-4">
+          {[...Array(4)].map((_, idx) => (
+            <CardSkeleton key={idx} />
+          ))}
+        </div>
       )}
       {error && (
         <div className="text-red-500 mb-4">{error}</div>
