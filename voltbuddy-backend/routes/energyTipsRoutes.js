@@ -1,9 +1,8 @@
-// routes/energyTipsRoutes.js
 const express = require('express');
-const { generateEnergyTips } = require('../controllers/energyTipsController');
+const { generateEnergyTips, generateCostStrategies } = require('../controllers/energyTipsController');
 const router = express.Router();
 
-// Route to generate energy-saving tips
 router.post('/', generateEnergyTips);
+router.post('/cost-strategies', generateCostStrategies);
 
 module.exports = router;
