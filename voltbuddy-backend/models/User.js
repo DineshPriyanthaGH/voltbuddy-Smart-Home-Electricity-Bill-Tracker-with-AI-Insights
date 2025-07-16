@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 
-// Schema for Bill History
+// Bill History Schema
 const billSchema = new mongoose.Schema({
   month: { type: String, required: true },  
   year: { type: Number, required: true },   
@@ -10,7 +10,7 @@ const billSchema = new mongoose.Schema({
   status: { type: String, default: "Pending" },  
 });
 
-// Schema for Appliances
+// Appliances Schema
 const applianceSchema = new mongoose.Schema({
   name: { type: String, required: true },
   type: { type: String, required: true },
@@ -19,24 +19,39 @@ const applianceSchema = new mongoose.Schema({
   monthlyUsage: { type: Number, required: true },  
 });
 
-// Schema for Future Energy Tips (for the user)
+// Energy Tips Schema
 const energyTipSchema = new mongoose.Schema({
   title: { type: String, required: true },
   description: { type: String, required: true },
-  icon: { type: String, default: "" }, // Can store an icon or URL for the tip
+  icon: { type: String, default: "" },
 });
 
-// User Schema (main schema)
+// Notification Schema
+const notificationSchema = new mongoose.Schema({
+  type: { 
+    type: String, 
+    enum: ['system', 'reminder', 'bill_due', 'ai-tip', 'promo', 'welcome'], 
+    required: true 
+  },
+  title: { type: String, required: true },
+  message: { type: String, required: true },
+  data: { type: Object, default: {} },
+  read: { type: Boolean, default: false },
+  createdAt: { type: Date, default: Date.now }
+});
+
+// User Schema (Main)
 const userSchema = new mongoose.Schema({
   username: { type: String, required: true, unique: true },
   email: { type: String, required: true, unique: true, lowercase: true },
   password: { type: String, required: true },
-  bills: [billSchema],  // Store user's bill history
-  appliances: [applianceSchema],  // Store user's appliances and usage data
-  futureEnergyTips: [energyTipSchema],  // Store future energy-saving tips
+  bills: [billSchema],
+  appliances: [applianceSchema],
+  futureEnergyTips: [energyTipSchema],
+  notifications: [notificationSchema]
 });
 
-// Method to compare password (for login)
+// Method to compare password
 userSchema.methods.comparePassword = function(candidatePassword) {
   return this.password === candidatePassword;
 };
