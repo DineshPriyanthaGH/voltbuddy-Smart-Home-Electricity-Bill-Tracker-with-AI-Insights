@@ -3,22 +3,30 @@ const { GoogleGenAI } = require('@google/genai');
 
 const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY });
 
-/**
- * Helper: Robustly extract and parse a JSON array from AI output.
- */
+// -------- Add Both Helper Functions! --------
+function robustParseJsonObject(text) {
+  const jsonStart = text.indexOf('{');
+  const jsonEnd = text.lastIndexOf('}');
+  if (jsonStart === -1 || jsonEnd === -1 || jsonEnd <= jsonStart) throw new Error('No valid JSON object found');
+  let jsonString = text.substring(jsonStart, jsonEnd + 1);
+  jsonString = jsonString.replace(/,\s*}/g, '}').replace(/,\s*]/g, ']');
+  try {
+    return JSON.parse(jsonString);
+  } catch (e) {
+    const lastObjEnd = jsonString.lastIndexOf('},');
+    if (lastObjEnd === -1) throw e;
+    const fixedStr = jsonString.slice(0, lastObjEnd + 1) + '}';
+    return JSON.parse(fixedStr);
+  }
+}
 function robustParseJsonArray(text) {
-  // Remove markdown code block markers (if present)
-  text = text.replace(/``````/g, '');
-
-  // Extract array from first [ to last ]
+  text = text.replace(/``````/g, ''); // Remove code block markers if present
   const start = text.indexOf('[');
   const end = text.lastIndexOf(']');
   if (start === -1 || end === -1 || end <= start) throw new Error('No valid JSON array found');
   let jsonStr = text.slice(start, end + 1);
-
   // Remove trailing commas before ] or }
   jsonStr = jsonStr.replace(/,\s*]/g, ']').replace(/,\s*}/g, '}');
-
   try {
     return JSON.parse(jsonStr);
   } catch (e) {
@@ -29,11 +37,8 @@ function robustParseJsonArray(text) {
     return JSON.parse(fixedStr);
   }
 }
+// -------------------------------------------
 
-/**
- * Generate energy-saving tips using Gemini AI.
- * Returns array of { title, description, learnMore }
- */
 async function getEnergyTipsFromGemini(billHistory, applianceUsage) {
   try {
     const prompt = `
@@ -85,10 +90,6 @@ User Appliance Usage: ${JSON.stringify(applianceUsage)}
   }
 }
 
-/**
- * Generate cost reduction strategies using Gemini AI.
- * Returns array of { title, summary, details, learnMore, problem, strategy, controls }
- */
 async function getCostStrategiesFromGemini(billHistory, applianceUsage) {
   try {
     const prompt = `
@@ -154,7 +155,43 @@ User Appliance Usage: ${JSON.stringify(applianceUsage)}
   }
 }
 
+
+async function getPredictionFromGemini(billHistory) {
+  try {
+    const prompt = `
+You are an AI energy analyst. Based strictly on the user's monthly bill history array (see below, only use the "consumption" key), generate a 12-month energy usage prediction table and actionable insights.
+
+Return a JSON object with:
+- "predictionTable": array of objects with "month" (abbreviated, e.g., 'Jan'), "currentConsumption" (from bill history, for the months with data, otherwise null), "predictedConsumption" (estimate for each month)
+- "insights": array of objects, each with "title" and "description" -- actionable, personalized and data-driven (e.g., 'Savings Trend', 'Usage Alert', 'Seasonal Adjustment', etc.)
+
+User Bill History: ${JSON.stringify(billHistory)}
+
+Return ONLY the JSON object in the above format.
+    `;
+    const response = await ai.models.generateContent({
+      model: "gemini-2.0-flash",
+      contents: prompt,
+      config: { maxOutputTokens: 950, temperature: 0.7 },
+    });
+    let parsed;
+    try {
+      parsed = robustParseJsonObject(response.text);
+    } catch (e) {
+      console.error('Gemini prediction parse error:', e, response.text);
+      throw new Error('Failed to parse prediction');
+    }
+    if (!parsed.predictionTable || !Array.isArray(parsed.predictionTable)) throw new Error('Missing or invalid predictionTable');
+    if (!parsed.insights || !Array.isArray(parsed.insights)) throw new Error('Missing or invalid insights');
+    return parsed;
+  } catch (error) {
+    throw new Error('Failed to generate prediction');
+  }
+}
+
+
 module.exports = {
   getEnergyTipsFromGemini,
-  getCostStrategiesFromGemini
+  getCostStrategiesFromGemini,
+  getPredictionFromGemini,
 };
