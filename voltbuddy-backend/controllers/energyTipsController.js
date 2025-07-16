@@ -1,4 +1,4 @@
-const { getEnergyTipsFromGemini, getCostStrategiesFromGemini } = require('../services/geminiService');
+const { getEnergyTipsFromGemini, getCostStrategiesFromGemini,  getPredictionFromGemini, } = require('../services/geminiService');
 
 exports.generateEnergyTips = async (req, res) => {
   try {
@@ -34,5 +34,31 @@ exports.generateCostStrategies = async (req, res) => {
   } catch (error) {
     console.error('Error generating cost reduction strategies:', error);
     res.status(500).json({ status: 'fail', message: 'Failed to generate cost reduction strategies' });
+  }
+};
+
+exports.generatePredictions = async (req, res) => {
+  try {
+    // User ID is provided by auth middleware
+    if (!req.user || !req.user._id) {
+      return res.status(401).json({ status: 'fail', message: 'Unauthorized' });
+    }
+    const user = await User.findById(req.user._id).select('bills');
+    if (!user || !user.bills.length) {
+      return res.status(404).json({ status: 'fail', message: 'No bill history found' });
+    }
+
+    // Use only needed fields
+    const billHistory = user.bills.map(b => ({
+      month: b.month,
+      year: b.year,
+      consumption: b.consumption,
+    }));
+
+    const prediction = await getPredictionFromGemini(billHistory);
+    res.status(200).json({ status: 'success', prediction });
+  } catch (error) {
+    console.error('Error generating predictions:', error);
+    res.status(500).json({ status: 'fail', message: 'Failed to generate predictions' });
   }
 };
