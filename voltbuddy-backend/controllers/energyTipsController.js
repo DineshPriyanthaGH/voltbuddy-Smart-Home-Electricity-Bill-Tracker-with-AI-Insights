@@ -1,5 +1,5 @@
 const { getEnergyTipsFromGemini, getCostStrategiesFromGemini,  getPredictionFromGemini, } = require('../services/geminiService');
-
+const User = require('../models/User'); 
 exports.generateEnergyTips = async (req, res) => {
   try {
     const { billHistory, applianceUsage } = req.body;
