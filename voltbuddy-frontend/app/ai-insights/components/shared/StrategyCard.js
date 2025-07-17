@@ -1,6 +1,7 @@
 import React from 'react'
 import { CheckCircleIcon } from 'lucide-react'
-export function StrategyCard({ icon, title, description, tips }) {
+
+export function StrategyCard({ icon, title, description, tips, onLearnMore }) {
   return (
     <div className="bg-white shadow rounded-lg p-6 hover:shadow-md transition-shadow">
       <div className="flex items-center mb-4">
@@ -9,14 +10,17 @@ export function StrategyCard({ icon, title, description, tips }) {
       </div>
       <p className="text-gray-600 mb-4">{description}</p>
       <ul className="mb-4 space-y-2">
-        {tips.map((tip, index) => (
+        {tips && tips.map((tip, index) => (
           <li key={index} className="flex items-start">
             <CheckCircleIcon className="h-5 w-5 text-green-500 mr-2 mt-0.5 flex-shrink-0" />
             <span className="text-gray-700">{tip}</span>
           </li>
         ))}
       </ul>
-      <button className="text-blue-600 hover:text-blue-800 font-medium flex items-center">
+      <button
+        className="text-blue-600 hover:text-blue-800 font-medium flex items-center"
+        onClick={onLearnMore}
+      >
         Learn More
         <svg
           className="w-4 h-4 ml-1"
@@ -36,4 +40,4 @@ export function StrategyCard({ icon, title, description, tips }) {
     </div>
   )
 }
-export default StrategyCard;
+export default StrategyCard

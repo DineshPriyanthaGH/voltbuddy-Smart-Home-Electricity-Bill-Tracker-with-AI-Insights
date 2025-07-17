@@ -81,7 +81,7 @@ export const BillChart = ({ dateRange, token }) => {
 
   return (
     <div className="bg-white rounded-lg shadow-sm p-6 sm:mx-20 mx-4">
-      {/* Toggle Tabs */}
+         {/* Toggle Tabs */}
       <div className="flex justify-center mb-6">
         <div className="inline-flex rounded-md shadow-sm" role="group">
           <button

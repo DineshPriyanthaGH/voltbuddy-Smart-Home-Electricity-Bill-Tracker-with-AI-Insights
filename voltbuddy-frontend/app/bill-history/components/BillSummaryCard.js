@@ -4,7 +4,7 @@ import { BillChart } from "./BillChart";
 
 export default function BillSummaryCard({ token }) {
   const [open, setOpen] = useState(false);
-  const [selected, setSelected] = useState(3); // default Last 3 Months
+  const [selected, setSelected] = useState(3); 
   const ref = useRef();
 
   const options = [
@@ -13,7 +13,7 @@ export default function BillSummaryCard({ token }) {
     { label: "Last 9 Months", value: 9 },
   ];
 
-  // Close dropdown on outside click
+  
   useEffect(() => {
     function handleClickOutside(event) {
       if (ref.current && !ref.current.contains(event.target)) {

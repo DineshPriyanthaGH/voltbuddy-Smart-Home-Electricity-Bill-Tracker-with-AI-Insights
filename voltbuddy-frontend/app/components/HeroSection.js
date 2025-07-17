@@ -12,7 +12,6 @@ export const HeroSection = () => {
           <div className="w-full md:w-1/2 space-y-6">
             <div className="flex items-center gap-2 mb-2">
               <div className="h-6 w-6 text-blue-600" />
-              <span className="text-blue-600 font-semibold">VoltBuddy</span>
             </div>
             <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-gray-900 leading-tight">
               Track Your Bills, Save with AI

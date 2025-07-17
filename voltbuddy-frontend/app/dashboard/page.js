@@ -15,6 +15,7 @@ import ChatbotIcon from "./ChatbotIcon";
 export default function Dashboard() {
   const [token, setToken] = useState(null);
   const [chatOpen, setChatOpen] = useState(false);
+  const [showWelcomeCard, setShowWelcomeCard] = useState(true); // State for welcome card visibility
 
   const toggleChat = () => setChatOpen(!chatOpen);
 
@@ -42,6 +43,17 @@ export default function Dashboard() {
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
           <div className="lg:col-span-2 space-y-6">
+            {/* Display the Welcome Card */}
+            {showWelcomeCard && (
+              <div className="bg-blue-100 border-l-4 border-blue-500 text-blue-700 p-6 rounded-md shadow-md">
+                <h3 className="font-semibold text-xl">Welcome to Ceylon Power Tracker!</h3>
+                <p className="mt-2">
+                  The CEB automatic amount retrieval service is not yet developed. You can manually enter your meter readings for now.
+                </p>
+                <p className="mt-2 text-sm">We hope this tool helps you track and manage your electricity bills efficiently.</p>
+              </div>
+            )}
+
             <CurrentBill />
             <BillHistory token={token} />
             <AIInsights />
