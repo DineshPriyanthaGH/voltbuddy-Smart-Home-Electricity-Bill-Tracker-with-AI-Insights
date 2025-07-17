@@ -69,9 +69,9 @@ export default function Navbar() {
               Appliance
             </Link>
             <Link
-              href="/profile-setting"
+              href="/settings"
               className={`flex items-center px-2 py-1 rounded-md ${
-                pathname === "/profile-setting"
+                pathname === "/settings"
                   ? "text-blue-600 bg-blue-50"
                   : "text-gray-600 hover:text-blue-600"
               }`}
@@ -240,7 +240,7 @@ export default function Navbar() {
             <Link
               href="/settings"
               className={`block px-4 py-2 rounded-md ${
-                pathname === "/profile-setting"
+                pathname === "/settings"
                   ? "text-blue-600 bg-blue-50"
                   : "text-gray-700 hover:bg-gray-100 hover:text-blue-600"
               }`}
