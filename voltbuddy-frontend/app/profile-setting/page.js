@@ -1,8 +1,7 @@
-// profile-setting/page.js
 'use client';
 
 import React, { useEffect, useState } from 'react';
-import Navbar from '../dashboard/Navbar';  // Ensure correct path
+import Navbar from '../dashboard/Navbar';
 import axios from 'axios';
 
 export default function Profile() {
@@ -11,47 +10,43 @@ export default function Profile() {
     address: '',
     contactNo: '',
     email: '',
+    password: '',
   });
   const [loading, setLoading] = useState(true);
   const [editMode, setEditMode] = useState(false);
   const [message, setMessage] = useState('');
 
-  const token = typeof window !== 'undefined' ? localStorage.getItem('token') : null;
-
   useEffect(() => {
-  const token = typeof window !== 'undefined' ? localStorage.getItem('token') : null;
-  if (!token) {
-    setMessage('You must be logged in.');
-    setLoading(false);
-    return;
-  }
-
-  const fetchProfile = async () => {
-    try {
-      const res = await axios.get('/api/user/profile', {
-        headers: { Authorization: `Bearer ${token}` },  // Ensure token is passed here
-      });
-
-      // Check the response structure
-      console.log("Profile Response:", res);
-
-      const data = res.data.data;
-      setProfile({
-        username: data.username || '',
-        address: data.address || '',
-        contactNo: data.contactNo || '',
-        email: data.email || '',
-      });
-    } catch (error) {
-      console.error('Error loading profile:', error);
-      setMessage('Failed to load profile.');
+    const token = localStorage.getItem('token');
+    if (!token) {
+      setMessage('You must be logged in.');
+      setLoading(false);
+      return;
     }
-    setLoading(false);
-  };
 
-  fetchProfile();
-}, []);
+    const fetchProfile = async () => {
+      try {
+        const res = await axios.get('/api/user/profile', {
+          headers: { Authorization: `Bearer ${token}` },
+        });
 
+        const data = res.data.data;
+        setProfile({
+          username: data.username || '',
+          address: data.address || '',
+          contactNo: data.contactNo || '',
+          email: data.email || '',
+          password: '', // Never fetch/display existing password
+        });
+      } catch (error) {
+        console.error('Error loading profile:', error);
+        setMessage('Failed to load profile.');
+      }
+      setLoading(false);
+    };
+
+    fetchProfile();
+  }, []);
 
   const handleChange = (e) => {
     setProfile({ ...profile, [e.target.name]: e.target.value });
@@ -70,14 +65,21 @@ export default function Profile() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setMessage('');
+    const token = localStorage.getItem('token');
+
     try {
-      const res = await axios.put('/api/user/profile', profile, {
+      const updatedData = { ...profile };
+      if (!updatedData.password) delete updatedData.password; // Don't send empty password
+
+      const res = await axios.put('/api/user/profile', updatedData, {
         headers: { Authorization: `Bearer ${token}` },
       });
-      setProfile(res.data.data);
+
+      setProfile({ ...res.data.data, password: '' });
       setEditMode(false);
       setMessage('Profile updated successfully!');
     } catch (error) {
+      console.error('Update error:', error);
       setMessage('Failed to update profile.');
     }
   };
@@ -89,7 +91,13 @@ export default function Profile() {
       <Navbar />
       <main className="p-8 ml-35 mr-35">
         <div className="mb-6">
+          <div className="flex items-center text-center text-sm text-gray-500 mb-1">
+            <span>Pages</span>
+            <span className="mx-2">/</span>
+            <span>Profile</span>
+          </div>
           <h1 className="text-2xl font-bold text-indigo-900">Profile</h1>
+          <p className="text-blue-800">Anuradhapura Branch</p>
         </div>
 
         <div className="bg-white rounded-lg shadow-sm overflow-hidden mt-6">
@@ -108,69 +116,56 @@ export default function Profile() {
 
           <form className="p-8 pt-16 max-w-2xl" onSubmit={handleSubmit}>
             <div className="grid grid-cols-2 gap-8">
-              <div className="flex items-center">
-                <div className="w-1/3 text-gray-500">Name:</div>
-                <div className="w-2/3 font-medium text-indigo-900">
-                  {editMode ? (
-                    <input
-                      type="text"
-                      name="username"
-                      value={profile.username}
-                      onChange={handleChange}
-                      className="border border-gray-300 rounded px-2 py-1 w-full"
-                      required
-                    />
-                  ) : (
-                    profile.username
-                  )}
-                </div>
-              </div>
+              {/* Name */}
+              <Field
+                label="Name:"
+                name="username"
+                value={profile.username}
+                editMode={editMode}
+                handleChange={handleChange}
+              />
 
-              <div className="flex items-center">
-                <div className="w-1/3 text-gray-500">Address:</div>
-                <div className="w-2/3 font-medium text-indigo-900">
-                  {editMode ? (
-                    <input
-                      type="text"
-                      name="address"
-                      value={profile.address}
-                      onChange={handleChange}
-                      className="border border-gray-300 rounded px-2 py-1 w-full"
-                    />
-                  ) : (
-                    profile.address
-                  )}
-                </div>
-              </div>
+              {/* Address */}
+              <Field
+                label="Address:"
+                name="address"
+                value={profile.address}
+                editMode={editMode}
+                handleChange={handleChange}
+              />
 
-              <div className="flex items-center">
-                <div className="w-1/3 text-gray-500">Contact No.:</div>
-                <div className="w-2/3 font-medium text-indigo-900">
-                  {editMode ? (
-                    <input
-                      type="text"
-                      name="contactNo"
-                      value={profile.contactNo}
-                      onChange={handleChange}
-                      className="border border-gray-300 rounded px-2 py-1 w-full"
-                    />
-                  ) : (
-                    profile.contactNo
-                  )}
-                </div>
-              </div>
+              {/* Contact No */}
+              <Field
+                label="Contact No.:"
+                name="contactNo"
+                value={profile.contactNo}
+                editMode={editMode}
+                handleChange={handleChange}
+              />
 
-              <div className="flex items-center">
-                <div className="w-1/3 text-gray-500">Email:</div>
-                <div className="w-2/3 font-medium text-indigo-900">{profile.email}</div>
-              </div>
+              {/* Email */}
+              <Field
+                label="Email:"
+                name="email"
+                type="email"
+                value={profile.email}
+                editMode={editMode}
+                handleChange={handleChange}
+              />
 
-              <div className="flex items-center">
-                <div className="w-1/3 text-gray-500">Password:</div>
-                <div className="w-2/3 font-medium text-indigo-900">*******</div>
-              </div>
+              {/* Password */}
+              <Field
+                label="Password:"
+                name="password"
+                type="password"
+                value={profile.password}
+                editMode={editMode}
+                handleChange={handleChange}
+                placeholder="Leave blank to keep unchanged"
+              />
             </div>
 
+            {/* Buttons */}
             <div className="mt-8 flex justify-end space-x-4">
               {editMode ? (
                 <>
@@ -214,4 +209,24 @@ export default function Profile() {
     </div>
   );
 }
- 
+
+// Reusable Field component
+const Field = ({ label, name, value, type = 'text', editMode, handleChange, placeholder }) => (
+  <div className="flex items-center">
+    <div className="w-1/3 text-gray-500">{label}</div>
+    <div className="w-2/3 font-medium text-indigo-900">
+      {editMode ? (
+        <input
+          type={type}
+          name={name}
+          value={value}
+          onChange={handleChange}
+          placeholder={placeholder || ''}
+          className="border border-gray-300 rounded px-2 py-1 w-full"
+        />
+      ) : (
+        name === 'password' ? '********' : value
+      )}
+    </div>
+  </div>
+);
