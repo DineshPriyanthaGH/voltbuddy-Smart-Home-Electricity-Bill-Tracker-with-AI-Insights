@@ -22,7 +22,6 @@ const SettingsPage = () => {
   });
 
   const [preferences, setPreferences] = useState({
-    darkMode: false,
     currency: "LKR",
     dateFormat: "DD/MM/YYYY",
   });
@@ -117,40 +116,21 @@ const SettingsPage = () => {
           icon={<Settings className="text-purple-600" size={18} />}
         >
           <SettingItem label="Language">
-            <select
-              disabled
-              className="px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 text-gray-500 cursor-not-allowed focus:ring-blue-500"
-            >
+            <div className="px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 text-gray-500 cursor-not-allowed focus:ring-blue-500">
               <option>English</option>
-            </select>
+            </div>
           </SettingItem>
 
           <SettingItem label="Currency">
-            <select
-              value={preferences.currency}
-              onChange={(e) =>
-                handlePreferenceChange("currency", e.target.value)
-              }
-              className="px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 text-black focus:ring-blue-500"
-            >
+            <div className="px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 text-black focus:ring-blue-500">
               <option value="LKR">LKR (Sri Lankan Rupee)</option>
-              <option value="USD">USD (US Dollar)</option>
-              <option value="EUR">EUR (Euro)</option>
-            </select>
+            </div>
           </SettingItem>
 
           <SettingItem label="Date Format">
-            <select
-              value={preferences.dateFormat}
-              onChange={(e) =>
-                handlePreferenceChange("dateFormat", e.target.value)
-              }
-              className="px-3 py-2 border border-gray-300 rounded-lg text-black focus:ring-2 focus:ring-blue-500"
-            >
+            <div className="px-3 py-2 border border-gray-300 rounded-lg text-black focus:ring-2 focus:ring-blue-500">
               <option value="DD/MM/YYYY">DD/MM/YYYY</option>
-              <option value="MM/DD/YYYY">MM/DD/YYYY</option>
-              <option value="YYYY-MM-DD">YYYY-MM-DD</option>
-            </select>
+            </div>
           </SettingItem>
         </SettingSection>
 
@@ -186,7 +166,10 @@ const SettingsPage = () => {
                 .replace(/([A-Z])/g, " $1")
                 .replace(/^./, (str) => str.toUpperCase())}
             >
-              <ToggleSwitch enabled={value} onChange={() => handlePrivacyChange(key)} />
+              <ToggleSwitch
+                enabled={value}
+                onChange={() => handlePrivacyChange(key)}
+              />
             </SettingItem>
           ))}
         </SettingSection>
