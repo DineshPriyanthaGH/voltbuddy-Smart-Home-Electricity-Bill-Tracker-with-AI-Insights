@@ -10,7 +10,6 @@ const App = () => {
 
   const [profileData, setProfileData] = useState({
     name: 'K.S Fernando',
-    branch: 'Anuradhapura Branch',
     address: 'No:6, Main Street, Anuradhapura',
     contactNo: '0713495446',
     email: 'ksfernando99@gmail.com',

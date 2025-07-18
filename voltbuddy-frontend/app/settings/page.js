@@ -1,7 +1,7 @@
 "use client";
 
-import React from 'react';
-import SettingsPage from './SettingsPage';  // Adjust path if needed
+import React from "react";
+import SettingsPage from "./SettingsPage"; // adjust path if needed
 
 const Page = () => {
   return <SettingsPage />;
