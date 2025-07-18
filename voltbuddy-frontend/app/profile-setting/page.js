@@ -91,18 +91,14 @@ export default function Profile() {
       <Navbar />
       <main className="p-8 ml-35 mr-35">
         <div className="mb-6">
-          <div className="flex items-center text-center text-sm text-gray-500 mb-1">
-            <span>Pages</span>
-            <span className="mx-2">/</span>
-            <span>Profile</span>
-          </div>
-          <h1 className="text-2xl font-bold text-indigo-900">Profile</h1>
-          <p className="text-blue-800">Anuradhapura Branch</p>
+          <h1 className="text-2xl text-indigo-900  font-semibold mb-3 mt-2">Profile</h1>
+          <p className="text-gray-500 text-lm mt-1">Manage your account settings and personal information</p>
         </div>
 
         <div className="bg-white rounded-lg shadow-sm overflow-hidden mt-6">
           <div className="bg-indigo-500 h-32 relative">
             <h2 className="text-2xl font-semibold text-white absolute bottom-4 left-8">Your Profile</h2>
+            
             <div className="absolute -bottom-20 right-8">
               <div className="w-40 h-40 rounded-full border-4 border-white overflow-hidden">
                 <img
