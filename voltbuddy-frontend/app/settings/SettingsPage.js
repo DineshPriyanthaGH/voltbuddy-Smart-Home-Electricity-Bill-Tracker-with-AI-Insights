@@ -1,23 +1,9 @@
 "use client";
 
+import React, { useState } from "react";
+import { Bell, Save, Settings, Shield, AlertCircle } from "lucide-react";
 
-import React, { useState } from 'react';
-import { 
-  Bell, 
-  Shield, 
-  Moon, 
-  Globe, 
-  Smartphone, 
-  Mail, 
-  AlertCircle, 
-  Lock, 
-  Eye, 
-  EyeOff, 
-  Save,
-  Settings
-} from 'lucide-react';
-
-import NavBar from '../dashboard/Navbar';  // Adjust path as per your project structure
+import NavBar from "../dashboard/Navbar"; // Adjust path if needed
 
 const SettingsPage = () => {
   const [notifications, setNotifications] = useState({
@@ -26,80 +12,57 @@ const SettingsPage = () => {
     energyTips: false,
     systemUpdates: true,
     emailNotifications: true,
-    smsNotifications: false
+    smsNotifications: false,
   });
 
   const [privacy, setPrivacy] = useState({
     dataSharing: false,
     analytics: true,
-    locationTracking: false
+    locationTracking: false,
   });
 
   const [preferences, setPreferences] = useState({
     darkMode: false,
-    language: 'en',
-    currency: 'LKR',
-    dateFormat: 'DD/MM/YYYY'
+    currency: "LKR",
+    dateFormat: "DD/MM/YYYY",
   });
 
-  const [security, setSecurity] = useState({
-    currentPassword: '',
-    newPassword: '',
-    confirmPassword: '',
-    twoFactorAuth: false
-  });
-
-  const [showPasswords, setShowPasswords] = useState({
-    current: false,
-    new: false,
-    confirm: false
-  });
+  const [feedback, setFeedback] = useState("");
 
   const [showNotification, setShowNotification] = useState(false);
 
-  const handleNotificationChange = (key) => {
-    setNotifications(prev => ({
-      ...prev,
-      [key]: !prev[key]
-    }));
-  };
+  const handleNotificationChange = (key) =>
+    setNotifications((prev) => ({ ...prev, [key]: !prev[key] }));
 
-  const handlePrivacyChange = (key) => {
-    setPrivacy(prev => ({
-      ...prev,
-      [key]: !prev[key]
-    }));
-  };
+  const handlePrivacyChange = (key) =>
+    setPrivacy((prev) => ({ ...prev, [key]: !prev[key] }));
 
-  const handlePreferenceChange = (key, value) => {
-    setPreferences(prev => ({
-      ...prev,
-      [key]: value
-    }));
-  };
-
-  const handleSecurityChange = (key, value) => {
-    setSecurity(prev => ({
-      ...prev,
-      [key]: value
-    }));
-  };
+  const handlePreferenceChange = (key, value) =>
+    setPreferences((prev) => ({ ...prev, [key]: value }));
 
   const handleSaveSettings = () => {
     setShowNotification(true);
     setTimeout(() => setShowNotification(false), 3000);
   };
 
+  const handleFeedbackSubmit = (e) => {
+    e.preventDefault();
+    alert("Feedback submitted! Thank you.");
+    setFeedback("");
+  };
+
   const ToggleSwitch = ({ enabled, onChange }) => (
     <button
+      type="button"
       onClick={onChange}
       className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors ${
-        enabled ? 'bg-blue-600' : 'bg-gray-200'
+        enabled ? "bg-blue-600" : "bg-gray-200"
       }`}
+      aria-pressed={enabled}
     >
       <span
         className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${
-          enabled ? 'translate-x-6' : 'translate-x-1'
+          enabled ? "translate-x-6" : "translate-x-1"
         }`}
       />
     </button>
@@ -125,9 +88,7 @@ const SettingsPage = () => {
           <div className="text-sm text-gray-600 mt-1">{description}</div>
         )}
       </div>
-      <div className="ml-4">
-        {children}
-      </div>
+      <div className="ml-4">{children}</div>
     </div>
   );
 
@@ -144,55 +105,47 @@ const SettingsPage = () => {
 
       <main className="max-w-4xl mx-auto py-8 px-4">
         <div className="mb-8">
-          <h1 className="text-3xl font-bold text-gray-800 mb-2">Settings</h1>
-          <p className="text-gray-600">Manage your account preferences and privacy settings</p>
+          <h1 className="text-2xl font-bold text-gray-800 mb-2">Settings</h1>
+          <p className="text-gray-600">
+            Manage your account preferences and privacy settings
+          </p>
         </div>
 
-        <SettingSection title="Notifications" icon={<Bell className="text-blue-600" size={18} />}>
-          {Object.entries(notifications).map(([key, value]) => (
-            <SettingItem key={key} label={key.replace(/([A-Z])/g, ' $1').replace(/^./, str => str.toUpperCase())}>
-              <ToggleSwitch
-                enabled={value}
-                onChange={() => handleNotificationChange(key)}
-              />
-            </SettingItem>
-          ))}
-        </SettingSection>
-
-        <SettingSection title="Privacy & Data" icon={<Shield className="text-green-600" size={18} />}>
-          {Object.entries(privacy).map(([key, value]) => (
-            <SettingItem key={key} label={key.replace(/([A-Z])/g, ' $1').replace(/^./, str => str.toUpperCase())}>
-              <ToggleSwitch
-                enabled={value}
-                onChange={() => handlePrivacyChange(key)}
-              />
-            </SettingItem>
-          ))}
-        </SettingSection>
-
-        <SettingSection title="Preferences" icon={<Settings className="text-purple-600" size={18} />}>
-          <SettingItem label="Dark Mode">
-            <ToggleSwitch
-              enabled={preferences.darkMode}
-              onChange={() => handlePreferenceChange('darkMode', !preferences.darkMode)}
-            />
+        {/* Preferences */}
+        <SettingSection
+          title="Preferences"
+          icon={<Settings className="text-purple-600" size={18} />}
+        >
+          <SettingItem label="Language">
+            <select
+              disabled
+              className="px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 text-gray-500 cursor-not-allowed focus:ring-blue-500"
+            >
+              <option>English</option>
+            </select>
           </SettingItem>
 
           <SettingItem label="Currency">
-            <div
+            <select
               value={preferences.currency}
-              onChange={(e) => handlePreferenceChange('currency', e.target.value)}
+              onChange={(e) =>
+                handlePreferenceChange("currency", e.target.value)
+              }
               className="px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 text-black focus:ring-blue-500"
             >
               <option value="LKR">LKR (Sri Lankan Rupee)</option>
-            </div>
+              <option value="USD">USD (US Dollar)</option>
+              <option value="EUR">EUR (Euro)</option>
+            </select>
           </SettingItem>
 
           <SettingItem label="Date Format">
             <select
               value={preferences.dateFormat}
-              onChange={(e) => handlePreferenceChange('dateFormat', e.target.value)}
-              className="px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+              onChange={(e) =>
+                handlePreferenceChange("dateFormat", e.target.value)
+              }
+              className="px-3 py-2 border border-gray-300 rounded-lg text-black focus:ring-2 focus:ring-blue-500"
             >
               <option value="DD/MM/YYYY">DD/MM/YYYY</option>
               <option value="MM/DD/YYYY">MM/DD/YYYY</option>
@@ -201,39 +154,66 @@ const SettingsPage = () => {
           </SettingItem>
         </SettingSection>
 
-        <SettingSection title="Security" icon={<Lock className="text-red-600" size={18} />}>
-          <SettingItem label="Two-Factor Authentication">
-            <ToggleSwitch
-              enabled={security.twoFactorAuth}
-              onChange={() => handleSecurityChange('twoFactorAuth', !security.twoFactorAuth)}
-            />
-          </SettingItem>
-
-          <div className="py-4 border-b border-gray-100">
-            <h3 className="font-medium text-gray-800 mb-4">Change Password</h3>
-            {['current', 'new', 'confirm'].map((type) => (
-              <div className="relative mb-4" key={type}>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
-                  {type === 'current' ? 'Current Password' : type === 'new' ? 'New Password' : 'Confirm New Password'}
-                </label>
-                <input
-                  type={showPasswords[type] ? 'text' : 'password'}
-                  value={security[type + 'Password']}
-                  onChange={(e) => handleSecurityChange(type + 'Password', e.target.value)}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
-                />
-                <button
-                  type="button"
-                  onClick={() => setShowPasswords(prev => ({...prev, [type]: !prev[type]}))}
-                  className="absolute right-3 top-8 text-gray-500"
-                >
-                  {showPasswords[type] ? <EyeOff size={16} /> : <Eye size={16} />}
-                </button>
-              </div>
-            ))}
-          </div>
+        {/* Notifications */}
+        <SettingSection
+          title="Notifications"
+          icon={<Bell className="text-blue-600" size={18} />}
+        >
+          {Object.entries(notifications).map(([key, value]) => (
+            <SettingItem
+              key={key}
+              label={key
+                .replace(/([A-Z])/g, " $1")
+                .replace(/^./, (str) => str.toUpperCase())}
+            >
+              <ToggleSwitch
+                enabled={value}
+                onChange={() => handleNotificationChange(key)}
+              />
+            </SettingItem>
+          ))}
         </SettingSection>
 
+        {/* Privacy */}
+        <SettingSection
+          title="Privacy & Data"
+          icon={<Shield className="text-green-600" size={18} />}
+        >
+          {Object.entries(privacy).map(([key, value]) => (
+            <SettingItem
+              key={key}
+              label={key
+                .replace(/([A-Z])/g, " $1")
+                .replace(/^./, (str) => str.toUpperCase())}
+            >
+              <ToggleSwitch enabled={value} onChange={() => handlePrivacyChange(key)} />
+            </SettingItem>
+          ))}
+        </SettingSection>
+
+        {/* Feedback & Support */}
+        <SettingSection
+          title="Feedback & Support"
+          icon={<AlertCircle className="text-yellow-600" size={18} />}
+        >
+          <form onSubmit={handleFeedbackSubmit} className="w-full">
+            <textarea
+              placeholder="Tell us what you think or report an issue..."
+              value={feedback}
+              onChange={(e) => setFeedback(e.target.value)}
+              className="w-full p-3 border border-gray-300 rounded-lg mb-4 resize-none focus:ring-2 focus:ring-blue-500"
+              rows={4}
+            />
+            <button
+              type="submit"
+              className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700"
+            >
+              Submit Feedback
+            </button>
+          </form>
+        </SettingSection>
+
+        {/* Save Button */}
         <div className="flex justify-end">
           <button
             onClick={handleSaveSettings}
