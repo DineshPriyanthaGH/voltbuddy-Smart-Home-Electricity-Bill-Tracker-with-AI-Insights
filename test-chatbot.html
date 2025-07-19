@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VoltBuddy Chatbot Test</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 600px;
+            margin: 50px auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .container {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #2563eb;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .test-section {
+            margin-bottom: 30px;
+            padding: 20px;
+            border: 1px solid #e5e7eb;
+            border-radius: 8px;
+        }
+        .test-section h3 {
+            color: #374151;
+            margin-bottom: 15px;
+        }
+        button {
+            background: #2563eb;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 3px;
+            font-size: 12px;
+        }
+        button:hover {
+            background: #1d4ed8;
+        }
+        h4 {
+            color: #4b5563;
+            margin: 15px 0 8px 0;
+            font-size: 14px;
+        }
+        #result {
+            margin-top: 20px;
+            padding: 15px;
+            background: #f9fafb;
+            border-radius: 5px;
+            border-left: 4px solid #2563eb;
+            white-space: pre-wrap;
+        }
+        .error {
+            border-left-color: #dc2626;
+            background: #fef2f2;
+            color: #991b1b;
+        }
+        .success {
+            border-left-color: #059669;
+            background: #ecfdf5;
+            color: #065f46;
+        }
+        input[type="text"] {
+            width: 70%;
+            padding: 10px;
+            border: 1px solid #d1d5db;
+            border-radius: 5px;
+            margin-right: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>VoltBuddy Data-Aware Chatbot Test</h1>
+        
+        <div class="test-section">
+            <h3>Authentication Test</h3>
+            <p>First, you need to login to access your energy data:</p>
+            <input type="text" id="email" placeholder="Enter your email" value="">
+            <input type="text" id="password" placeholder="Enter your password" value="">
+            <button onclick="testLogin()">Login</button>
+            <div id="loginResult"></div>
+        </div>
+
+        <div class="test-section">
+            <h3>Comprehensive Test Questions</h3>
+            <p>Test all categories of chatbot capabilities:</p>
+            
+            <h4>Personal Energy Data:</h4>
+            <button onclick="askQuestion('Which appliance is costing me the most?')">Most Expensive Appliance</button>
+            <button onclick="askQuestion('What is my total monthly electricity cost?')">Total Monthly Cost</button>
+            <button onclick="askQuestion('Show me my bill history trends')">Bill History Analysis</button>
+            <button onclick="askQuestion('What are my recent notifications?')">Recent Notifications</button>
+            
+            <h4>Sri Lankan Electricity & Tax:</h4>
+            <button onclick="askQuestion('Explain the domestic tariff blocks in Sri Lanka')">Tariff Blocks</button>
+            <button onclick="askQuestion('How does VAT tax affect my electricity bill?')">VAT Tax Info</button>
+            <button onclick="askQuestion('What are peak and off-peak hours?')">Time-of-Use Tariff</button>
+            <button onclick="askQuestion('What government energy programs are available?')">Energy Programs</button>
+            
+            <h4>Cost Optimization:</h4>
+            <button onclick="askQuestion('How can I reduce my highest energy costs?')">Cost Reduction Tips</button>
+            <button onclick="askQuestion('Should I install solar panels?')">Solar Installation</button>
+            <button onclick="askQuestion('How much can I save with off-peak usage?')">Off-Peak Savings</button>
+        </div>
+
+        <div class="test-section">
+            <h3>Custom Question Test</h3>
+            <p>Ask your own question:</p>
+            <input type="text" id="customQuestion" placeholder="Type your question here..." value="">
+            <button onclick="askCustomQuestion()">Ask Question</button>
+        </div>
+
+        <div id="result"></div>
+    </div>
+
+    <script>
+        const API_BASE = 'http://localhost:5001/api';
+        let authToken = localStorage.getItem('token');
+
+        async function testLogin() {
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            
+            if (!email || !password) {
+                showResult('Please enter both email and password', 'error', 'loginResult');
+                return;
+            }
+
+            try {
+                const response = await fetch(`${API_BASE}/auth/login`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ email, password })
+                });
+
+                const data = await response.json();
+
+                if (response.ok) {
+                    authToken = data.token;
+                    localStorage.setItem('token', authToken);
+                    showResult(`Login successful! Token: ${authToken.substring(0, 20)}...`, 'success', 'loginResult');
+                } else {
+                    showResult(`Login failed: ${data.message || 'Unknown error'}`, 'error', 'loginResult');
+                }
+            } catch (error) {
+                showResult(`Login error: ${error.message}`, 'error', 'loginResult');
+            }
+        }
+
+        async function askQuestion(question) {
+            if (!authToken) {
+                showResult('Please login first to access your energy data', 'error');
+                return;
+            }
+
+            showResult('Asking question: "' + question + '"\n\nWaiting for AI response...', '');
+
+            try {
+                const response = await fetch(`${API_BASE}/chat/ask`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${authToken}`
+                    },
+                    body: JSON.stringify({ query: question })
+                });
+
+                const data = await response.json();
+
+                if (response.ok) {
+                    showResult(`Question: "${data.query}"\n\nVoltBuddy AI Response:\n${data.response}`, 'success');
+                } else {
+                    showResult(`Error: ${data.error || 'Unknown error'}`, 'error');
+                }
+            } catch (error) {
+                showResult(`Network error: ${error.message}`, 'error');
+            }
+        }
+
+        function askCustomQuestion() {
+            const question = document.getElementById('customQuestion').value.trim();
+            if (!question) {
+                showResult('Please enter a question', 'error');
+                return;
+            }
+            askQuestion(question);
+        }
+
+        function showResult(message, type = '', elementId = 'result') {
+            const element = document.getElementById(elementId);
+            element.textContent = message;
+            element.className = type;
+        }
+
+        // Check if already logged in
+        if (authToken) {
+            showResult('You are already logged in. Token: ' + authToken.substring(0, 20) + '...', 'success', 'loginResult');
+        }
+    </script>
+</body>
+</html>

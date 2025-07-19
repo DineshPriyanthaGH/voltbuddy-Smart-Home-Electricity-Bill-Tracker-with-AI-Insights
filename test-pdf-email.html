@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VoltBuddy - Test PDF Email</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 600px;
+            margin: 50px auto;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+        .container {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .header {
+            text-align: center;
+            color: #2441E1;
+            margin-bottom: 30px;
+        }
+        .form-group {
+            margin-bottom: 20px;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+        input[type="email"] {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            box-sizing: border-box;
+        }
+        button {
+            background: linear-gradient(135deg, #2441E1, #3B82F6);
+            color: white;
+            padding: 12px 30px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            width: 100%;
+        }
+        button:hover {
+            background: linear-gradient(135deg, #1e3cc7, #2563eb);
+        }
+        button:disabled {
+            background: #cccccc;
+            cursor: not-allowed;
+        }
+        .result {
+            margin-top: 20px;
+            padding: 15px;
+            border-radius: 5px;
+            display: none;
+        }
+        .success {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+        .error {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+        .loading {
+            text-align: center;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>⚡ VoltBuddy</h1>
+            <h2>Test PDF Email Functionality</h2>
+            <p>This tool tests if the AI Insights PDF email feature is working properly.</p>
+        </div>
+
+        <form id="testForm">
+            <div class="form-group">
+                <label for="testEmail">Enter your email address:</label>
+                <input type="email" id="testEmail" name="testEmail" required 
+                       placeholder="your-email@example.com">
+            </div>
+            
+            <button type="submit" id="testButton">
+                📧 Send Test PDF Email
+            </button>
+        </form>
+
+        <div id="loading" class="loading" style="display: none;">
+            <p>🔄 Generating PDF and sending email...</p>
+        </div>
+
+        <div id="result" class="result">
+            <p id="resultMessage"></p>
+        </div>
+
+        <div style="margin-top: 30px; padding: 20px; background: #f8f9fa; border-radius: 5px;">
+            <h3>📋 What this test does:</h3>
+            <ul>
+                <li>✅ Generates a test PDF with sample AI insights data</li>
+                <li>✅ Tests the email service configuration</li>
+                <li>✅ Sends the PDF as an email attachment</li>
+                <li>✅ Verifies the complete workflow</li>
+            </ul>
+            <p><strong>Note:</strong> Make sure the backend server is running on port 5001.</p>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('testForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const testEmail = document.getElementById('testEmail').value;
+            const button = document.getElementById('testButton');
+            const loading = document.getElementById('loading');
+            const result = document.getElementById('result');
+            const resultMessage = document.getElementById('resultMessage');
+            
+            // Show loading
+            button.disabled = true;
+            loading.style.display = 'block';
+            result.style.display = 'none';
+            
+            try {
+                const response = await fetch('http://localhost:5001/api/test/test-pdf-email', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ testEmail })
+                });
+                
+                const data = await response.json();
+                
+                if (response.ok) {
+                    result.className = 'result success';
+                    resultMessage.innerHTML = `
+                        ✅ <strong>Success!</strong><br>
+                        ${data.message}<br>
+                        PDF Size: ${data.pdfSize} bytes<br>
+                        <em>Check your email inbox (and spam folder) for the test report.</em>
+                    `;
+                } else {
+                    throw new Error(data.message || 'Test failed');
+                }
+                
+            } catch (error) {
+                result.className = 'result error';
+                resultMessage.innerHTML = `
+                    ❌ <strong>Error:</strong><br>
+                    ${error.message}<br>
+                    <em>Please check the console for more details.</em>
+                `;
+                console.error('Test error:', error);
+            } finally {
+                button.disabled = false;
+                loading.style.display = 'none';
+                result.style.display = 'block';
+            }
+        });
+    </script>
+</body>
+</html>
