@@ -85,20 +85,35 @@ const SettingsPage = () => {
         </div>
 
         {/* Preferences Section */}
-        <Section title="Preferences" icon={<Settings className="text-purple-600" size={18} />}>
+        <Section
+          title="Preferences"
+          icon={<Settings className="text-purple-600" size={18} />}
+        >
           {Object.entries(preferences).map(([key, value]) => (
-            <Item key={key} label={key.replace(/([A-Z])/g, " $1").replace(/^./, str => str.toUpperCase())}>
-              <div className="px-3 py-2 border border-gray-200 rounded-lg text-gray-500">{value}</div>
+            <Item
+              key={key}
+              label={key
+                .replace(/([A-Z])/g, " $1")
+                .replace(/^./, (str) => str.toUpperCase())}
+            >
+              <div className="px-3 py-2 border border-gray-200 rounded-lg text-gray-500">
+                {value}
+              </div>
             </Item>
           ))}
         </Section>
 
         {/* Notifications Section */}
-        <Section title="Notifications" icon={<Bell className="text-blue-600" size={18} />}>
+        <Section
+          title="Notifications"
+          icon={<Bell className="text-blue-600" size={18} />}
+        >
           {Object.entries(notifications).map(([key, value]) => (
             <Item
               key={key}
-              label={key.replace(/([A-Z])/g, " $1").replace(/^./, str => str.toUpperCase())}
+              label={key
+                .replace(/([A-Z])/g, " $1")
+                .replace(/^./, (str) => str.toUpperCase())}
             >
               <ToggleSwitch
                 enabled={value}
@@ -109,7 +124,10 @@ const SettingsPage = () => {
         </Section>
 
         {/* About Section */}
-        <Section title="About" icon={<Globe className="text-gray-600" size={18} />}>
+        <Section
+          title="About"
+          icon={<Globe className="text-gray-600" size={18} />}
+        >
           <div className="space-y-3 text-sm text-gray-600">
             <div className="flex justify-between">
               <span>Version:</span>
@@ -121,9 +139,15 @@ const SettingsPage = () => {
             </div>
             <div className="pt-3 border-t border-gray-200">
               <div className="flex space-x-6">
-                <button className="text-blue-600 hover:text-blue-700 transition-colors">Privacy Policy</button>
-                <button className="text-blue-600 hover:text-blue-700 transition-colors">Terms of Service</button>
-                <button className="text-blue-600 hover:text-blue-700 transition-colors">Help Center</button>
+                <button className="text-blue-600 hover:text-blue-700 transition-colors">
+                  Privacy Policy
+                </button>
+                <button className="text-blue-600 hover:text-blue-700 transition-colors">
+                  Terms of Service
+                </button>
+                <button className="text-blue-600 hover:text-blue-700 transition-colors">
+                  Help Center
+                </button>
               </div>
             </div>
           </div>
