@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 
-// Bill History Schema
+
 const billSchema = new mongoose.Schema({
   month: { type: String, required: true },  
   year: { type: Number, required: true },   
@@ -10,7 +10,7 @@ const billSchema = new mongoose.Schema({
   status: { type: String, default: "Pending" },  
 });
 
-// Appliances Schema
+
 const applianceSchema = new mongoose.Schema({
   name: { type: String, required: true },
   type: { type: String, required: true },
@@ -19,14 +19,14 @@ const applianceSchema = new mongoose.Schema({
   monthlyUsage: { type: Number, required: true },  
 });
 
-// Energy Tips Schema
+
 const energyTipSchema = new mongoose.Schema({
   title: { type: String, required: true },
   description: { type: String, required: true },
   icon: { type: String, default: "" },
 });
 
-// Notification Schema
+
 const notificationSchema = new mongoose.Schema({
   type: { 
     type: String, 
@@ -40,18 +40,32 @@ const notificationSchema = new mongoose.Schema({
   createdAt: { type: Date, default: Date.now }
 });
 
-// User Schema (Main)
+
 const userSchema = new mongoose.Schema({
   username: { type: String, required: true, unique: true },
   email: { type: String, required: true, unique: true, lowercase: true },
   password: { type: String, required: true },
+
+  address: { type: String, default: '' },
+  contactNo: { type: String, default: '' },
+  firstName: { type: String, default: '' },
+  lastName: { type: String, default: '' },
+  profileImage: { type: String, default: '' },
+  dateOfBirth: { type: Date },
+
   bills: [billSchema],
   appliances: [applianceSchema],
   futureEnergyTips: [energyTipSchema],
-  notifications: [notificationSchema]
+  notifications: [notificationSchema],
+
+  lastLoginAt: { type: Date },
+  isActive: { type: Boolean, default: true },
+  emailVerified: { type: Boolean, default: false }
+}, {
+  timestamps: true 
 });
 
-// Method to compare password
+
 userSchema.methods.comparePassword = function(candidatePassword) {
   return this.password === candidatePassword;
 };

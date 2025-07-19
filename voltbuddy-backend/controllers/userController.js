@@ -1,5 +1,6 @@
 const User = require('../models/User');
 const { getEnergyTipsFromGemini } = require('../services/geminiService');
+const { sendProfileUpdateEmail } = require('../utils/emailService');
 
 // Get user profile (require auth, just use req.user from authMiddleware)
 exports.getProfile = async (req, res) => {
@@ -15,6 +16,15 @@ exports.getProfile = async (req, res) => {
         email: user.email,
         address: user.address || '',
         contactNo: user.contactNo || '',
+        firstName: user.firstName || '',
+        lastName: user.lastName || '',
+        profileImage: user.profileImage || '',
+        dateOfBirth: user.dateOfBirth || null,
+        createdAt: user.createdAt,
+        updatedAt: user.updatedAt,
+        lastLoginAt: user.lastLoginAt,
+        emailVerified: user.emailVerified,
+        isActive: user.isActive
       },
     });
   } catch (err) {
@@ -27,26 +37,57 @@ exports.getProfile = async (req, res) => {
 exports.updateProfile = async (req, res) => {
   try {
     const updates = {};
-    if (req.body.username) updates.username = req.body.username;
-    if (req.body.address) updates.address = req.body.address;
-    if (req.body.contactNo) updates.contactNo = req.body.contactNo;
+    const allowedUpdates = ['username', 'address', 'contactNo', 'firstName', 'lastName', 'dateOfBirth', 'profileImage'];
+    
+    // Only include allowed fields in updates
+    allowedUpdates.forEach(field => {
+      if (req.body[field] !== undefined) {
+        updates[field] = req.body[field];
+      }
+    });
 
+    // Get the current user for comparison
+    const currentUser = await User.findById(req.user._id);
+    if (!currentUser) {
+      return res.status(404).json({ status: 'fail', message: 'User not found' });
+    }
+
+    // Update the user
     const user = await User.findByIdAndUpdate(req.user._id, updates, {
       new: true,
       runValidators: true,
     });
 
-    if (!user) {
-      return res.status(404).json({ status: 'fail', message: 'User not found' });
+    // Send email notification about profile update
+    try {
+      console.log('🚀 About to send profile update email...');
+      console.log('📧 Email details:', { email: user.email, username: user.username, updates });
+      
+      await sendProfileUpdateEmail(user.email, user.username, updates);
+      console.log('✅ Profile update email sent successfully to:', user.email);
+    } catch (emailError) {
+      console.error('⚠️ Failed to send profile update email:', emailError);
+      console.error('📧 Email error details:', emailError.message);
+      // Don't fail the request if email fails
     }
 
     res.status(200).json({
       status: 'success',
+      message: 'Profile updated successfully',
       data: {
         username: user.username,
         email: user.email,
         address: user.address || '',
         contactNo: user.contactNo || '',
+        firstName: user.firstName || '',
+        lastName: user.lastName || '',
+        profileImage: user.profileImage || '',
+        dateOfBirth: user.dateOfBirth || null,
+        createdAt: user.createdAt,
+        updatedAt: user.updatedAt,
+        lastLoginAt: user.lastLoginAt,
+        emailVerified: user.emailVerified,
+        isActive: user.isActive
       },
     });
   } catch (err) {
