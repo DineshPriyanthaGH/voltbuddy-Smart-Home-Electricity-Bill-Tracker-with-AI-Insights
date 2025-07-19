@@ -55,7 +55,7 @@ export const NavBar = () => {
                 </button>
               </Link>
               <Link href="/Authentication" passHref>
-                <button className="text-blue-600 border-2 cursor-pointer rounded-lg px-5 py-2 font-bold hover:text-blue-700 transition-colors">
+                <button className="text-blue-600 border-2 cursor-pointer rounded-lg px-4.5 py-1.5 font-bold hover:text-blue-700 transition-colors">
                   Log In
                 </button>
               </Link>
