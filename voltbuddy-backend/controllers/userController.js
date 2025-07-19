@@ -1,19 +1,13 @@
-const jwt = require('jsonwebtoken');
 const User = require('../models/User');
-const JWT_SECRET = process.env.JWT_SECRET;
-const { getEnergyTipsFromGemini } = require('../services/geminiService');  // Assuming a service for Gemini integration
+const { getEnergyTipsFromGemini } = require('../services/geminiService');
 
-// Get user profile
+// Get user profile (require auth, just use req.user from authMiddleware)
 exports.getProfile = async (req, res) => {
   try {
-    const token = req.headers.authorization.split(" ")[1];
-    const decoded = jwt.verify(token, JWT_SECRET);
-    const user = await User.findById(decoded.userId);
-
+    const user = await User.findById(req.user._id);
     if (!user) {
       return res.status(404).json({ status: 'fail', message: 'User not found' });
     }
-
     res.status(200).json({
       status: 'success',
       data: {
@@ -32,15 +26,12 @@ exports.getProfile = async (req, res) => {
 // Update user profile (username, address, contactNo)
 exports.updateProfile = async (req, res) => {
   try {
-    const token = req.headers.authorization.split(" ")[1];
-    const decoded = jwt.verify(token, JWT_SECRET);
-
     const updates = {};
     if (req.body.username) updates.username = req.body.username;
     if (req.body.address) updates.address = req.body.address;
     if (req.body.contactNo) updates.contactNo = req.body.contactNo;
 
-    const user = await User.findByIdAndUpdate(decoded.userId, updates, {
+    const user = await User.findByIdAndUpdate(req.user._id, updates, {
       new: true,
       runValidators: true,
     });
@@ -64,34 +55,51 @@ exports.updateProfile = async (req, res) => {
   }
 };
 
-// Save user data (bill history, appliance usage) and generate future energy-saving tips
-// controllers/userController.js
-// Save user data (bill history, appliance usage) and generate future energy-saving tips
-exports.saveUserData = async (req, res) => {
-  const { userId, billHistory, applianceUsage } = req.body;
-
+// Fetch all notifications (in-app)
+exports.getNotifications = async (req, res) => {
   try {
-    // Find user or create a new user
-    let user = await User.findById(userId);
-    if (!user) {
-      user = new User({ _id: userId, billHistory, applianceUsage });
-    } else {
-      // Update the existing user with the new bill history and appliance usage
-      user.billHistory = billHistory;
-      user.applianceUsage = applianceUsage;
-    }
+    const user = await User.findById(req.user._id).select('notifications');
+    res.status(200).json({ notifications: user.notifications.slice().reverse() });
+  } catch (err) {
+    res.status(500).json({ message: 'Error fetching notifications' });
+  }
+};
 
-    // Save the user data in the database
+// Mark notification as read
+exports.markNotificationRead = async (req, res) => {
+  try {
+    const { notifId } = req.body;
+    await User.updateOne(
+      { _id: req.user._id, "notifications._id": notifId },
+      { $set: { "notifications.$.read": true } }
+    );
+    res.json({ success: true });
+  } catch (err) {
+    res.status(500).json({ message: 'Error marking notification as read' });
+  }
+};
+
+// Save user data (billHistory, applianceUsage) and generate future energy tips
+exports.saveUserData = async (req, res) => {
+  const { billHistory, applianceUsage } = req.body;
+  // billHistory should be an array matching your User.bills
+  try {
+    // Find the user
+    let user = await User.findById(req.user._id);
+    if (!user) return res.status(404).json({ status: 'fail', message: 'User not found' });
+
+    // Replace bill history and appliance usage (syncing with your model)
+    user.bills = billHistory;
+    user.appliances = applianceUsage;
     await user.save();
 
-    // Call Gemini API to regenerate energy-saving tips based on updated data
+    // Generate energy-saving tips
     const futureTips = await getEnergyTipsFromGemini(billHistory, applianceUsage);
 
-    // Store the regenerated future tips in the user's profile
+    // Store the generated tips
     user.futureEnergyTips = futureTips;
-    await user.save();  // Save the updated user with new energy-saving tips
+    await user.save();
 
-    // Respond with success and the newly generated tips
     res.status(200).json({ status: 'success', tips: futureTips });
   } catch (err) {
     console.error('Error saving user data:', err);
@@ -99,21 +107,17 @@ exports.saveUserData = async (req, res) => {
   }
 };
 
-
-// Get saved user data (bill history, appliance usage, and energy-saving tips)
- exports.getUserData = async (req, res) => {
-  const { userId } = req.query;
-
+// Get user data (bill history, appliances, future tips)
+exports.getUserData = async (req, res) => {
   try {
-    const user = await User.findById(userId);
+    const user = await User.findById(req.user._id);
     if (!user) {
       return res.status(404).json({ error: 'User data not found' });
     }
-
     res.status(200).json({
-      billHistory: user.billHistory,
-      applianceUsage: user.applianceUsage,
-      futureEnergyTips: user.futureEnergyTips,  // Return the future energy-saving tips
+      billHistory: user.bills,
+      applianceUsage: user.appliances,
+      futureEnergyTips: user.futureEnergyTips,
     });
   } catch (err) {
     console.error('Error retrieving user data:', err);
@@ -121,7 +125,7 @@ exports.saveUserData = async (req, res) => {
   }
 };
 
-// Placeholder update user function (not yet implemented)
+// (Optional) Placeholder for update user endpoint
 exports.updateUser = async (req, res) => {
   res.status(501).json({ status: 'fail', message: 'Not implemented' });
 };

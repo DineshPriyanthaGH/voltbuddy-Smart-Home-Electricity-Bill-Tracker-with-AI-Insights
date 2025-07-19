@@ -11,6 +11,7 @@ const applianceRoutes = require('./routes/applianceRoutes');
 const energyTipsRoutes = require('./routes/energyTipsRoutes');
 const { errorHandler } = require('./middleware/authMiddleware');
 
+
 const app = express();
 
 app.use(cors({
