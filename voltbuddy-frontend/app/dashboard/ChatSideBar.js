@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import axios from 'axios';
+import { chatAPI } from '../../utils/api';
 
 export default function ChatSidebar({ onClose }) {
   const [messages, setMessages] = useState([]);
@@ -8,12 +8,16 @@ export default function ChatSidebar({ onClose }) {
   const [showWelcome, setShowWelcome] = useState(true);
   const messagesEndRef = useRef(null);
 
-  // Predefined quick messages
+  // Predefined quick messages for comprehensive energy and tax queries
   const quickMessages = [
-    "How can I reduce my electricity bill?",
-    "Show me my energy consumption trends",
-    "What are the best energy-saving tips?",
-    "Help me understand my bill breakdown"
+    "Which appliance is costing me the most?",
+    "How much will my bill be this month?",
+    "Explain Sri Lankan electricity tax structure",
+    "How can I reduce my highest energy costs?",
+    "Show me my bill history trends",
+    "What are the domestic tariff blocks?",
+    "How do peak hours affect my bill?",
+    "What government energy programs are available?"
   ];
 
   // Scroll chat to bottom on new messages
@@ -28,11 +32,11 @@ export default function ChatSidebar({ onClose }) {
     sendMessageWithText(message);
   };
 
-  // Start conversation
+  // Start conversation with comprehensive greeting
   const startChat = () => {
     setShowWelcome(false);
     setMessages([
-      { sender: 'bot', text: 'Hello! I\'m your VoltBuddy AI Assistant. How can I help you manage your electricity consumption today?' }
+      { sender: 'bot', text: 'Hello! I\'m your VoltBuddy AI Assistant with complete access to your energy profile, appliances, bills, notifications, and Sri Lankan electricity tariff information. Ask me anything about your data or electricity policies!' }
     ]);
   };
 
@@ -52,11 +56,22 @@ export default function ChatSidebar({ onClose }) {
     setInput('');
 
     try {
-      const res = await axios.post('http://localhost:5001/api/chat/gemini', { message: messageText });
-      const botReply = res.data.reply || 'Sorry, I could not get an answer.';
+      // Use the data-aware chatbot endpoint
+      const res = await chatAPI.askQuestion(messageText);
+      const botReply = res.data.response || 'Sorry, I could not get an answer.';
       setMessages(prev => [...prev, { sender: 'bot', text: botReply }]);
     } catch (error) {
-      setMessages(prev => [...prev, { sender: 'bot', text: 'Error contacting chatbot service.' }]);
+      console.error('Chatbot error:', error);
+      
+      // Provide more specific error messages
+      let errorMessage = 'Error contacting chatbot service.';
+      if (error.response?.status === 401) {
+        errorMessage = 'Please log in to access your personalized energy data.';
+      } else if (error.response?.status === 404) {
+        errorMessage = 'User data not found. Please make sure you have some appliances registered.';
+      }
+      
+      setMessages(prev => [...prev, { sender: 'bot', text: errorMessage }]);
     } finally {
       setLoading(false);
     }
@@ -71,7 +86,8 @@ export default function ChatSidebar({ onClose }) {
   };
 
   return (
-    <div className="fixed top-0 right-0 w-96 h-full bg-gradient-to-br from-slate-50 to-blue-50 shadow-2xl z-50 flex flex-col animate-slide-in-right">
+    <div className="fixed top-20 right-0 w-96 h-[calc(100vh-5rem)] bg-gradient-to-br from-slate-50 to-blue-50 shadow-2xl z-40 flex flex-col animate-slide-in-right border-l border-white/20 backdrop-blur-xl"
+         style={{ maxHeight: 'calc(100vh - 5rem)' }}>
       {/* Header */}
       <header className="relative bg-gradient-to-r from-blue-600 to-purple-700 text-white p-6 rounded-bl-3xl shadow-lg">
         <div className="flex justify-between items-center">
@@ -115,7 +131,7 @@ export default function ChatSidebar({ onClose }) {
             <div className="space-y-2">
               <h3 className="text-2xl font-bold text-gray-800">Welcome to VoltBuddy AI!</h3>
               <p className="text-gray-600 leading-relaxed">
-                I'm your intelligent energy assistant, here to help you:
+                I'm your intelligent energy assistant with access to your personal data:
               </p>
             </div>
 
@@ -126,7 +142,7 @@ export default function ChatSidebar({ onClose }) {
                     <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" />
                   </svg>
                 </div>
-                <span className="text-sm text-gray-700">Analyze your energy consumption</span>
+                <span className="text-sm text-gray-700">Access your real appliance costs & usage</span>
               </div>
               
               <div className="flex items-center space-x-3 p-3 bg-white rounded-lg shadow-sm">
@@ -135,7 +151,7 @@ export default function ChatSidebar({ onClose }) {
                     <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
                   </svg>
                 </div>
-                <span className="text-sm text-gray-700">Provide money-saving tips</span>
+                <span className="text-sm text-gray-700">Provide personalized cost-saving tips</span>
               </div>
               
               <div className="flex items-center space-x-3 p-3 bg-white rounded-lg shadow-sm">
@@ -144,7 +160,7 @@ export default function ChatSidebar({ onClose }) {
                     <path d="M3 4a1 1 0 011-1h12a1 1 0 011 1v2a1 1 0 01-1 1H4a1 1 0 01-1-1V4zM3 10a1 1 0 011-1h6a1 1 0 011 1v6a1 1 0 01-1 1H4a1 1 0 01-1-1v-6zM14 9a1 1 0 00-1 1v6a1 1 0 001 1h2a1 1 0 001-1v-6a1 1 0 00-1-1h-2z" />
                   </svg>
                 </div>
-                <span className="text-sm text-gray-700">Track bill patterns & trends</span>
+                <span className="text-sm text-gray-700">Answer questions about your specific data</span>
               </div>
             </div>
 

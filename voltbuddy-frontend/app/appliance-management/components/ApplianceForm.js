@@ -123,15 +123,28 @@ export const ApplianceForm = ({ onSubmit, editingAppliance, onCancel }) => {
   };
 
   return (
-    <div className="bg-white rounded-lg shadow-md p-6 mb-8">
-      <h3 className="text-xl font-semibold mb-4 text-blue-600">
-        {editingAppliance ? 'Edit Appliance' : 'Add New Appliance'}
-      </h3>
+    <div className="bg-white/70 backdrop-blur-sm border border-white/30 rounded-3xl p-8 shadow-2xl hover:shadow-3xl transition-all duration-300">
+      <div className="flex items-center space-x-4 mb-8">
+        <div className="p-3 rounded-2xl shadow-lg" 
+             style={{background: 'linear-gradient(to bottom right, #2441E1, #3B82F6)'}}>
+          {editingAppliance ? (
+            <SaveIcon className="w-6 h-6 text-white" />
+          ) : (
+            <PlusIcon className="w-6 h-6 text-white" />
+          )}
+        </div>
+        <h3 className="text-2xl font-bold text-transparent" 
+            style={{backgroundImage: 'linear-gradient(to right, #2441E1, #3B82F6)', 
+                    WebkitBackgroundClip: 'text', backgroundClip: 'text'}}>
+          {editingAppliance ? 'Edit Appliance' : 'Add New Appliance'}
+        </h3>
+      </div>
+      
       <form onSubmit={handleSubmit}>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           {/* Appliance Name */}
-          <div className="mb-4">
-            <label htmlFor="name" className="block text-sm font-medium text-gray-700 mb-1">
+          <div className="space-y-2">
+            <label htmlFor="name" className="block text-sm font-bold text-gray-700">
               Appliance Name
             </label>
             <input
@@ -139,21 +152,24 @@ export const ApplianceForm = ({ onSubmit, editingAppliance, onCancel }) => {
               type="text"
               value={name}
               onChange={(e) => setName(e.target.value)}
-              className="w-full px-3 py-2 border text-gray-500 border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full px-4 py-3 border border-gray-200 text-gray-700 rounded-2xl focus:outline-none focus:ring-2 focus:border-transparent shadow-lg hover:shadow-xl transition-all duration-300"
+              style={{focusRing: '2px solid #2441E1'}}
               required
+              placeholder="Enter appliance name"
             />
           </div>
 
           {/* Appliance Type */}
-          <div className="mb-4">
-            <label htmlFor="type" className="block text-sm font-medium text-gray-700 mb-1">
+          <div className="space-y-2">
+            <label htmlFor="type" className="block text-sm font-bold text-gray-700">
               Appliance Type
             </label>
             <select
               id="type"
               value={type}
               onChange={(e) => setType(e.target.value)}
-              className="w-full px-3 py-2 border text-gray-500 border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full px-4 py-3 border border-gray-200 text-gray-700 rounded-2xl focus:outline-none focus:ring-2 focus:border-transparent shadow-lg hover:shadow-xl transition-all duration-300 bg-white"
+              style={{focusRing: '2px solid #2441E1'}}
             >
               <option value="refrigerator">Refrigerator</option>
               <option value="air-conditioner">Air Conditioner</option>
@@ -166,8 +182,8 @@ export const ApplianceForm = ({ onSubmit, editingAppliance, onCancel }) => {
           </div>
 
           {/* Used Hours Per Day */}
-          <div className="mb-4">
-            <label htmlFor="usedHoursPerDay" className="block text-sm font-medium text-gray-700 mb-1">
+          <div className="space-y-2">
+            <label htmlFor="usedHoursPerDay" className="block text-sm font-bold text-gray-700">
               Used Hours Per Day
             </label>
             <input
@@ -175,16 +191,18 @@ export const ApplianceForm = ({ onSubmit, editingAppliance, onCancel }) => {
               type="number"
               value={usedHoursPerDay}
               onChange={(e) => setUsedHoursPerDay(e.target.value)}
-              className="w-full px-3 py-2 border text-gray-500 border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full px-4 py-3 border border-gray-200 text-gray-700 rounded-2xl focus:outline-none focus:ring-2 focus:border-transparent shadow-lg hover:shadow-xl transition-all duration-300"
+              style={{focusRing: '2px solid #2441E1'}}
               required
               min="0"
               step="0.1"
+              placeholder="e.g., 8.5"
             />
           </div>
 
           {/* Power Rating */}
-          <div className="mb-4">
-            <label htmlFor="powerRating" className="block text-sm font-medium text-gray-700 mb-1">
+          <div className="space-y-2">
+            <label htmlFor="powerRating" className="block text-sm font-bold text-gray-700">
               Power Rating (Watts)
             </label>
             <input
@@ -192,39 +210,42 @@ export const ApplianceForm = ({ onSubmit, editingAppliance, onCancel }) => {
               type="number"
               value={powerRating}
               onChange={(e) => setPowerRating(e.target.value)}
-              className="w-full px-3 py-2 border text-gray-500 border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full px-4 py-3 border border-gray-200 text-gray-700 rounded-2xl focus:outline-none focus:ring-2 focus:border-transparent shadow-lg hover:shadow-xl transition-all duration-300"
+              style={{focusRing: '2px solid #2441E1'}}
               required
               min="0"
+              placeholder="e.g., 150"
             />
           </div>
         </div>
 
         {/* Submit Button */}
-        <div className="flex justify-end mt-4 space-x-2">
+        <div className="flex justify-end mt-8 space-x-4">
           {editingAppliance && (
             <button
               type="button"
               onClick={onCancel}
-              className="px-4 py-2 border border-gray-300 rounded-md text-gray-700 hover:bg-gray-100 flex items-center"
+              className="px-6 py-3 bg-gray-100 hover:bg-gray-200 border border-gray-200 rounded-2xl text-gray-700 hover:text-gray-900 font-medium flex items-center shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300"
             >
-              <XIcon size={18} className="mr-1" />
+              <XIcon size={18} className="mr-2" />
               Cancel
             </button>
           )}
           <button
             type="submit"
-            className={`px-4 py-2 rounded-md text-white flex items-center ${
-              editingAppliance ? 'bg-green-600 hover:bg-green-700' : 'bg-blue-600 hover:bg-blue-700'
-            }`}
+            className="px-6 py-3 rounded-2xl text-white font-bold flex items-center shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300"
+            style={{background: editingAppliance 
+              ? 'linear-gradient(to right, #10B981, #059669)' 
+              : 'linear-gradient(to right, #2441E1, #3B82F6)'}}
           >
             {editingAppliance ? (
               <>
-                <SaveIcon size={18} className="mr-1" />
+                <SaveIcon size={18} className="mr-2" />
                 Update Appliance
               </>
             ) : (
               <>
-                <PlusIcon size={18} className="mr-1" />
+                <PlusIcon size={18} className="mr-2" />
                 Add Appliance
               </>
             )}

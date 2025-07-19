@@ -20,19 +20,19 @@ export const ApplianceCard = ({ appliance, onEdit, onDelete }) => {
   const getApplianceIcon = () => {
     switch (appliance.type) {
       case 'refrigerator':
-        return <RefrigeratorIcon size={24} className="text-blue-500" />;
+        return <RefrigeratorIcon size={24} style={{color: '#2441E1'}} />;
       case 'air-conditioner':
-        return <AirVentIcon size={24} className="text-blue-500" />;
+        return <AirVentIcon size={24} style={{color: '#2441E1'}} />;
       case 'tv':
-        return <TvIcon size={24} className="text-blue-500" />;
+        return <TvIcon size={24} style={{color: '#2441E1'}} />;
       case 'washing-machine':
-        return <div size={24} className="text-blue-500" />; // No icon imported; consider adding one
+        return <div size={24} style={{color: '#2441E1'}} />; // No icon imported; consider adding one
       case 'microwave':
-        return <MicrowaveIcon size={24} className="text-blue-500" />;
+        return <MicrowaveIcon size={24} style={{color: '#2441E1'}} />;
       case 'light':
-        return <LightbulbIcon size={24} className="text-blue-500" />;
+        return <LightbulbIcon size={24} className="text-yellow-400" />;
       default:
-        return <PackageIcon size={24} className="text-blue-500" />;
+        return <PackageIcon size={24} style={{color: '#2441E1'}} />;
     }
   };
 
@@ -56,23 +56,27 @@ export const ApplianceCard = ({ appliance, onEdit, onDelete }) => {
   };
 
   return (
-    <div className="bg-white rounded-lg shadow-md p-5 relative hover:shadow-lg transition-shadow">
-      <div className="flex justify-between items-start">
-        <div className="flex items-center">
-          {getApplianceIcon()}
-          <h3 className="text-lg font-medium ml-2">{appliance.name}</h3>
+    <div className="bg-white/60 backdrop-blur-sm border border-white/40 rounded-3xl p-6 shadow-2xl hover:shadow-3xl transform hover:scale-105 transition-all duration-300 group relative">
+      <div className="flex justify-between items-start mb-6">
+        <div className="flex items-center space-x-3">
+          <div className="p-3 rounded-2xl bg-gradient-to-br from-gray-50 to-gray-100 shadow-lg group-hover:shadow-xl transition-shadow duration-300">
+            {getApplianceIcon()}
+          </div>
+          <h3 className="text-lg font-bold text-gray-800 group-hover:text-gray-900 transition-colors duration-300">
+            {appliance.name}
+          </h3>
         </div>
-        <div className="flex space-x-1">
+        <div className="flex space-x-2">
           <button
             onClick={() => onEdit(appliance)}
-            className="p-1.5 rounded-full hover:bg-gray-100"
+            className="p-2 rounded-2xl bg-blue-50 hover:bg-blue-100 shadow-lg hover:shadow-xl transform hover:scale-110 transition-all duration-300"
             aria-label="Edit appliance"
           >
-            <EditIcon size={18} className="text-blue-600" />
+            <EditIcon size={18} style={{color: '#2441E1'}} />
           </button>
           <button
             onClick={() => onDelete(appliance.id)}
-            className="p-1.5 rounded-full hover:bg-gray-100"
+            className="p-2 rounded-2xl bg-red-50 hover:bg-red-100 shadow-lg hover:shadow-xl transform hover:scale-110 transition-all duration-300"
             aria-label="Delete appliance"
           >
             <TrashIcon size={18} className="text-red-600" />
@@ -80,35 +84,54 @@ export const ApplianceCard = ({ appliance, onEdit, onDelete }) => {
         </div>
       </div>
 
-      <div className="mt-4 space-y-2">
+      <div className="space-y-4">
         {/* Monthly Usage */}
-        <div className="flex items-center text-gray-600">
-          <ZapIcon size={16} className="mr-2 text-green-500" />
-          <span className="text-sm">{appliance.monthlyUsage} kWh/month</span>
+        <div className="flex items-center justify-between p-3 bg-gradient-to-r from-green-50 to-emerald-50 rounded-2xl border border-green-200">
+          <div className="flex items-center">
+            <div className="p-2 rounded-full bg-green-100">
+              <ZapIcon size={16} className="text-green-600" />
+            </div>
+            <span className="ml-3 text-sm font-medium text-gray-700">Monthly Usage</span>
+          </div>
+          <span className="text-sm font-bold text-green-700">{appliance.monthlyUsage} kWh</span>
         </div>
 
         {/* Power Rating */}
-        <div className="flex items-center text-gray-600">
-          <ZapIcon size={16} className="mr-2 text-yellow-500" />
-          <span className="text-sm">{appliance.powerRating} Watts</span>
+        <div className="flex items-center justify-between p-3 bg-gradient-to-r from-yellow-50 to-amber-50 rounded-2xl border border-yellow-200">
+          <div className="flex items-center">
+            <div className="p-2 rounded-full bg-yellow-100">
+              <ZapIcon size={16} className="text-yellow-600" />
+            </div>
+            <span className="ml-3 text-sm font-medium text-gray-700">Power Rating</span>
+          </div>
+          <span className="text-sm font-bold text-yellow-700">{appliance.powerRating} W</span>
         </div>
 
         {/* Used Hours Per Day */}
-        <div className="flex items-center text-gray-600">
-          <ZapIcon size={16} className="mr-2 text-blue-500" />
-          <span className="text-sm">{appliance.usedHoursPerDay} hours/day</span>
+        <div className="flex items-center justify-between p-3 bg-gradient-to-r from-blue-50 to-indigo-50 rounded-2xl border border-blue-200">
+          <div className="flex items-center">
+            <div className="p-2 rounded-full bg-blue-100">
+              <ZapIcon size={16} style={{color: '#2441E1'}} />
+            </div>
+            <span className="ml-3 text-sm font-medium text-gray-700">Daily Usage</span>
+          </div>
+          <span className="text-sm font-bold" style={{color: '#2441E1'}}>{appliance.usedHoursPerDay} hrs</span>
         </div>
       </div>
 
-      <div className="mt-3 relative">
+      <div className="mt-6 relative">
         <button
-          className="flex items-center text-xs text-blue-600 hover:text-blue-800"
+          className="flex items-center w-full p-3 bg-gradient-to-r from-indigo-50 to-purple-50 rounded-2xl border border-indigo-200 hover:from-indigo-100 hover:to-purple-100 transition-all duration-300 group"
           onMouseEnter={() => setShowTooltip(true)}
           onMouseLeave={() => setShowTooltip(false)}
           onClick={() => setShowTooltip(!showTooltip)}
         >
-          <InfoIcon size={14} className="mr-1" />
-          Energy saving tip
+          <div className="p-1 rounded-full bg-indigo-100 mr-3">
+            <InfoIcon size={14} style={{color: '#2441E1'}} />
+          </div>
+          <span className="text-sm font-medium" style={{color: '#2441E1'}}>
+            Energy saving tip
+          </span>
         </button>
         {showTooltip && <Tooltip text={getEnergyTip()} />}
       </div>

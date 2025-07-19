@@ -71,84 +71,118 @@ export function LoginForm() {
       <div className="relative">
         <div className="absolute -top-16 right-0"></div>
       </div>
-      <div className="flex-shrink-0 flex items-center space-x-30">
-        <span className="text-2xl font-extrabold text-blue-600">VOLTBUDDY</span>
-        <img src="./images/logo.png" alt="VoltBuddy Logo" className="h-17 w-17" />
+      {/* Logo Section */}
+      <div className="flex items-center justify-center space-x-3 mb-8">
+        <img src="./images/logo.png" className="h-10 w-10" />
+        <span className="text-xl font-bold" style={{color: '#2441E1'}}>VOLTBUDDY</span>
       </div>
       <form onSubmit={handleSubmit}>
         {isLogin ? (
           <div>
-            <h1 className="text-2xl font-bold text-gray-700 mb-2">Welcome to VOLTBUDDY!</h1>
-            <p className="text-gray-500 mb-8">Please sign-in to Track Your Bills, Save with AI</p>
-            <div className="mb-4">
-              <label htmlFor="email" className="block text-gray-600 mb-2">
-                Email
-              </label>
-              <input
-                type="email"
-                id="email"
-                placeholder="email@example.com"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                className="w-full text-gray-600 px-4 py-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-600"
-              />
+            <div className="text-center mb-8">
+              <h1 className="text-3xl font-bold text-transparent mb-3" 
+                  style={{backgroundImage: 'linear-gradient(to right, #2441E1, #3B82F6)', 
+                          WebkitBackgroundClip: 'text', backgroundClip: 'text'}}>
+                Welcome Back!
+              </h1>
+              <p className="text-gray-600 text-lg">Sign in to track your bills and save with AI</p>
             </div>
-            <div className="mb-4">
-              <label htmlFor="password" className="block text-gray-600 mb-2">
-                Password
-              </label>
-              <input
-                type="password"
-                id="password"
-                placeholder="••••••••"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                className="w-full px-4 text-gray-600 py-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-600"
-              />
+            
+            <div className="space-y-6">
+              <div>
+                <label htmlFor="email" className="block text-gray-700 font-semibold mb-2">
+                  Email Address
+                </label>
+                <input
+                  type="email"
+                  id="email"
+                  placeholder="email@example.com"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  className="w-full text-gray-700 px-4 py-3 border border-gray-200 rounded-2xl focus:outline-none focus:ring-2 focus:border-transparent shadow-lg hover:shadow-xl transition-all duration-300 bg-white/80"
+                  style={{focusRing: '2px solid #2441E1'}}
+                />
+              </div>
+              <div>
+                <label htmlFor="password" className="block text-gray-700 font-semibold mb-2">
+                  Password
+                </label>
+                <input
+                  type="password"
+                  id="password"
+                  placeholder="••••••••"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  className="w-full px-4 text-gray-700 py-3 border border-gray-200 rounded-2xl focus:outline-none focus:ring-2 focus:border-transparent shadow-lg hover:shadow-xl transition-all duration-300 bg-white/80"
+                  style={{focusRing: '2px solid #2441E1'}}
+                />
+              </div>
             </div>
-            {error && <p className="text-red-500 mb-4">{error}</p>}
-            <button
-              type="submit"
-              className="w-full bg-blue-600 cursor-pointer hover:bg-blue-700 text-center py-3 font-bold rounded-md text-gray-100 mb-4"
-            >
-              Login
-            </button>
-            <button
-              type="button"
-              onClick={() => {
-                setIsLogin(false);
-                setError('');
-                setUsername('');
-                setEmail('');
-                setPassword('');
-                setConfirmPassword('');
-              }}
-              className="w-full bg-gray-600 hover:bg-gray-700 text-center py-3 rounded-md text-white font-bold cursor-pointer"
-            >
-              Register
-            </button>
+            
+            {error && (
+              <div className="bg-red-50/80 backdrop-blur-sm border border-red-200 rounded-2xl p-4 mt-6">
+                <div className="flex items-center space-x-3">
+                  <div className="w-5 h-5 bg-red-500 rounded-full flex items-center justify-center">
+                    <span className="text-white text-xs font-bold">!</span>
+                  </div>
+                  <span className="text-red-700 font-medium">{error}</span>
+                </div>
+              </div>
+            )}
+            
+            <div className="space-y-4 mt-8">
+              <button
+                type="submit"
+                className="w-full py-4 font-bold rounded-2xl text-white shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300"
+                style={{background: 'linear-gradient(to right, #2441E1, #3B82F6)'}}
+              >
+                Sign In
+              </button>
+              <button
+                type="button"
+                onClick={() => {
+                  setIsLogin(false);
+                  setError('');
+                  setUsername('');
+                  setEmail('');
+                  setPassword('');
+                  setConfirmPassword('');
+                }}
+                className="w-full py-4 bg-gray-100 hover:bg-gray-200 border border-gray-200 rounded-2xl text-gray-700 hover:text-gray-900 font-bold shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300"
+              >
+                Create New Account
+              </button>
+            </div>
           </div>
         ) : (
           <div>
-            <h1 className="text-3xl font-bold text-gray-700 mb-2">Create Account</h1>
-            <p className="text-gray-500 mb-8">Track Your Bills, Save with AI</p>
-            <div className="space-y-4">
+            <div className="text-center mb-8">
+              <h1 className="text-3xl font-bold text-transparent mb-3" 
+                  style={{backgroundImage: 'linear-gradient(to right, #2441E1, #3B82F6)', 
+                          WebkitBackgroundClip: 'text', backgroundClip: 'text'}}>
+                Create Account
+              </h1>
+              <p className="text-gray-600 text-lg">Join VoltBuddy to track bills and save with AI</p>
+            </div>
+            
+            <div className="space-y-6">
               <div>
-                <label htmlFor="username" className="block text-gray-600 mb-2">
+                <label htmlFor="username" className="block text-gray-700 font-semibold mb-2">
                   Full Name
                 </label>
                 <input
                   type="text"
                   id="username"
-                  placeholder="Name"
+                  placeholder="Enter your full name"
                   value={username}
                   onChange={(e) => setUsername(e.target.value)}
-                  className="w-full px-4 text-gray-600 py-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-600"
+                  className="w-full px-4 text-gray-700 py-3 border border-gray-200 rounded-2xl focus:outline-none focus:ring-2 focus:border-transparent shadow-lg hover:shadow-xl transition-all duration-300 bg-white/80"
+                  style={{focusRing: '2px solid #2441E1'}}
                 />
               </div>
               <div>
-                <label htmlFor="email-register" className="block text-gray-600 mb-2">
-                  Email
+                <label htmlFor="email-register" className="block text-gray-700 font-semibold mb-2">
+                  Email Address
                 </label>
                 <input
                   type="email"
@@ -156,57 +190,74 @@ export function LoginForm() {
                   placeholder="email@example.com"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  className="w-full px-4 py-3 border border-gray-300 text-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-600"
+                  className="w-full px-4 py-3 border border-gray-200 text-gray-700 rounded-2xl focus:outline-none focus:ring-2 focus:border-transparent shadow-lg hover:shadow-xl transition-all duration-300 bg-white/80"
+                  style={{focusRing: '2px solid #2441E1'}}
                 />
               </div>
               <div>
-                <label htmlFor="password-register" className="block text-gray-600 mb-2">
+                <label htmlFor="password-register" className="block text-gray-700 font-semibold mb-2">
                   Password
                 </label>
                 <input
                   type="password"
                   id="password-register"
-                  placeholder="••••••••"
+                  placeholder="Create a strong password"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
-                  className="w-full text-gray-600 px-4 py-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-600"
+                  className="w-full text-gray-700 px-4 py-3 border border-gray-200 rounded-2xl focus:outline-none focus:ring-2 focus:border-transparent shadow-lg hover:shadow-xl transition-all duration-300 bg-white/80"
+                  style={{focusRing: '2px solid #2441E1'}}
                 />
               </div>
               <div>
-                <label htmlFor="confirm-password" className="block text-gray-600 mb-2">
+                <label htmlFor="confirm-password" className="block text-gray-700 font-semibold mb-2">
                   Confirm Password
                 </label>
                 <input
                   type="password"
                   id="confirm-password"
-                  placeholder="••••••••"
+                  placeholder="Confirm your password"
                   value={confirmPassword}
                   onChange={(e) => setConfirmPassword(e.target.value)}
-                  className="w-full px-4 py-3 border border-gray-300 text-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-600"
+                  className="w-full px-4 py-3 border border-gray-200 text-gray-700 rounded-2xl focus:outline-none focus:ring-2 focus:border-transparent shadow-lg hover:shadow-xl transition-all duration-300 bg-white/80"
+                  style={{focusRing: '2px solid #2441E1'}}
                 />
               </div>
             </div>
-            {error && <p className="text-red-500 mt-4">{error}</p>}
-            <button
-              type="submit"
-              className="w-full bg-blue-600 hover:bg-blue-700 text-center py-3 rounded-md text-white font-bold cursor-pointer mt-6 mb-4"
-            >
-              Create Account
-            </button>
-            <button
-              type="button"
-              onClick={() => {
-                setIsLogin(true);
-                setError('');
-                setUsername('');
-                setEmail('');
-                setPassword('');
-                setConfirmPassword('');
-              }}
-              className="w-full bg-gray-600 hover:bg-gray-700 text-center py-3 rounded-md text-white font-bold cursor-pointer"
-            >
-              Back to Login
-            </button>
+            
+            {error && (
+              <div className="bg-red-50/80 backdrop-blur-sm border border-red-200 rounded-2xl p-4 mt-6">
+                <div className="flex items-center space-x-3">
+                  <div className="w-5 h-5 bg-red-500 rounded-full flex items-center justify-center">
+                    <span className="text-white text-xs font-bold">!</span>
+                  </div>
+                  <span className="text-red-700 font-medium">{error}</span>
+                </div>
+              </div>
+            )}
+            
+            <div className="space-y-4 mt-8">
+              <button
+                type="submit"
+                className="w-full py-4 font-bold rounded-2xl text-white shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300"
+                style={{background: 'linear-gradient(to right, #10B981, #059669)'}}
+              >
+                Create Account
+              </button>
+              <button
+                type="button"
+                onClick={() => {
+                  setIsLogin(true);
+                  setError('');
+                  setUsername('');
+                  setEmail('');
+                  setPassword('');
+                  setConfirmPassword('');
+                }}
+                className="w-full py-4 bg-gray-100 hover:bg-gray-200 border border-gray-200 rounded-2xl text-gray-700 hover:text-gray-900 font-bold shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300"
+              >
+                Back to Sign In
+              </button>
+            </div>
           </div>
         )}
       </form>

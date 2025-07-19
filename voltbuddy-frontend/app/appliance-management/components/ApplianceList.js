@@ -35,27 +35,57 @@ export const ApplianceList = ({ onEdit, onDelete }) => {
 
   if (errorMessage) {
     return (
-      <div className="bg-white rounded-lg shadow-md p-6 text-center text-red-600">
-        <p>{errorMessage}</p>
+      <div className="bg-red-50/80 backdrop-blur-sm border border-red-200 rounded-3xl p-8 shadow-2xl text-center">
+        <div className="flex items-center justify-center space-x-3">
+          <div className="w-8 h-8 bg-red-500 rounded-full flex items-center justify-center">
+            <span className="text-white text-sm font-bold">!</span>
+          </div>
+          <p className="text-red-700 font-medium text-lg">{errorMessage}</p>
+        </div>
       </div>
     );
   }
 
   if (!appliances.length) {
     return (
-      <div className="bg-white rounded-lg shadow-md p-6 text-center">
-        <p className="text-gray-500">No appliances added yet. Add your first appliance above!</p>
+      <div className="bg-blue-50/80 backdrop-blur-sm border border-blue-200 rounded-3xl p-8 shadow-2xl text-center">
+        <div className="flex flex-col items-center space-y-4">
+          <div className="p-4 rounded-2xl shadow-lg" 
+               style={{background: 'linear-gradient(to bottom right, #2441E1, #3B82F6)'}}>
+            <svg className="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} 
+                    d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
+            </svg>
+          </div>
+          <div>
+            <h3 className="text-xl font-bold text-gray-800 mb-2">No Appliances Yet</h3>
+            <p className="text-blue-700 font-medium">Add your first appliance above to start tracking energy usage!</p>
+          </div>
+        </div>
       </div>
     );
   }
 
   return (
-    <div>
-      <h3 className="text-xl font-semibold mb-4 text-gray-700">Your Appliances</h3>
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+    <div className="bg-white/70 backdrop-blur-sm border border-white/30 rounded-3xl p-8 shadow-2xl hover:shadow-3xl transition-all duration-300">
+      <div className="flex items-center space-x-4 mb-8">
+        <div className="p-3 rounded-2xl shadow-lg" 
+             style={{background: 'linear-gradient(to bottom right, #2441E1, #3B82F6)'}}>
+          <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} 
+                  d="M4 6h16M4 10h16M4 14h16M4 18h16" />
+          </svg>
+        </div>
+        <h3 className="text-2xl font-bold text-transparent" 
+            style={{backgroundImage: 'linear-gradient(to right, #2441E1, #3B82F6)', 
+                    WebkitBackgroundClip: 'text', backgroundClip: 'text'}}>
+          Your Appliances
+        </h3>
+      </div>
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {appliances.map((appliance) => (
           <ApplianceCard
-            key={appliance._id} // Ensure the appliance _id is used as the unique key
+            key={appliance._id}
             appliance={appliance}
             onEdit={onEdit}
             onDelete={onDelete}
