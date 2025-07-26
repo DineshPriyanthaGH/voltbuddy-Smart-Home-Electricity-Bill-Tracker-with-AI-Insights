@@ -58,7 +58,7 @@ app.post('/api/test-email', async (req, res) => {
       return res.status(400).json({ message: 'Email is required' });
     }
     
-    console.log('🧪 Testing email functionality for:', email);
+    console.log(' Testing email functionality for:', email);
     
     // Test email with mock user data
     const mockUser = {
@@ -81,7 +81,7 @@ app.post('/api/test-email', async (req, res) => {
     });
     
   } catch (error) {
-    console.error('❌ Test email failed:', error);
+    console.error(' Test email failed:', error);
     res.status(500).json({ 
       success: false, 
       message: 'Failed to send test email',
@@ -100,7 +100,7 @@ app.post('/api/test-bill-email', async (req, res) => {
       return res.status(400).json({ message: 'Email is required' });
     }
     
-    console.log('🧪 Testing bill tracking email for:', email);
+    console.log('Testing bill tracking email for:', email);
     
     // Test email with mock bill data
     const mockUser = {
@@ -147,28 +147,20 @@ const cron = require('node-cron');
 
 // Schedule task to run every day at 9:00 AM
 cron.schedule('0 9 * * *', async () => {
-  console.log('🕘 Daily automated bill reminder check started at 9:00 AM');
+  console.log('Daily automated bill reminder check started at 9:00 AM');
   try {
     await NotificationService.checkAndSendUnpaidBillReminders();
-    console.log('✅ Daily bill reminder check completed');
+    console.log(' Daily bill reminder check completed');
   } catch (error) {
-    console.error('❌ Error in daily bill reminder check:', error);
+    console.error(' Error in daily bill reminder check:', error);
   }
 });
 
-// Alternative: For testing - run every 5 minutes (uncomment for testing)
-// cron.schedule('*/5 * * * *', async () => {
-//   console.log('🧪 Test: Checking unpaid bills (every 5 minutes)');
-//   try {
-//     await NotificationService.checkAndSendUnpaidBillReminders();
-//   } catch (error) {
-//     console.error('❌ Error in test bill reminder check:', error);
-//   }
-// });
+
 
 const PORT = process.env.PORT || 5001;
 app.listen(PORT, () => {
-  console.log(`🚀 Server running on port ${PORT}`);
-  console.log('📧 Automated email reminder system is active');
-  console.log('⏰ Bill reminders will be sent daily at 9:00 AM for unpaid bills after 20th of each month');
+  console.log(`Server running on port ${PORT}`);
+  console.log('Automated email reminder system is active');
+  console.log('Bill reminders will be sent daily at 9:00 AM for unpaid bills after 20th of each month');
 });

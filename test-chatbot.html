@@ -58,6 +58,32 @@
             border-radius: 5px;
             border-left: 4px solid #2563eb;
             white-space: pre-wrap;
+            line-height: 1.6;
+        }
+        #result strong {
+            color: #1f2937;
+            font-weight: 700;
+        }
+        #result .bullet-point {
+            display: flex;
+            align-items: flex-start;
+            margin: 8px 0;
+        }
+        #result .bullet-point span:first-child {
+            color: #2563eb;
+            margin-right: 8px;
+            font-weight: bold;
+        }
+        #result .emoji-header {
+            display: flex;
+            align-items: center;
+            margin: 15px 0 10px 0;
+            font-size: 18px;
+            font-weight: bold;
+        }
+        #result .emoji-header span:first-child {
+            font-size: 24px;
+            margin-right: 8px;
         }
         .error {
             border-left-color: #dc2626;
@@ -92,25 +118,23 @@
         </div>
 
         <div class="test-section">
-            <h3>Comprehensive Test Questions</h3>
-            <p>Test all categories of chatbot capabilities:</p>
+            <h3>Modern Formatted Response Examples</h3>
+            <p>Test the new modern, bold-formatted responses:</p>
             
             <h4>Personal Energy Data:</h4>
-            <button onclick="askQuestion('Which appliance is costing me the most?')">Most Expensive Appliance</button>
-            <button onclick="askQuestion('What is my total monthly electricity cost?')">Total Monthly Cost</button>
-            <button onclick="askQuestion('Show me my bill history trends')">Bill History Analysis</button>
-            <button onclick="askQuestion('What are my recent notifications?')">Recent Notifications</button>
+            <button onclick="askQuestion('Which appliance is costing me the most?')">Most Expensive Analysis</button>
+            <button onclick="askQuestion('Give me my complete energy breakdown')">Complete Energy Profile</button>
+            <button onclick="askQuestion('How much am I spending on electricity?')">Cost Analysis</button>
             
             <h4>Sri Lankan Electricity & Tax:</h4>
-            <button onclick="askQuestion('Explain the domestic tariff blocks in Sri Lanka')">Tariff Blocks</button>
-            <button onclick="askQuestion('How does VAT tax affect my electricity bill?')">VAT Tax Info</button>
-            <button onclick="askQuestion('What are peak and off-peak hours?')">Time-of-Use Tariff</button>
-            <button onclick="askQuestion('What government energy programs are available?')">Energy Programs</button>
+            <button onclick="askQuestion('Explain the domestic tariff blocks with my usage')">Tariff Analysis</button>
+            <button onclick="askQuestion('Calculate my bill with all taxes included')">Tax Calculation</button>
+            <button onclick="askQuestion('What are peak and off-peak savings for me?')">Time-of-Use Analysis</button>
             
-            <h4>Cost Optimization:</h4>
-            <button onclick="askQuestion('How can I reduce my highest energy costs?')">Cost Reduction Tips</button>
-            <button onclick="askQuestion('Should I install solar panels?')">Solar Installation</button>
-            <button onclick="askQuestion('How much can I save with off-peak usage?')">Off-Peak Savings</button>
+            <h4>Smart Optimization:</h4>
+            <button onclick="askQuestion('Give me 3 ways to reduce my highest costs')">Cost Reduction Plan</button>
+            <button onclick="askQuestion('Should I install solar panels based on my usage?')">Solar Analysis</button>
+            <button onclick="askQuestion('How can I save money with government programs?')">Program Eligibility</button>
         </div>
 
         <div class="test-section">
@@ -200,7 +224,32 @@
 
         function showResult(message, type = '', elementId = 'result') {
             const element = document.getElementById(elementId);
-            element.textContent = message;
+            
+            // Format the message if it's from the chatbot
+            if (type === 'success' && message.includes('VoltBuddy AI Response:')) {
+                // Extract the response part
+                const responsePart = message.split('VoltBuddy AI Response:\n')[1];
+                if (responsePart) {
+                    // Format the response with HTML
+                    let formattedResponse = responsePart
+                        // Convert **bold** to <strong>
+                        .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+                        // Convert bullet points
+                        .replace(/^• (.*$)/gim, '<div class="bullet-point"><span>•</span><span>$1</span></div>')
+                        // Convert emojis and headers
+                        .replace(/^([🏠💡📊💰⚡🔧])\s*\*\*(.*?)\*\*/gim, '<div class="emoji-header"><span>$1</span><span>$2</span></div>')
+                        // Convert line breaks
+                        .replace(/\n\n/g, '<br><br>')
+                        .replace(/\n/g, '<br>');
+                    
+                    element.innerHTML = `<strong>Question:</strong> ${message.split('\n')[0].replace('Question: "', '').replace('"', '')}<br><br><strong>VoltBuddy AI Response:</strong><br><br>${formattedResponse}`;
+                } else {
+                    element.innerHTML = message;
+                }
+            } else {
+                element.textContent = message;
+            }
+            
             element.className = type;
         }
 

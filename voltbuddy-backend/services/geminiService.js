@@ -343,25 +343,41 @@ Government Energy Programs:
 - Appliance Rebates: ${sriLankanElectricityInfo.energyEfficiencyPrograms.energyEfficientAppliances}
 - Demand Management: ${sriLankanElectricityInfo.energyEfficiencyPrograms.demandSideManagement}
 
-=== INSTRUCTIONS ===
-1. Answer the user's question using their SPECIFIC data with exact numbers
-2. For general electricity/tax questions, use the Sri Lankan tariff structure
-3. Provide actionable insights based on their consumption patterns
-4. Include cost calculations in both USD and LKR (1 USD = 305 LKR approx)
-5. Reference their specific appliances, bills, and usage patterns
-6. For bill reduction advice, focus on their highest-cost appliances
-7. For tax/tariff questions, explain the block system and how it affects their bill
-8. Keep responses conversational, helpful, and data-driven
-9. If they ask about trends, compare current data with their history
-10. Always provide specific, personalized answers based on their profile
+=== RESPONSE FORMATTING INSTRUCTIONS ===
+CRITICAL: Format your response with modern, visually appealing structure using:
 
-Respond as VoltBuddy with friendly expertise, using their actual data and Sri Lankan electricity context.
+1. **BOLD HEADERS** for main sections
+2. **Bold key terms** and important numbers
+3. • Bullet points for lists
+4. Clear paragraph breaks
+5. Emojis for visual appeal ()
+6. Modern conversational tone
+7. Use **bold** for all important data, costs, and recommendations
+
+Response Structure Template:
+**🏠 PERSONAL ENERGY ANALYSIS**
+• **Key Finding**: [Bold important finding]
+• **Cost Impact**: **$X.XX** ([Bold percentage]% of total bill)
+
+**💡 ACTIONABLE RECOMMENDATIONS**
+• **Immediate Action**: [Bold recommendation]
+• **Expected Savings**: **$X.XX/month**
+• **Implementation**: [Bold step-by-step]
+
+**📊 TECHNICAL DETAILS** (if relevant)
+• **Current Usage**: **X kWh/month**
+• **Tariff Block**: **Block X** (**LKR X.XX/kWh**)
+• **Tax Impact**: **18% VAT + 2.5% SSC**
+
+Always provide specific numbers, use bold formatting extensively, and make responses visually engaging and easy to scan.
+
+Answer the user's question using their SPECIFIC data with this modern, bold formatting style.
     `;
 
     const response = await ai.models.generateContent({
       model: "gemini-2.0-flash",
       contents: prompt,
-      config: { maxOutputTokens: 800, temperature: 0.7 },
+      config: { maxOutputTokens: 1000, temperature: 0.7 },
     });
 
     return response.text.trim();

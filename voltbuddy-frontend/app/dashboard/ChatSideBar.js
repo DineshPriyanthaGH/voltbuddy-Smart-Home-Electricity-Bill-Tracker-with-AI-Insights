@@ -85,6 +85,23 @@ export default function ChatSidebar({ onClose }) {
     }
   };
 
+  // Format bot messages with modern styling
+  const formatBotMessage = (text) => {
+    // Convert markdown-style formatting to HTML
+    let formattedText = text
+      // Convert **bold** to <strong>
+      .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+      // Convert bullet points
+      .replace(/^• (.*$)/gim, '<div class="flex items-start mb-2"><span class="text-blue-600 mr-2">•</span><span>$1</span></div>')
+      // Convert emojis and headers
+      .replace(/^([🏠💡📊💰⚡🔧])\s*\*\*(.*?)\*\*/gim, '<div class="mb-3 mt-3"><span class="text-2xl mr-2">$1</span><strong class="text-lg text-gray-800">$2</strong></div>')
+      // Add line breaks for better formatting
+      .replace(/\n\n/g, '<br><br>')
+      .replace(/\n/g, '<br>');
+    
+    return formattedText;
+  };
+
   return (
     <div className="fixed top-20 right-0 w-96 h-[calc(100vh-5rem)] bg-gradient-to-br from-slate-50 to-blue-50 shadow-2xl z-40 flex flex-col animate-slide-in-right border-l border-white/20 backdrop-blur-xl"
          style={{ maxHeight: 'calc(100vh - 5rem)' }}>
@@ -131,7 +148,7 @@ export default function ChatSidebar({ onClose }) {
             <div className="space-y-2">
               <h3 className="text-2xl font-bold text-gray-800">Welcome to VoltBuddy AI!</h3>
               <p className="text-gray-600 leading-relaxed">
-                I'm your intelligent energy assistant with access to your personal data:
+                I'm your modern AI assistant with professional formatting and complete data access:
               </p>
             </div>
 
@@ -142,7 +159,7 @@ export default function ChatSidebar({ onClose }) {
                     <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" />
                   </svg>
                 </div>
-                <span className="text-sm text-gray-700">Access your real appliance costs & usage</span>
+                <span className="text-sm text-gray-700">Modern **bold formatting** with bullet points</span>
               </div>
               
               <div className="flex items-center space-x-3 p-3 bg-white rounded-lg shadow-sm">
@@ -151,7 +168,7 @@ export default function ChatSidebar({ onClose }) {
                     <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
                   </svg>
                 </div>
-                <span className="text-sm text-gray-700">Provide personalized cost-saving tips</span>
+                <span className="text-sm text-gray-700">🏠 Emoji-organized structured responses</span>
               </div>
               
               <div className="flex items-center space-x-3 p-3 bg-white rounded-lg shadow-sm">
@@ -160,7 +177,7 @@ export default function ChatSidebar({ onClose }) {
                     <path d="M3 4a1 1 0 011-1h12a1 1 0 011 1v2a1 1 0 01-1 1H4a1 1 0 01-1-1V4zM3 10a1 1 0 011-1h6a1 1 0 011 1v6a1 1 0 01-1 1H4a1 1 0 01-1-1v-6zM14 9a1 1 0 00-1 1v6a1 1 0 001 1h2a1 1 0 001-1v-6a1 1 0 00-1-1h-2z" />
                   </svg>
                 </div>
-                <span className="text-sm text-gray-700">Answer questions about your specific data</span>
+                <span className="text-sm text-gray-700">Complete energy data + Sri Lankan tariff expertise</span>
               </div>
             </div>
 
@@ -193,13 +210,20 @@ export default function ChatSidebar({ onClose }) {
                 className={`flex ${msg.sender === 'user' ? 'justify-end' : 'justify-start'} animate-message-appear`}
               >
                 <div
-                  className={`max-w-xs lg:max-w-sm px-4 py-3 rounded-2xl shadow-sm ${
+                  className={`max-w-sm lg:max-w-md px-4 py-3 rounded-2xl shadow-sm ${
                     msg.sender === 'user'
                       ? 'bg-gradient-to-r from-blue-600 to-purple-700 text-white rounded-br-md'
                       : 'bg-white text-gray-800 border border-gray-200 rounded-bl-md'
                   }`}
                 >
-                  <p className="text-sm leading-relaxed whitespace-pre-wrap">{msg.text}</p>
+                  {msg.sender === 'bot' ? (
+                    <div 
+                      className="text-sm leading-relaxed"
+                      dangerouslySetInnerHTML={{ __html: formatBotMessage(msg.text) }}
+                    />
+                  ) : (
+                    <p className="text-sm leading-relaxed whitespace-pre-wrap">{msg.text}</p>
+                  )}
                 </div>
               </div>
             ))}
