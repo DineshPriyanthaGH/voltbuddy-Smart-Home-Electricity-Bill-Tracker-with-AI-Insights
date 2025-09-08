@@ -9,6 +9,7 @@ const App = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [showNotification, setShowNotification] = useState(false);
 
+  const [formData, setFormData] = useState({
     name: 'K.S Fernando',
     branch: 'Anuradhapura Branch',
     address: 'No:6,Main Street, Anuradhapura',
@@ -21,8 +22,8 @@ const App = () => {
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
-    setProfileData({
-      ...profileData,
+    setFormData({
+      ...formData,
       [name]: value
     });
   };
@@ -32,9 +33,9 @@ const App = () => {
       const file = e.target.files[0];
       setSelectedFile(file);
       const reader = new FileReader();
-reader.onloadend = () => {
-  setPreviewUrl(reader.result);
-};
+      reader.onloadend = () => {
+        setPreviewUrl(reader.result);
+      };
       reader.readAsDataURL(file);
     }
   };

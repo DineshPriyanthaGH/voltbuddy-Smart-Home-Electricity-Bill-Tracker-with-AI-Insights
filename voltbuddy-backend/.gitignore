@@ -19,3 +19,4 @@ yarn-error.log*
 config/firebase-service-account.json
 
 /node_modules
+.vercel
