@@ -194,20 +194,24 @@ const App = () => {
                       <h4 className="text-sm font-medium text-gray-700">Two-Factor Authentication</h4>
                       <p className="text-xs text-gray-500">Add an extra layer of security to your account</p>
                     </div>
-<div className="relative inline-block w-12 mr-2 align-middle select-none">
-
-  </label>
-</div>
+                    <div className="relative inline-block w-12 mr-2 align-middle select-none">
+                      <input type="checkbox" name="toggle" id="toggle" className="hidden" />
+                      <label htmlFor="toggle" className="block overflow-hidden h-6 rounded-full bg-gray-300 cursor-pointer">
+                        <div className="w-6 h-6 bg-white rounded-full shadow-md transform transition-transform duration-200 ease-in-out dot"></div>
+                      </label>
+                    </div>
                   </div>
                   <div className="flex items-center justify-between">
                     <div>
                       <h4 className="text-sm font-medium text-gray-700">Login Notifications</h4>
                       <p className="text-xs text-gray-500">Receive alerts when someone logs into your account</p>
                     </div>
-<div className="relative inline-block w-12 mr-2 align-middle select-none">
-
-  </label>
-</div>
+                    <div className="relative inline-block w-12 mr-2 align-middle select-none">
+                      <input type="checkbox" name="toggle2" id="toggle2" className="hidden" />
+                      <label htmlFor="toggle2" className="block overflow-hidden h-6 rounded-full bg-gray-300 cursor-pointer">
+                        <div className="w-6 h-6 bg-white rounded-full shadow-md transform transition-transform duration-200 ease-in-out dot"></div>
+                      </label>
+                    </div>
                   </div>
                 </div>
               </div>
