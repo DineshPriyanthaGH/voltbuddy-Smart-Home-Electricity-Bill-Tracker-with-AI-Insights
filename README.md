@@ -98,19 +98,10 @@ The application follows a modern full-stack architecture with clear separation o
 - Enterprise features for commercial users
 - API marketplace for third-party integrations
 
-## Contributing
-
-This project was developed as part of a Programming II Capstone Project. Contributions and feedback are welcome for educational and improvement purposes.
-
 ## Impact & Significance
 
 VoltBuddy addresses a real-world problem faced by millions of Sri Lankan households in understanding and managing their electricity consumption. By combining modern web technologies with artificial intelligence, the application provides practical solutions for energy optimization and cost reduction, contributing to more sustainable energy usage patterns in Sri Lankan communities.
 
-## License
-
-This project is developed for educational purposes as part of a university capstone project.
-
 ---
 
-**Developed by Group 26 - Programming II Capstone Project**  
 **Solving real-world energy management challenges through innovative technology solutions**
