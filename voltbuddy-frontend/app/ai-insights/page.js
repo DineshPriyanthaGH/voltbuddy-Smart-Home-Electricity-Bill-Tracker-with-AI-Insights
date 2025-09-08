@@ -133,7 +133,7 @@ export default function AiInsightsPage() {
           {/* Compact PDF Export Section - Minimized */}
           <div className="text-center py-4">
             <p className="text-sm text-gray-500">
-              💡 <strong>Tip:</strong> Use the "Export Report" button above to download or email your complete AI insights report.
+              💡 <strong>Tip:</strong> Use the &quot;Export Report&quot; button above to download or email your complete AI insights report.
             </p>
           </div>
         </div>

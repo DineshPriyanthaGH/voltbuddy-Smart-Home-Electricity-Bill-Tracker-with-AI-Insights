@@ -31,7 +31,7 @@ export default function BillDetection() {
           >
             <div>
               <p className="font-medium">Your electricity bill has increased by 30%</p>
-              <p className="text-sm">We've detected an unusual increase in your electricity consumption.</p>
+              <p className="text-sm">We&apos;ve detected an unusual increase in your electricity consumption.</p>
             </div>
           </Alert>
             
@@ -47,7 +47,7 @@ export default function BillDetection() {
           >
             <div>
               <p className="font-medium">Your electricity bill has increased by 30%</p>
-              <p className="text-sm">We've detected an unusual increase in your electricity consumption.</p>
+              <p className="text-sm">We&apos;ve detected an unusual increase in your electricity consumption.</p>
             </div>
           </Alert>
         )} */}

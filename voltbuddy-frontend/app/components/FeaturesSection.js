@@ -97,7 +97,7 @@ export const FeaturesSection = () => {
             Ready to Transform Your Energy Management?
           </h3>
           <p className="text-gray-600 mb-6 max-w-2xl mx-auto">
-            Join thousands of Sri Lankan households who are already saving money with VoltBuddy's intelligent energy tracking
+            Join thousands of Sri Lankan households who are already saving money with VoltBuddy&apos;s intelligent energy tracking
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <button className="bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white font-bold px-8 py-4 rounded-2xl shadow-lg shadow-blue-500/25 transition-all duration-300 transform hover:scale-105">

@@ -217,14 +217,14 @@ export default function FeedbackSupportPage() {
             <div className="bg-white rounded-lg shadow-md p-5">
               <h3 className="font-bold text-lg text-gray-800">How much can I save using VoltBuddy?</h3>
               <p className="mt-2 text-gray-600">
-                On average, our users save 10-15% on their electricity bills after implementing VoltBuddy's recommendations. The exact amount varies based on your current usage patterns and how consistently you follow the optimization suggestions.
+                On average, our users save 10-15% on their electricity bills after implementing VoltBuddy&apos;s recommendations. The exact amount varies based on your current usage patterns and how consistently you follow the optimization suggestions.
               </p>
             </div>
             
             <div className="bg-white rounded-lg shadow-md p-5">
               <h3 className="font-bold text-lg text-gray-800">How do I get started with VoltBuddy?</h3>
               <p className="mt-2 text-gray-600">
-                Getting started is simple! Just sign up with your mobile number, and we'll guide you through a quick setup process. You'll start receiving SMS notifications about your electricity bills, and our AI will begin generating insights to help you save.
+                Getting started is simple! Just sign up with your mobile number, and we&apos;ll guide you through a quick setup process. You&apos;ll start receiving SMS notifications about your electricity bills, and our AI will begin generating insights to help you save.
               </p>
             </div>
           </div>

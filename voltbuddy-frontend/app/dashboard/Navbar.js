@@ -208,7 +208,7 @@ export default function Navbar() {
                           </svg>
                         </div>
                         <p className="font-medium">No notifications yet</p>
-                        <p className="text-sm mt-1">We'll notify you when something important happens</p>
+                        <p className="text-sm mt-1">We&apos;ll notify you when something important happens</p>
                       </div>
                     ) : (
                       notifications.map((notification) => (

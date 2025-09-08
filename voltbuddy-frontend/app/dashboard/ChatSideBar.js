@@ -148,7 +148,7 @@ export default function ChatSidebar({ onClose }) {
             <div className="space-y-2">
               <h3 className="text-2xl font-bold text-gray-800">Welcome to VoltBuddy AI!</h3>
               <p className="text-gray-600 leading-relaxed">
-                I'm your modern AI assistant with professional formatting and complete data access:
+                I&apos;m your modern AI assistant with professional formatting and complete data access:
               </p>
             </div>
 
