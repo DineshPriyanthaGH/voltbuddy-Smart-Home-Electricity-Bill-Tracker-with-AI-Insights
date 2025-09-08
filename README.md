@@ -105,3 +105,4 @@ VoltBuddy addresses a real-world problem faced by millions of Sri Lankan househo
 ---
 
 **Solving real-world energy management challenges through innovative technology solutions**
+"# Trigger deployment"  
