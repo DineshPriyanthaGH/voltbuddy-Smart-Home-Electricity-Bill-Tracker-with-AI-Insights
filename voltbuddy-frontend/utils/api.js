@@ -1,6 +1,7 @@
 import axios from 'axios';
 
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'https://voltbuddy-smart-home-electricity-bi.vercel.app/api';
+// Force production API URL for deployment
+const API_BASE_URL = 'https://voltbuddy-smart-home-electricity-bi.vercel.app/api';
 
 // Create axios instance with default configuration
 const api = axios.create({
