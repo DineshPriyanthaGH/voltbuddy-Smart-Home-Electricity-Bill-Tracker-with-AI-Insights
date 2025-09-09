@@ -19,7 +19,12 @@ const { errorHandler } = require('./middleware/authMiddleware');
 const app = express();
 
 app.use(cors({
-  origin: ['http://localhost:3000', 'http://localhost:5001', 'file://'],
+  origin: [
+    'http://localhost:3000', 
+    'http://localhost:5001', 
+    'https://voltbuddy-smart-home-electricity-bi.vercel.app',
+    'file://'
+  ],
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
   allowedHeaders: ['Content-Type', 'Authorization'],
   credentials: true,

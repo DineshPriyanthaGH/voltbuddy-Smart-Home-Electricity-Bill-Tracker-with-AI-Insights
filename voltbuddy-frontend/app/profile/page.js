@@ -5,6 +5,7 @@ import { toast } from 'react-toastify';
 import Navbar from '../dashboard/Navbar';
 import { Footer } from '../dashboard/Footer';
 import { useNotifications } from '../context/NotificationContext';
+import { API_BASE_URL } from '../../config/api';
 
 export default function ProfilePage() {
   const [profile, setProfile] = useState({
@@ -43,7 +44,7 @@ export default function ProfilePage() {
     }
 
     try {
-      const response = await fetch('http://localhost:5001/api/user/profile', {
+      const response = await fetch(`${API_BASE_URL}/user/profile`, {
         headers: {
           'Authorization': `Bearer ${token}`,
           'Content-Type': 'application/json'
@@ -102,7 +103,7 @@ export default function ProfilePage() {
         return;
       }
 
-      const response = await fetch('http://localhost:5001/api/user/profile', {
+      const response = await fetch(`${API_BASE_URL}/user/profile`, {
         method: 'PUT',
         headers: {
           'Authorization': `Bearer ${token}`,
