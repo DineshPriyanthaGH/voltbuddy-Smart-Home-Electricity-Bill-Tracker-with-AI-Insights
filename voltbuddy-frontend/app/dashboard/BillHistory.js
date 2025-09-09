@@ -11,6 +11,7 @@ import {
   Tooltip,
   ResponsiveContainer,
 } from "recharts";
+import { API_BASE_URL } from '../../config/api';
 
 export default function BillHistory({ token }) {
   const [chartData, setChartData] = useState([]);
@@ -43,7 +44,7 @@ export default function BillHistory({ token }) {
       setLoading(true);
       setError(null);
       try {
-        const res = await fetch("http://localhost:5001/api/bills/bill-history", {
+        const res = await fetch(`${API_BASE_URL}/bills/bill-history`, {
           headers: {
             Authorization: `Bearer ${token}`,
           },

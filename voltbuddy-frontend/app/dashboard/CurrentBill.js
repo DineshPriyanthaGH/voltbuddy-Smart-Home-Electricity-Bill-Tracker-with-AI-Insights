@@ -3,6 +3,7 @@
 import React, { useState, useEffect } from "react";
 import { useNotifications } from "../context/NotificationContext";
 import { useDataRefresh } from "../context/DataRefreshContext";
+import { API_BASE_URL } from '../../config/api';
 
 export default function CurrentBill() {
   const { fetchNotifications, addBillCalculationNotification } = useNotifications();
@@ -109,7 +110,7 @@ export default function CurrentBill() {
     const fetchPendingBills = async () => {
       setLoading(true);
       try {
-        const response = await fetch('http://localhost:5001/api/bills/bill-history', {
+        const response = await fetch(`${API_BASE_URL}/bills/bill-history`, {
           headers: {
             'Authorization': `Bearer ${token}`,
           }
@@ -195,7 +196,7 @@ export default function CurrentBill() {
      console.log('💾 Sending bill data to backend:', billData);
 
     try {
-      const response = await fetch('http://localhost:5001/api/bills/update', {
+      const response = await fetch(`${API_BASE_URL}/bills/update`, {
         method: 'POST',
         headers: {
           'Authorization': `Bearer ${token}`,
@@ -246,7 +247,7 @@ export default function CurrentBill() {
     setStatusColor("bg-green-200"); 
 
     try {
-      const response = await fetch(`http://localhost:5001/api/bills/mark-paid/${billId}`, {
+      const response = await fetch(`${API_BASE_URL}/bills/mark-paid/${billId}`, {
         method: 'PUT',
         headers: {
           'Authorization': `Bearer ${token}`,

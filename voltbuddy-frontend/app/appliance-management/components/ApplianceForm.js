@@ -1,5 +1,6 @@
 'use client';
 import React, { useState, useEffect } from 'react';
+import { API_BASE_URL } from '../../../config/api';
 import { PlusIcon, SaveIcon, XIcon, InfoIcon } from 'lucide-react';
 
 const defaultWattsByType = {
@@ -75,7 +76,7 @@ export const ApplianceForm = ({ onSubmit, editingAppliance, onCancel }) => {
     try {
       console.log('Sending appliance data to backend:', applianceData);  // Log the data before sending
 
-      const response = await fetch('http://localhost:5001/api/appliances', {
+      const response = await fetch(`${API_BASE_URL}/appliances`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

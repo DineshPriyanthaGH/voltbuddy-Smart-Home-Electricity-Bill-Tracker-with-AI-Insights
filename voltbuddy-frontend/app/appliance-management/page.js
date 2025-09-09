@@ -9,6 +9,7 @@ import ChatbotIcon from '../dashboard/ChatbotIcon';
 import ChatSidebar from '../dashboard/ChatSideBar';
 import { useNotifications } from '../context/NotificationContext';
 import { useDataRefresh } from '../context/DataRefreshContext';
+import { API_BASE_URL } from '../../config/api';
 
 const ApplianceManagementPage = () => {
   const [appliances, setAppliances] = useState([]);
@@ -31,7 +32,7 @@ const ApplianceManagementPage = () => {
     // Fetch appliances when the page loads
     const fetchAppliances = async () => {
       try {
-        const response = await fetch('http://localhost:5001/api/appliances', {
+        const response = await fetch(`${API_BASE_URL}/appliances`, {
           method: 'GET',
           headers: {
             Authorization: `Bearer ${localStorage.getItem('token')}`,
