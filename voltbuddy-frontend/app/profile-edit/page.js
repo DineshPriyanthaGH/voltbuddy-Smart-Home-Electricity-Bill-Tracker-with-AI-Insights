@@ -66,7 +66,7 @@ const App = () => {
             <h1 className="text-3xl font-bold text-gray-900 mb-2">Edit Profile</h1>
             <div className="flex items-center space-x-2">
               <i className="fas fa-building text-blue-600"></i>
-              <p className="text-sm text-blue-600 font-medium">{profileData.branch}</p>
+              <p className="text-sm text-blue-600 font-medium">{formData.branch}</p>
             </div>
           </div>
           <div className="bg-white shadow-xl rounded-xl overflow-hidden border border-gray-100">
@@ -110,7 +110,7 @@ const App = () => {
                     type="text"
                     id="name"
                     name="name"
-                    value={profileData.name}
+                    value={formData.name}
                     onChange={handleInputChange}
                     className="w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-sm transition-all duration-200"
                   />
@@ -121,7 +121,7 @@ const App = () => {
                     type="text"
                     id="branch"
                     name="branch"
-                    value={profileData.branch}
+                    value={formData.branch}
                     onChange={handleInputChange}
                     className="w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-sm transition-all duration-200"
                   />
@@ -132,7 +132,7 @@ const App = () => {
                     type="text"
                     id="address"
                     name="address"
-                    value={profileData.address}
+                    value={formData.address}
                     onChange={handleInputChange}
                     className="w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-sm transition-all duration-200"
                   />
@@ -143,7 +143,7 @@ const App = () => {
                     type="tel"
                     id="contactNo"
                     name="contactNo"
-                    value={profileData.contactNo}
+                    value={formData.contactNo}
                     onChange={handleInputChange}
                     className="w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-sm transition-all duration-200"
                   />
@@ -154,7 +154,7 @@ const App = () => {
                     type="email"
                     id="email"
                     name="email"
-                    value={profileData.email}
+                    value={formData.email}
                     onChange={handleInputChange}
                     className="w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-sm transition-all duration-200"
                   />
@@ -166,7 +166,7 @@ const App = () => {
                       type={showPassword ? "text" : "password"}
                       id="password"
                       name="password"
-                      value={profileData.password}
+                      value={formData.password}
                       onChange={handleInputChange}
                       className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 text-sm pr-10"
                     />
