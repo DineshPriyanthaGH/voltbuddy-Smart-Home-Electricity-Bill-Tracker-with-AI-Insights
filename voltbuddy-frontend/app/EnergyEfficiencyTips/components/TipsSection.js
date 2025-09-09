@@ -35,10 +35,6 @@ const Tip = ({ icon, title, description, tooltip }) => {
   )
 }
 
-TipsSection.propTypes = {
-  searchQuery: PropTypes.string.isRequired,
-}
-
 Tip.propTypes = {
   icon: PropTypes.node.isRequired,
   title: PropTypes.string.isRequired,
@@ -125,4 +121,8 @@ export const TipsSection = ({ searchQuery }) => {
       </div>
     </section>
   )
+}
+
+TipsSection.propTypes = {
+  searchQuery: PropTypes.string.isRequired,
 }
