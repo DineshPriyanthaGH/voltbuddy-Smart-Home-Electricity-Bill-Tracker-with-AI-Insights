@@ -18,13 +18,39 @@ const { errorHandler } = require('./middleware/authMiddleware');
 
 const app = express();
 
+// CORS configuration to handle multiple deployment URLs
+const allowedOrigins = [
+  'http://localhost:3000',
+  'http://localhost:5001',
+  'https://voltbuddy-smart-home-electricity-bi.vercel.app',
+  'https://voltbuddy-smart-home-electricity-bi-five.vercel.app',
+  /^https:\/\/voltbuddy-smart-home-electricity-bi.*\.vercel\.app$/,
+  'file://'
+];
+
 app.use(cors({
-  origin: [
-    'http://localhost:3000', 
-    'http://localhost:5001', 
-    'https://voltbuddy-smart-home-electricity-bi.vercel.app',
-    'file://'
-  ],
+  origin: function (origin, callback) {
+    // Allow requests with no origin (like mobile apps or curl requests)
+    if (!origin) return callback(null, true);
+    
+    // Check if origin is in allowed list or matches pattern
+    const isAllowed = allowedOrigins.some(allowedOrigin => {
+      if (typeof allowedOrigin === 'string') {
+        return allowedOrigin === origin;
+      }
+      if (allowedOrigin instanceof RegExp) {
+        return allowedOrigin.test(origin);
+      }
+      return false;
+    });
+    
+    if (isAllowed) {
+      callback(null, true);
+    } else {
+      console.log('CORS blocked origin:', origin);
+      callback(new Error('Not allowed by CORS'));
+    }
+  },
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
   allowedHeaders: ['Content-Type', 'Authorization'],
   credentials: true,
