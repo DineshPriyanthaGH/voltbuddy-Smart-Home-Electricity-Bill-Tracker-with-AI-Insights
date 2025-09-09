@@ -1,6 +1,7 @@
 'use client';
 import React, { useState, useEffect } from 'react';
 import { ApplianceCard } from './ApplianceCard';
+import { API_BASE_URL } from '../../../config/api';
 
 export const ApplianceList = ({ onEdit, onDelete }) => {
   const [appliances, setAppliances] = useState([]);
@@ -10,7 +11,7 @@ export const ApplianceList = ({ onEdit, onDelete }) => {
   useEffect(() => {
     const fetchAppliances = async () => {
       try {
-        const response = await fetch('http://localhost:5001/api/appliances', {
+        const response = await fetch(`${API_BASE_URL}/appliances`, {
           method: 'GET',
           headers: {
             Authorization: `Bearer ${localStorage.getItem('token')}`,  // Ensure the token is passed correctly

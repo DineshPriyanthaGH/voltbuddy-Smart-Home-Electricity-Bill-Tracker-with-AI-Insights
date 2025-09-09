@@ -8,6 +8,7 @@ import {
   LightbulbIcon,
   PackageIcon,
 } from 'lucide-react';
+import { API_BASE_URL } from '../../config/api';
 
 // Appliance Usage Component
 export default function ApplianceUsage() {
@@ -17,7 +18,7 @@ export default function ApplianceUsage() {
   useEffect(() => {
     const fetchAppliances = async () => {
       try {
-        const response = await fetch('http://localhost:5001/api/appliances', {
+        const response = await fetch(`${API_BASE_URL}/appliances`, {
           method: 'GET',
           headers: {
             Authorization: `Bearer ${localStorage.getItem('token')}`,  // Pass the JWT token

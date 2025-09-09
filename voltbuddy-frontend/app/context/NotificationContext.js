@@ -1,6 +1,7 @@
 'use client';
 
 import React, { createContext, useContext, useState, useEffect } from 'react';
+import { API_BASE_URL } from '../../config/api';
 
 const NotificationContext = createContext();
 
@@ -42,7 +43,7 @@ export function NotificationProvider({ children }) {
     console.log('🔄 Fetching notifications from backend...');
     setLoading(true);
     try {
-      const response = await fetch('http://localhost:5001/api/notifications', {
+      const response = await fetch(`${API_BASE_URL}/notifications`, {
         headers: {
           'Authorization': `Bearer ${token}`,
         },
@@ -88,7 +89,7 @@ export function NotificationProvider({ children }) {
     console.log(`🔄 Attempting to mark notification as read: ${notificationId}`);
 
     try {
-      const response = await fetch(`http://localhost:5001/api/notifications/${notificationId}/read`, {
+      const response = await fetch(`${API_BASE_URL}/notifications/${notificationId}/read`, {
         method: 'PUT',
         headers: {
           'Authorization': `Bearer ${token}`,

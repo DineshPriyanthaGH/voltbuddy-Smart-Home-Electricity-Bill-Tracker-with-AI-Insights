@@ -4,6 +4,7 @@ import React, { useState } from 'react';
 import axios from 'axios';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { API_BASE_URL } from '../../../config/api';
 
 export function LoginForm() {
   const [isLogin, setIsLogin] = useState(true);
@@ -31,7 +32,7 @@ export function LoginForm() {
 
     try {
       if (isLogin) {
-        const res = await axios.post('http://localhost:5001/api/auth/login', {
+        const res = await axios.post(`${API_BASE_URL}/auth/login`, {
           email,
           password,
         });
@@ -48,7 +49,7 @@ export function LoginForm() {
         // Redirect to dashboard page after login
         window.location.href = '/dashboard';
       } else {
-        await axios.post('http://localhost:5001/api/auth/register', {
+        await axios.post(`${API_BASE_URL}/auth/register`, {
           username,
           email,
           password,
