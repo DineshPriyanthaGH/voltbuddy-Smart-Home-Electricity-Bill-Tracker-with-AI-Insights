@@ -67,7 +67,7 @@ const Guide = ({
  * @param {GuidesSectionProps} props
  */
 export const GuidesSection = ({ searchQuery }) => {
-  const [selectedGuide, setSelectedGuide] = useState<number | null>(null)
+  const [selectedGuide, setSelectedGuide] = useState(null)
   const guides = [
     {
       icon: <HomeIcon className="w-5 h-5" />,
