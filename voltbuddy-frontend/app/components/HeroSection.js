@@ -49,15 +49,21 @@ export const HeroSection = () => {
 
             {/* CTA Buttons */}
             <div className="flex flex-col sm:flex-row gap-4 pt-6">
-              <button className="group bg-gradient-to-r from-yellow-300 to-yellow-300 hover:from-yellow-400 hover:to-yellow-500 text-black font-bold cursor-pointer rounded-2xl px-8 py-4 shadow-xl shadow-blue-500/25 transition-all duration-300 transform hover:scale-105">
+              <a 
+                href="/Authentication"
+                className="group bg-gradient-to-r from-yellow-300 to-yellow-300 hover:from-yellow-400 hover:to-yellow-500 text-black font-bold cursor-pointer rounded-2xl px-8 py-4 shadow-xl shadow-blue-500/25 transition-all duration-300 transform hover:scale-105 text-center"
+              >
                 <span className="flex items-center justify-center gap-2">
                   Get Started Free
                   <svg className="w-5 h-5 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
                   </svg>
                 </span>
-              </button>
-              <button className="group bg-white/70 backdrop-blur-sm hover:bg-white cursor-pointer text-blue-600 hover:text-blue-700 font-bold rounded-2xl px-8 py-4 shadow-lg shadow-blue-100/50 transition-all duration-300 border-2 border-transparent hover:border-blue-200">
+              </a>
+              <button 
+                onClick={() => document.getElementById('demo')?.scrollIntoView({ behavior: 'smooth' })}
+                className="group bg-white/70 backdrop-blur-sm hover:bg-white cursor-pointer text-blue-600 hover:text-blue-700 font-bold rounded-2xl px-8 py-4 shadow-lg shadow-blue-100/50 transition-all duration-300 border-2 border-transparent hover:border-blue-200"
+              >
                 <span className="flex items-center justify-center gap-2">
                   <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14.828 14.828a4 4 0 01-5.656 0M9 10h1m4 0h1m-6 4h10a2 2 0 002-2V7a2 2 0 00-2-2H8a2 2 0 00-2 2v5a2 2 0 002 2z" />

@@ -10,6 +10,7 @@ import CompactExportButton from './components/CompactExportButton';
 import { Footer } from '../dashboard/Footer';
 import ChatbotIcon from '../dashboard/ChatbotIcon';
 import ChatSidebar from '../dashboard/ChatSideBar';
+import { API_BASE_URL } from '../../config/api';
 
 export default function AiInsightsPage() {
   const [token, setToken] = useState(null);
@@ -43,7 +44,7 @@ export default function AiInsightsPage() {
 
         // If not in localStorage, fetch from API
         if (savedToken) {
-          const response = await fetch('http://localhost:5001/api/user/profile', {
+          const response = await fetch(`${API_BASE_URL}/user/profile`, {
             headers: {
               'Authorization': `Bearer ${savedToken}`
             }

@@ -36,6 +36,13 @@ export const NavBar = () => {
               <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-gradient-to-r from-blue-600 to-indigo-600 group-hover:w-full transition-all duration-300"></span>
             </a>
             <a
+              href="#demo"
+              className="text-gray-700 font-semibold hover:text-blue-600 transition-all duration-300 relative group"
+            >
+              Demo
+              <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-gradient-to-r from-blue-600 to-indigo-600 group-hover:w-full transition-all duration-300"></span>
+            </a>
+            <a
               href="#FeaturesSection"
               className="text-gray-700 font-semibold hover:text-blue-600 transition-all duration-300 relative group"
             >
@@ -95,6 +102,12 @@ export const NavBar = () => {
                 className="text-gray-700 font-semibold hover:text-blue-600 transition-colors py-2 px-4 rounded-xl hover:bg-blue-50"
               >
                 Home
+              </a>
+              <a
+                href="#demo"
+                className="text-gray-700 font-semibold hover:text-blue-600 transition-colors py-2 px-4 rounded-xl hover:bg-blue-50"
+              >
+                Demo
               </a>
               <a
                 href="#FeaturesSection"
